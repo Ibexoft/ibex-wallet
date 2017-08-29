@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Account</title>
-</head>
-<body>
-    <h1>{{ $account->name }}</h1>
-</body>
-</html>
+@extends('layouts.master')
+
+@section('content')
+
+    <h1>Account details</h1>
+    <p><strong>Account name</strong>: {{ $account->name }}</p>
+    <p><strong>Type</strong>: {{ $account->type }}</p>
+    <p><strong>Currency</strong>: {{ $account->currency }}</p>
+
+    <a href="/accounts"><< Go Back</a>
+    
+@endsection

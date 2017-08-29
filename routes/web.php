@@ -15,13 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('accounts', function () {
-    $accounts = DB::table('accounts')->get();
-    return view('accounts.index', compact('accounts'));
-});
-
-Route::get('accounts/{id}', function ($id) {
-    $account = DB::table('accounts')->find($id);
-
-    return view('accounts.show', compact('account'));
-});
+Route::get('accounts', 'AccountsController@index');
+Route::get('accounts/create', 'AccountsController@create');
+Route::get('accounts/{account}', 'AccountsController@show');
+Route::post('accounts', 'AccountsController@store');
