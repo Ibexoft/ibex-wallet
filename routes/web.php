@@ -19,3 +19,7 @@ Route::get('accounts', 'AccountsController@index');
 Route::get('accounts/create', 'AccountsController@create');
 Route::get('accounts/{account}', 'AccountsController@show');
 Route::post('accounts', 'AccountsController@store');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

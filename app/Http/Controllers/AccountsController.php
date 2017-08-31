@@ -7,6 +7,11 @@ use App\Account;
 
 class AccountsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -47,7 +52,7 @@ class AccountsController extends Controller
             'name' => request('name'),
             'type' => request('type'),
             'currency' => request('currency'),
-            'user_id' => 1  // TODO: need to replace with logged in user_id
+            'user_id' => auth()->id()
         ]);
 
         return redirect('/accounts');
