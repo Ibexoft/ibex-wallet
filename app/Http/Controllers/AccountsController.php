@@ -21,7 +21,7 @@ class AccountsController extends Controller
     {
         // $accounts = DB::table('accounts')->get();
         $accounts = Account::all();
-        return view('accounts.index', compact('accounts'));    
+        return view('accounts.index', compact('accounts'));
     }
 
     /**

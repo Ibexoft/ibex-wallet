@@ -20,7 +20,7 @@ class TagController extends Controller
     public function index()
     {
         $tags = Tag::all();
-        return view('tags.index', compact('tags'));    
+        return view('tags.index', compact('tags'));
     }
 
     /**
@@ -59,9 +59,10 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Tag $tag)
     {
-        //
+        $transactions = $tag->transactions;
+        return view('transactions.index', compact('transactions'));
     }
 
     /**

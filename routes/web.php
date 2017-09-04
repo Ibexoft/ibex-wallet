@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'AccountsController@index');
+Route::get('/', 'TransactionController@index');
 
 Route::get('accounts', 'AccountsController@index');
 Route::get('accounts/create', 'AccountsController@create');
@@ -20,7 +20,13 @@ Route::post('accounts', 'AccountsController@store');
 
 Route::get('tags', 'TagController@index');
 Route::get('tags/create', 'TagController@create');
+Route::get('tags/{tag}', 'TagController@show');
 Route::post('tags', 'TagController@store');
+
+Route::get('transactions', 'TransactionController@index');
+Route::get('transactions/create', 'TransactionController@create');
+Route::get('transactions/{transaction}', 'TransactionController@show');
+Route::post('transactions', 'TransactionController@store');
 
 Auth::routes();
 
