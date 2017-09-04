@@ -21,7 +21,7 @@ class CreateTagsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('transaction_tag', function (Blueprint $table) {
+        Schema::create('tag_transaction', function (Blueprint $table) {
             $table->integer('transaction_id');
             $table->integer('tag_id');
             $table->primary(['transaction_id', 'tag_id']);
@@ -36,6 +36,6 @@ class CreateTagsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('tags');
-        Schema::dropIfExists('transaction_tag');
+        Schema::dropIfExists('tag_transaction');
     }
 }
