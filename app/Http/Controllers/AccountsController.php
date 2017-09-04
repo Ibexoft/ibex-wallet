@@ -69,7 +69,6 @@ class AccountsController extends Controller
         // $account = DB::table('accounts')->find($id);
         
         return view('accounts.show', compact('account'));
-        
     }
 
     /**

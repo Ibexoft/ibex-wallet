@@ -18,6 +18,10 @@ Route::get('accounts/create', 'AccountsController@create');
 Route::get('accounts/{account}', 'AccountsController@show');
 Route::post('accounts', 'AccountsController@store');
 
+Route::get('tags', 'TagController@index');
+Route::get('tags/create', 'TagController@create');
+Route::post('tags', 'TagController@store');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
