@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Transaction;
+use App\Account;
+use App\Tag;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -19,7 +21,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transactions = Transaction::all();
+        $transactions = Transaction::latest()->get();
         return view('transactions.index', compact('transactions'));
     }
 
@@ -30,7 +32,9 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        return view('transactions.create');
+        $accounts = Account::where('user_id', '=', auth()->id())->get();
+        $tags = Tag::where('user_id', '=', auth()->id())->get();
+        return view('transactions.create', compact(['accounts', 'tags']));
     }
 
     /**
@@ -52,12 +56,11 @@ class TransactionController extends Controller
             'type' => request('type'),
             'description' => request('description'),
             'user_id' => auth()->id(),
-            'from_account_id' => request('from_account'),
-            'to_account_id' => request('to_account'),
+            'from_account_id' => request('from_account') != "" ? request('from_account') : null,
+            'to_account_id' => request('to_account') != "" ? request('to_account') : null,
         ]);
 
-        $tags = explode(",", request('tags'));
-
+        $tags = request('tags');
         foreach($tags as $tag)
         {
             $txn->tags()->attach($tag);

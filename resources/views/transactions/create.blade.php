@@ -23,19 +23,38 @@
                         </div>
                         <div class="form-group">
                             <label for="type">Transaction Type</label>
-                            <input type="text" class="form-control" id="type" name="type" placeholder="Transaction Type" required>
+                            <select class="custom-select form-control" id="type" name="type" required>
+                                <option value="" selected>-- Select Type --</option>
+                                <option value="withdrawal">Withdrawal</option>
+                                <option value="income">Income</option>
+                                <option value="transfer">Transfer</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="from_account">From Account</label>
-                            <input type="text" class="form-control" id="from_account" name="from_account" placeholder="From Account">
+                            <select class="custom-select form-control" id="from_account" name="from_account">
+                                <option value="" selected>-- Select Account --</option>
+                                @foreach($accounts as $account)
+                                    <option value="{{ $account->id }}">{{ $account->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="to_account">To Account</label>
-                            <input type="text" class="form-control" id="to_account" name="to_account" placeholder="To Account">
+                            <select class="custom-select form-control" id="to_account" name="to_account">
+                                <option value="" selected>-- Select Account --</option>
+                                @foreach($accounts as $account)
+                                    <option value="{{ $account->id }}">{{ $account->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="tags">Tags</label>
-                            <input type="text" class="form-control" id="tags" name="tags" placeholder="Tags">
+                            <select multiple class="form-control" id="tags" name="tags[]">
+                                @foreach($tags as $tag)
+                                    <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Add Account</button>

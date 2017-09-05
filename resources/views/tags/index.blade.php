@@ -5,14 +5,21 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Tags | <a href="/tags/create"><small>Add</small></a></div>
+                <div class="panel-heading">Tags</div>
 
                 <div class="panel-body">
-                    <ul>
+                    
+                    <div>
                     @foreach ($tags as $tag)
-                        <li><a href="/tags/{{ $tag->name }}">{{ $tag->name }}</a></li>
+                        <a href="/tags/{{ $tag->name }}">
+                            <span class="badge badge-pill badge-primary">{{ $tag->name }}</span>
+                        </a>
                     @endforeach
-                    </ul>
+                    </div>
+                    <hr/>
+                    <div>
+                        <a class="btn btn-primary" href="/tags/create"><small>Add</small></a>
+                    </div>
                 </div>
             </div>
         </div>

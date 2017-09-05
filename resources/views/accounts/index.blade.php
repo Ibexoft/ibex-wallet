@@ -5,18 +5,29 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Accounts | <a href="/accounts/create"><small>Add</small></a></div>
+                <div class="panel-heading">Accounts</div>
 
                 <div class="panel-body">
-                    <ul>
+                    <div class="pull-right">
+                        <a class="btn btn-primary" href="/accounts/create"><small>Add</small></a>
+                    </div>
+                    
+                    <table class="table table-striped table-hover">
+                        <tr>
+                            <th></th>
+                            <th>Account</th>
+                            <th>Type</th>
+                        </tr>
                         @foreach ($accounts as $account)
-                            <li> 
-                                <a href="accounts/{{$account->id}}"> 
-                                    {{ $account->name }} 
-                                </a>
-                            </li>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>
+                                    <a href="/accounts/{{$account->id}}">{{ $account->name }}</a>
+                                </td> 
+                                <td>{{ $account->type }}</td>
+                            </tr>
                         @endforeach
-                    </ul>
+                    </table>
                 </div>
             </div>
         </div>
