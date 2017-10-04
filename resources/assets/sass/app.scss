@@ -7,4 +7,7 @@
 
 // Bootstrap
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
-@import "dashboard.scss";
+
+.navbar-header form {
+    padding-top: 7px;
+}

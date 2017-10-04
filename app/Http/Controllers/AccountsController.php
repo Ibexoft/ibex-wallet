@@ -20,8 +20,9 @@ class AccountsController extends Controller
     public function index()
     {
         // $accounts = DB::table('accounts')->get();
+        $page_title = 'Accounts';
         $accounts = Account::all();
-        return view('accounts.index', compact('accounts'));
+        return view('accounts.index', compact('accounts', 'page_title'));
     }
 
     /**
@@ -31,7 +32,8 @@ class AccountsController extends Controller
      */
     public function create()
     {
-        return view('accounts.create');
+        $page_title = 'Create Account';
+        return view('accounts.create', compact('page_title'));
     }
 
     /**
@@ -68,7 +70,8 @@ class AccountsController extends Controller
     {
         // $account = DB::table('accounts')->find($id);
         
-        return view('accounts.show', compact('account'));
+        $page_title = 'Account Details';
+        return view('accounts.show', compact('account', 'page_title'));
     }
 
     /**

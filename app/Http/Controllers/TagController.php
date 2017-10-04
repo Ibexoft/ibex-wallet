@@ -19,8 +19,9 @@ class TagController extends Controller
      */
     public function index()
     {
+        $page_title = 'Tags';
         $tags = Tag::all();
-        return view('tags.index', compact('tags'));
+        return view('tags.index', compact('tags', 'page_title'));
     }
 
     /**
@@ -30,7 +31,8 @@ class TagController extends Controller
      */
     public function create()
     {
-        return view('tags.create');
+        $page_title = 'Add Tag';
+        return view('tags.create', compact('page_title') );
     }
 
     /**
@@ -61,8 +63,9 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
+        $page_title = 'Transactions';
         $transactions = $tag->transactions;
-        return view('transactions.index', compact('transactions'));
+        return view('transactions.index', compact('transactions', 'page_title'));
     }
 
     /**

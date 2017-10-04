@@ -21,8 +21,9 @@ class TransactionController extends Controller
      */
     public function index()
     {
+        $page_title = 'Transactions';
         $transactions = Transaction::latest()->get();
-        return view('transactions.index', compact('transactions'));
+        return view('transactions.index', compact('transactions', 'page_title'));
     }
 
     /**
@@ -32,9 +33,11 @@ class TransactionController extends Controller
      */
     public function create()
     {
+        $page_title = 'Add Transaction';
+
         $accounts = Account::where('user_id', '=', auth()->id())->get();
         $tags = Tag::where('user_id', '=', auth()->id())->get();
-        return view('transactions.create', compact(['accounts', 'tags']));
+        return view('transactions.create', compact(['accounts', 'tags', 'page_title']));
     }
 
     /**
@@ -77,7 +80,8 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
-        return view('transactions.show', compact('transaction'));
+        $page_title = 'Transaction Details';
+        return view('transactions.show', compact('transaction', 'page_title'));
     }
 
     /**
