@@ -2,7 +2,7 @@
 
 @section('content')
 
-<p><strong>Amount</strong>: {{ $transaction->amount }}</p>
+<p><strong>Amount</strong>: {{ $transaction->from_account->currency ?? $transaction->to_account->currency }} {{ $transaction->amount }}</p>
 <p><strong>Description</strong>: {{ $transaction->description }}</p>
 <p><strong>Type</strong>: {{ $transaction->type }}</p>
 <p><strong>From Account</strong>: {{ $transaction->from_account ? $transaction->from_account->name : "" }}</p>
@@ -13,5 +13,7 @@
     {{ $tag->name }}
 @endforeach
 </p>
+
+<p><strong>For whom</strong>: {{ $transaction->for_whom }}</p>
                 
 @endsection
