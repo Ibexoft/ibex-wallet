@@ -51,6 +51,11 @@
         </select>
     </div>
     <div class="form-group">
+        <label for="for_whom">For Whom</label>
+        <input type="text" class="form-control" id="for_whom" name="for_whom" aria-describedby="nameHelp" placeholder="Enter name" required>
+        <small id="nameHelp" class="form-text text-muted">For whom you are lenging/borrowing money to/from</small>
+    </div>
+    <div class="form-group">
         <button type="submit" class="btn btn-primary">Add Account</button>
     </div>
 </form>
