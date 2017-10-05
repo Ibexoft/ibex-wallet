@@ -18,9 +18,13 @@ class CreateTransactionsTable extends Migration
             $table->integer('user_id');
             $table->float('amount', 8, 2);
             $table->string('description');
-            $table->enum('type', ['withdrawal', 'income', 'transfer']);
+            $table->enum('type', [
+                'expense', 'return', 'lend', 'settlement w',    // withdrawals
+                'income', 'refund', 'settlement d', 'borrow',   // deposits
+                'transfer']);
             $table->integer('from_account_id')->nullable();
             $table->integer('to_account_id')->nullable();
+            $table->string('for_whom')->nullable();
             $table->timestamps();
         });
     }
