@@ -19,9 +19,15 @@
         <label for="type">Transaction Type</label>
         <select class="custom-select form-control" id="type" name="type" required>
             <option value="" selected>-- Select Type --</option>
-            <option value="withdrawal">Withdrawal</option>
+            <option value="expense">Expense</option>
+            <option value="return">Return</option>
+            <option value="lend">Lend</option>
+            <option value="settlement w">Settlement (Withdraw)</option>
+
             <option value="income">Income</option>
-            <option value="transfer">Transfer</option>
+            <option value="refund">Refund</option>
+            <option value="borrow">Borrow</option>
+            <option value="settlement d">Settlement (deposit)</option>
         </select>
     </div>
     <div class="form-group">

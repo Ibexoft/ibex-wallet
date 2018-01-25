@@ -2,30 +2,39 @@
 
 @section('content')
 
-<div class="row-fluid">
-    <div class="col-md-3">
-        <h4>Net Worth</h4>
-        <currency>Rs.10000</currency>
+<section class="row text-center placeholders">
+    <div class="col-6 col-sm-4 placeholder">
+        <div class="text-muted">Net Worth</div>
+        <h4 class="text-success">{{ $total_balance }}</h4>
     </div>
-    <div class="col-md-3">
-        <h4>Income this month</h4>
-        <currency>Rs.10000</currency>
+    <div class="col-6 col-sm-4 placeholder">
+        <div class="text-muted">Available Balance</div>
+        <h4 class="text-success">{{ $available_balance }}</h4>
     </div>
-    <div class="col-md-3">
-        <h4>Expense this month</h4>
-        <currency>Rs.10000</currency>
+    <div class="col-6 col-sm-4 placeholder">
+        <span class="text-muted">Income this month</span>
+        <h4 class="text-success">{{ $income_this_month }}</h4>
     </div>
-    <div class="col-md-3">
-        <h4>Owed</h4>
-        <currency>Rs.10000</currency>
+    <div class="col-6 col-sm-4 placeholder">
+        <span class="text-muted">Expense this month</span>
+        <h4 class="text-danger">{{ $expense_this_month }}</h4>
     </div>
+    <div class="col-6 col-sm-4 placeholder">
+        <span class="text-muted">You Owe</span>
+        <h4 class="text-success">{{ $owed }}</h4>
+    </div>
+    <div class="col-6 col-sm-4 placeholder">
+        <span class="text-muted">Others Owe You</span>
+        <h4 class="text-success">{{ $other_owed }}</h4>
+    </div>
+</section>
+
+<div class="row">
+    <div class="col-8"><h3>Transactions</h3></div>
+    <div class="col-4"><a class="btn btn-primary pull-right" href="/transactions/create"><small>Add</small></a></div>
 </div>
 
-<div class="pull-right">
-    <a class="btn btn-primary" href="/transactions/create"><small>Add</small></a>
-</div>
-
-<table class="table table-striped table-hover">
+<table class="table table-responsive table-striped table-hover">
     <tr>
         <th></th>
         <th>Description</th>
@@ -41,7 +50,7 @@
             <td>
                 <a href="/transactions/{{$transaction->id}}">{{ $transaction->description }}</a>
             </td> 
-            <td>{{ $transaction->amount }}</td>
+            <td>{{ $transaction->from_account->currency ?? $transaction->to_account->currency }} {{ $transaction->amount }}</td>
             <td>{{ $transaction->type }}</td>
             <td>{{ $transaction->from_account ? $transaction->from_account->name : "" }}</td>
             <td>{{ $transaction->to_account ? $transaction->to_account->name : "" }}</td>

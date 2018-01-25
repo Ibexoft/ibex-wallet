@@ -15,9 +15,11 @@
                 {{ config('app.name', 'Ibexpenses') }}
             </a>
 
+            @if (!Auth::guest())
             <form class="form-inline col-xs-6 pull-right">
                 <input class="form-control" type="text" placeholder="Search" aria-label="Search">
             </form>
+            @endif
             
         </div>
 

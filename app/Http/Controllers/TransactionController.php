@@ -21,9 +21,20 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $page_title = 'Transactions';
+        $page_title = 'Dashboard';
         $transactions = Transaction::latest()->get();
-        return view('transactions.index', compact('transactions', 'page_title'));
+        
+        $user = \Auth::user();
+
+        $total_balance = Transaction::total_balance( $user->id );
+        $available_balance = Transaction::available_balance( $user->id );
+        $income_this_month = Transaction::month_income($user->id);
+        $expense_this_month = Transaction::month_expense($user->id);
+        $owed = Transaction::owed( $user->id );
+        $other_owed = Transaction::other_owed( $user->id );
+        
+        return view('transactions.index', 
+                        compact('transactions', 'page_title', 'total_balance', 'available_balance', 'income_this_month', 'expense_this_month', 'owed', 'other_owed'));
     }
 
     /**
