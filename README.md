@@ -1,2 +1,2 @@
-# ibexpenses
-Manage your personal and family expenses with ease
+# Ibexpenses
+Manage your personal finances and family expenses with ease.
