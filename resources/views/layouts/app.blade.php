@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Ibexpenses') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -25,8 +25,8 @@
     <link href="{{ asset('vendor/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
 
     <!-- Argon CSS -->
-    <link type="text/css" href="{{ asset('css/argon.min.css') }}" rel="stylesheet"> {{--
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
+    <link type="text/css" href="{{ asset('css/argon.min.css') }}" rel="stylesheet"> 
+    {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
 </head>
 
 <body>
