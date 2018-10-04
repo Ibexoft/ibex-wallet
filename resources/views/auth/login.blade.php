@@ -165,7 +165,7 @@
               <a href="https://www.ibexoft.com" class="nav-link" target="_blank">Ibexoft</a>
             </li>
             <li class="nav-item">
-              <a href="https://ibexoft.com/about-us/" class="nav-link" target="_blank">About Us</a>
+              <a href="https://www.ibexoft.com/about-us/" class="nav-link" target="_blank">About Us</a>
             </li>
             <li class="nav-item">
               <a href="https://medium.com/ibexoft" class="nav-link" target="_blank">Blog</a>
