@@ -40,7 +40,7 @@
             <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
                 <div class="container-fluid">
                     <!-- Brand -->
-                    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="./index.html">Dashboard</a>
+                    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="{{ route('home') }}">Dashboard</a>
                     <!-- Form -->
                     <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
                         <div class="form-group mb-0">
@@ -210,17 +210,17 @@
                         <div class="col-xl-6">
                             <ul class="nav nav-footer justify-content-center justify-content-xl-end">
                                 <li class="nav-item">
-                                    <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Creative Tim</a>
+                                    <a href="https://www.ibexoft.com" class="nav-link" target="_blank">Ibexoft</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
+                                    <a href="https://www.ibexoft.com/about-us/" class="nav-link" target="_blank">About Us</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
+                                    <a href="https://medium.com/ibexoft" class="nav-link" target="_blank">Blog</a>
                                 </li>
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md" class="nav-link" target="_blank">MIT License</a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                     </div>
