@@ -103,7 +103,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('home') }}">
+            <a class="nav-link" href="{{ route('accounts.index') }}">
             <i class="ni ni-pin-3 text-orange"></i> Accounts
             </a>
         </li>
