@@ -36,7 +36,10 @@ class AccountController extends Controller
      */
     public function create()
     {
-        return view('accounts.add', compact('account'));
+        $accountTypes = config('custom.account_types');
+        $currencies = config('custom.currencies');
+        
+        return view('accounts.add', compact(['accountTypes', 'currencies']));
     }
 
     /**
@@ -82,7 +85,10 @@ class AccountController extends Controller
      */
     public function edit(Account $account)
     {
-        return view('accounts.edit', compact('account'));
+        $accountTypes = config('custom.account_types');
+        $currencies = config('custom.currencies');
+        
+        return view('accounts.edit', compact(['account', 'accountTypes', 'currencies']));
     }
 
     /**
@@ -94,6 +100,12 @@ class AccountController extends Controller
      */
     public function update(Request $request)
     {
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'type' => 'required',
+            'currency' => 'required',
+        ]);
+
         Account::where('user_id', Auth::id())
         ->where('id', $request->id)
         ->update([

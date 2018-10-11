@@ -24,36 +24,36 @@
                 <form method="POST" action="{{ url('/accounts') }}">
                     @csrf
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-alternative" id="title" name="title" placeholder="Account Title" value="{{ old('title') }}">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <select class="form-control form-control-alternative" id="type" name="type">
                                     <option></option>
-                                    <option value="cash" {{ old('type')=='cash'?'selected':'' }}>Cash</option>
-                                    <option value="bank" {{ old('type')=='bank'?'selected':'' }}>Bank</option>
-                                    <option value="credit card" {{ old('type')=='credit card'?'selected':'' }}>Credit Card</option>
-                                    <option value="mobile" {{ old('type')=='mobile'?'selected':'' }}>Mobile</option>
-                                    <option value="other" {{ old('type')=='other'?'selected':'' }}>Other</option>
+                                    @foreach ($accountTypes as $type)
+                                        <option value="{{ $type }}" {{ (old('type') == $type) ? 'selected' : '' }}>{{ title_case($type) }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <select class="form-control form-control-alternative" id="currency" name="currency">
                                     <option></option>
-                                    <option value="PKR" {{ old('currency')=='PKR'?'selected':'' }}>PKR</option>
-                                    <option value="SAR" {{ old('currency')=='SAR'?'selected':'' }}>SAR</option>
-                                    <option value="AED"{{ old('currency')=='AED'?'selected':'' }}>AED</option>
+                                    @foreach ($currencies as $currency)
+                                        <option value="{{ $currency }}" {{ (old('currency') == $currency) ? 'selected' : '' }}>{{ strtoupper($currency) }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+
+                        <div class="col-md-12 text-right">
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary active">Save</button>
+                                <span class="p-4"><a class="mr-15" href="{{ route('accounts.index') }}">Go Back</a></span>
+                                <span class="p-4"><button type="submit" class="btn btn-primary btn-lg active">Add Account</button></span>
                             </div>
                         </div>
                     </div>
