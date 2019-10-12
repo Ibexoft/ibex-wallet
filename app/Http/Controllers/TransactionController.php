@@ -3,17 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Transaction;
-use App\Account;
-use App\Tag;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    
     /**
      * Display a listing of the resource.
      *
@@ -23,18 +16,20 @@ class TransactionController extends Controller
     {
         $page_title = 'Dashboard';
         $transactions = Transaction::latest()->get();
-        
+
         $user = \Auth::user();
 
-        $total_balance = Transaction::total_balance( $user->id );
-        $available_balance = Transaction::available_balance( $user->id );
+        $total_balance = Transaction::total_balance($user->id);
+        $available_balance = Transaction::available_balance($user->id);
         $income_this_month = Transaction::month_income($user->id);
         $expense_this_month = Transaction::month_expense($user->id);
-        $owed = Transaction::owed( $user->id );
-        $other_owed = Transaction::other_owed( $user->id );
-        
-        return view('transactions.index', 
-                        compact('transactions', 'page_title', 'total_balance', 'available_balance', 'income_this_month', 'expense_this_month', 'owed', 'other_owed'));
+        $owed = Transaction::owed($user->id);
+        $other_owed = Transaction::other_owed($user->id);
+
+        return view(
+            'transactions.index',
+            compact('transactions', 'page_title', 'total_balance', 'available_balance', 'income_this_month', 'expense_this_month', 'owed', 'other_owed')
+        );
     }
 
     /**
@@ -59,28 +54,7 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'amount' => 'required',
-            'description' => 'required',
-            'type' => 'required'
-        ]);
-
-        $txn = Transaction::create([
-            'amount' => request('amount'),
-            'type' => request('type'),
-            'description' => request('description'),
-            'user_id' => auth()->id(),
-            'from_account_id' => request('from_account') != "" ? request('from_account') : null,
-            'to_account_id' => request('to_account') != "" ? request('to_account') : null,
-        ]);
-
-        $tags = request('tags');
-        foreach($tags as $tag)
-        {
-            $txn->tags()->attach($tag);
-        }
-
-        return redirect('/transactions');
+        //
     }
 
     /**

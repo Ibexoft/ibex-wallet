@@ -43,7 +43,7 @@ class Transaction extends Model
         // HAVING balance <> 0
 
         $balance = DB::table('transactions')
-                    ->select(DB::raw("SUM(COALESCE(CASE 
+            ->select(DB::raw("SUM(COALESCE(CASE 
                                         WHEN `type` = 'income' THEN amount 
                                         WHEN `type` = 'refund' THEN amount 
                                     END,0)) 
@@ -51,9 +51,9 @@ class Transaction extends Model
                                         WHEN `type` = 'expense' THEN amount 
                                         WHEN `type` = 'return' THEN amount 
                                     END,0)) balance"))
-                    ->where('user_id', '=', $user_id)
-                    // ->groupBy('status')
-                    ->get();
+            ->where('user_id', '=', $user_id)
+            // ->groupBy('status')
+            ->get();
 
         return $balance[0]->balance;
     }
@@ -61,7 +61,7 @@ class Transaction extends Model
     public static function available_balance($user_id)
     {
         $balance = DB::table('transactions')
-                    ->select(DB::raw("SUM(COALESCE(CASE 
+            ->select(DB::raw("SUM(COALESCE(CASE 
                             WHEN `type` = 'income' THEN amount 
                             WHEN `type` = 'refund' THEN amount 
                             WHEN `type` = 'settlement d' THEN amount 
@@ -73,8 +73,8 @@ class Transaction extends Model
                             WHEN `type` = 'lend' THEN amount
                             WHEN `type` = 'settlement w' THEN amount 
                         END,0)) balance"))
-                    ->where('user_id', '=', $user_id)
-                    ->get();
+            ->where('user_id', '=', $user_id)
+            ->get();
 
         return $balance[0]->balance;
     }
@@ -82,14 +82,14 @@ class Transaction extends Model
     public static function owed($user_id)
     {
         $balance = DB::table('transactions')
-                    ->select(DB::raw("SUM(COALESCE(CASE 
+            ->select(DB::raw("SUM(COALESCE(CASE 
                             WHEN `type` = 'borrow' THEN amount 
                         END,0)) 
                         - SUM(COALESCE(CASE 
                             WHEN `type` = 'settlement w' THEN amount 
                         END,0))balance"))
-                    ->where('user_id', '=', $user_id)
-                    ->get();
+            ->where('user_id', '=', $user_id)
+            ->get();
 
         return $balance[0]->balance;
     }
@@ -97,14 +97,14 @@ class Transaction extends Model
     public static function other_owed($user_id)
     {
         $balance = DB::table('transactions')
-                    ->select(DB::raw("SUM(COALESCE(CASE 
+            ->select(DB::raw("SUM(COALESCE(CASE 
                             WHEN `type` = 'lend' THEN amount 
                         END,0)) 
                         - SUM(COALESCE(CASE 
                             WHEN `type` = 'settlement d' THEN amount 
                         END,0)) balance"))
-                    ->where('user_id', '=', $user_id)
-                    ->get();
+            ->where('user_id', '=', $user_id)
+            ->get();
 
         return $balance[0]->balance;
     }
@@ -112,25 +112,25 @@ class Transaction extends Model
     public static function month_income($user_id)
     {
         $transactions = DB::table('transactions')
-                    ->select(DB::raw("SUM(amount) income"))
-                    ->where('user_id', '=', $user_id)
-                    ->where('type', '=', '\'income\'')
-                    ->whereMonth('created_at', 'MONTH(CURRENT_DATE())')
-                    ->whereYear('created_at', 'YEAR(CURRENT_DATE())')
-                    ->get();
-dd($transactions);
+            ->select(DB::raw("SUM(amount) income"))
+            ->where('user_id', '=', $user_id)
+            ->where('type', '=', '\'income\'')
+            ->whereMonth('created_at', 'MONTH(CURRENT_DATE())')
+            ->whereYear('created_at', 'YEAR(CURRENT_DATE())')
+            ->get();
+        dd($transactions);
         return $transactions[0]->income;
     }
 
     public static function month_expense($user_id)
     {
         $transactions = DB::table('transactions')
-                    ->select(DB::raw("SUM(amount) expense"))
-                    ->where('user_id', '=', $user_id)
-                    ->where('type', '=', '\'expense\'')
-                    ->whereMonth('created_at', 'MONTH(CURRENT_DATE())')
-                    ->whereYear('created_at', 'YEAR(CURRENT_DATE())')
-                    ->get();
+            ->select(DB::raw("SUM(amount) expense"))
+            ->where('user_id', '=', $user_id)
+            ->where('type', '=', '\'expense\'')
+            ->whereMonth('created_at', 'MONTH(CURRENT_DATE())')
+            ->whereYear('created_at', 'YEAR(CURRENT_DATE())')
+            ->get();
 
         return $transactions[0]->expense;
     }

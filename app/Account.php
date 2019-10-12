@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
 {
-    protected $fillable = ['user_id', 'name', 'type', 'currency'];
+    protected $guarded = [];
 
+    /**
+     * Get the user that owns the account.
+     */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo('App\User');
     }
 }
