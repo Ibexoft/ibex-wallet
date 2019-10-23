@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         */
         DB::table('accounts')->insert([
             'user_id' => 1,
-            'name' => 'SCB',
+            'title' => 'SCB',
             'type' => 'bank',
             'currency' => 'PKR',
             'created_at' => Carbon::now(),
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('accounts')->insert([
             'user_id' => 1,
-            'name' => 'Cash',
+            'title' => 'Cash',
             'type' => 'cash',
             'currency' => 'PKR',
             'created_at' => Carbon::now(),
@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('accounts')->insert([
             'user_id' => 1,
-            'name' => 'EasyPaisa',
+            'title' => 'EasyPaisa',
             'type' => 'mobile',
             'currency' => 'PKR',
             'created_at' => Carbon::now(),
@@ -58,26 +58,26 @@ class DatabaseSeeder extends Seeder
         /*
             Tags
         */
-        DB::table('tags')->insert([
-            'user_id' => 1,
-            'name' => 'personal',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+        // DB::table('tags')->insert([
+        //     'user_id' => 1,
+        //     'name' => 'personal',
+        //     'created_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now()
+        // ]);
 
-        DB::table('tags')->insert([
-            'user_id' => 1,
-            'name' => 'work',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+        // DB::table('tags')->insert([
+        //     'user_id' => 1,
+        //     'name' => 'work',
+        //     'created_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now()
+        // ]);
 
-        DB::table('tags')->insert([
-            'user_id' => 1,
-            'name' => 'home',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+        // DB::table('tags')->insert([
+        //     'user_id' => 1,
+        //     'name' => 'home',
+        //     'created_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now()
+        // ]);
 
         /*
             Transactions
@@ -118,14 +118,14 @@ class DatabaseSeeder extends Seeder
         /*
             Transaction Tags
         */
-        DB::table('tag_transaction')->insert([
-            'transaction_id' => 1,
-            'tag_id' => 2
-        ]);
+        // DB::table('tag_transaction')->insert([
+        //     'transaction_id' => 1,
+        //     'tag_id' => 2
+        // ]);
 
-        DB::table('tag_transaction')->insert([
-            'transaction_id' => 3,
-            'tag_id' => 3
-        ]);
+        // DB::table('tag_transaction')->insert([
+        //     'transaction_id' => 3,
+        //     'tag_id' => 3
+        // ]);
     }
 }
