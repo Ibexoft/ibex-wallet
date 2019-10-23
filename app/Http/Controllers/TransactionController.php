@@ -14,7 +14,22 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        $page_title = 'Dashboard';
+        $transactions = Transaction::latest()->get();
+
+        $user = \Auth::user();
+
+        $total_balance = Transaction::total_balance($user->id);
+        $available_balance = Transaction::available_balance($user->id);
+        $income_this_month = Transaction::month_income($user->id);
+        $expense_this_month = Transaction::month_expense($user->id);
+        $owed = Transaction::owed($user->id);
+        $other_owed = Transaction::other_owed($user->id);
+
+        return view(
+            'transactions.index',
+            compact('transactions', 'page_title', 'total_balance', 'available_balance', 'income_this_month', 'expense_this_month', 'owed', 'other_owed')
+        );
     }
 
     /**
@@ -24,7 +39,11 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        //
+        $page_title = 'Add Transaction';
+
+        $accounts = Account::where('user_id', '=', auth()->id())->get();
+        $tags = Tag::where('user_id', '=', auth()->id())->get();
+        return view('transactions.create', compact(['accounts', 'tags', 'page_title']));
     }
 
     /**
@@ -46,7 +65,8 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
-        //
+        $page_title = 'Transaction Details';
+        return view('transactions.show', compact('transaction', 'page_title'));
     }
 
     /**
