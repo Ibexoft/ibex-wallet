@@ -118,7 +118,7 @@ class Transaction extends Model
             ->whereMonth('created_at', 'MONTH(CURRENT_DATE())')
             ->whereYear('created_at', 'YEAR(CURRENT_DATE())')
             ->get();
-        dd($transactions);
+
         return $transactions[0]->income;
     }
 
