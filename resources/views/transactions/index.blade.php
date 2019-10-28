@@ -50,10 +50,10 @@
             <td>
                 <a href="/transactions/{{$transaction->id}}">{{ $transaction->description }}</a>
             </td> 
-            <td>{{ $transaction->from_account->currency ?? $transaction->to_account->currency }} {{ $transaction->amount }}</td>
+            <td>{{ $transaction->from_account ? $transaction->from_account->currency : ($transaction->to_account ? $transaction->to_account->currency : 'PKR') }} {{ $transaction->amount }}</td>
             <td>{{ $transaction->type }}</td>
-            <td>{{ $transaction->from_account ? $transaction->from_account->name : "" }}</td>
-            <td>{{ $transaction->to_account ? $transaction->to_account->name : "" }}</td>
+            <td>{{ $transaction->from_account ? $transaction->from_account->title : "" }}</td>
+            <td>{{ $transaction->to_account ? $transaction->to_account->title : "" }}</td>
             <td>{{ $transaction->created_at }}</td> 
         </tr>
     @endforeach

@@ -2,7 +2,7 @@
 
 @section('content')
 
-@include('layouts.errors')
+{{-- @include('layouts.errors') --}}
 
 <form method="POST" action="/transactions">
     {{ csrf_field() }}
@@ -35,7 +35,7 @@
         <select class="custom-select form-control" id="from_account" name="from_account">
             <option value="" selected>-- Select Account --</option>
             @foreach($accounts as $account)
-                <option value="{{ $account->id }}">{{ $account->name }}</option>
+                <option value="{{ $account->id }}">{{ $account->title }}</option>
             @endforeach
         </select>
     </div>
@@ -44,25 +44,25 @@
         <select class="custom-select form-control" id="to_account" name="to_account">
             <option value="" selected>-- Select Account --</option>
             @foreach($accounts as $account)
-                <option value="{{ $account->id }}">{{ $account->name }}</option>
+                <option value="{{ $account->id }}">{{ $account->title }}</option>
             @endforeach
         </select>
     </div>
-    <div class="form-group">
+    {{-- <div class="form-group">
         <label for="tags">Tags</label>
         <select multiple class="form-control" id="tags" name="tags[]">
             @foreach($tags as $tag)
                 <option value="{{ $tag->id }}">{{ $tag->name }}</option>
             @endforeach
         </select>
-    </div>
+    </div> --}}
     <div class="form-group">
         <label for="for_whom">For Whom</label>
         <input type="text" class="form-control" id="for_whom" name="for_whom" aria-describedby="nameHelp" placeholder="Enter name" required>
-        <small id="nameHelp" class="form-text text-muted">For whom you are lenging/borrowing money to/from</small>
+        <small id="nameHelp" class="form-text text-muted">For whom you are lending/borrowing money to/from</small>
     </div>
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Add Account</button>
+        <button type="submit" class="btn btn-primary">Save</button>
     </div>
 </form>
 

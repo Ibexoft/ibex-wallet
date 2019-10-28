@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Transaction;
 use Illuminate\Http\Request;
+use App\Account;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
@@ -52,8 +54,8 @@ class TransactionController extends Controller
         $page_title = 'Add Transaction';
 
         $accounts = Account::where('user_id', '=', auth()->id())->get();
-        $tags = Tag::where('user_id', '=', auth()->id())->get();
-        return view('transactions.create', compact(['accounts', 'tags', 'page_title']));
+        // $tags = Tag::where('user_id', '=', auth()->id())->get();
+        return view('transactions.create', compact(['accounts', 'page_title']));
     }
 
     /**
@@ -64,7 +66,26 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $validatedData = $request->validate([
+        //     'amount' => $request->amount,
+        //     'description' => $request->description,
+        //     'type' => $request->type,
+        //     'from_account_id' => $request->from_account_id,
+        //     'to_account_id' => $request->to_account_id,
+        //     'for_whom' => $request->for_whom
+        // ]);
+
+        Transaction::create([
+            'user_id' => auth()->id(),
+            'amount' => $request->amount,
+            'description' => $request->description,
+            'type' => $request->type,
+            'from_account_id' => $request->from_account,
+            'to_account_id' => $request->to_account,
+            'for_whom' => $request->for_whom
+        ]);
+
+        return redirect('transactions');
     }
 
     /**
