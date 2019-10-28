@@ -98,7 +98,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('home') }}">
+            <a class="nav-link" href="{{ route('transactions.index') }}">
             <i class="ni ni-planet text-blue"></i> Transactions
             </a>
         </li>

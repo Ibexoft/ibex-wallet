@@ -22,3 +22,4 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('accounts', 'AccountController');
+Route::resource('transactions', 'TransactionController');
