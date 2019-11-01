@@ -1,54 +1,100 @@
+
 @extends('layouts.app')
 
 @section('content')
+<div class="row">
+    <div class="col-xl">
+        <div class="card shadow">
+            <div class="card-header border-0">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h3 class="mb-0">Add Transaction</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <form method="POST" action="{{ url('/transactions') }}">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-alternative" id="amount" name="amount" placeholder="100" value="{{ old('amount') }}">
+                            </div>
+                        </div>
+                    </div>
 
-{{-- @include('layouts.errors') --}}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-alternative" id="description" name="description" placeholder="Description" value="{{ old('description') }}">
+                            </div>
+                        </div>
+                    </div>
 
-<form method="POST" action="/transactions">
-    {{ csrf_field() }}
-    <div class="form-group">
-        <label for="amoount">Amount</label>
-        <input type="text" class="form-control" id="amount" name="amount" placeholder="PKR 100" required>
-    </div>
-    <div class="form-group">
-        <label for="description">Description</label>
-        <input type="text" class="form-control" id="description" name="description" aria-describedby="nameHelp" placeholder="Enter description" required>
-        <small id="nameHelp" class="form-text text-muted">Transaction Description</small>
-    </div>
-    <div class="form-group">
-        <label for="type">Transaction Type</label>
-        <select class="custom-select form-control" id="type" name="type" required>
-            <option value="" selected>-- Select Type --</option>
-            <option value="expense">Expense</option>
-            <option value="return">Return</option>
-            <option value="lend">Lend</option>
-            <option value="settlement w">Settlement (Withdraw)</option>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <select class="form-control form-control-alternative" id="type" name="type">
+                                    <option>Type</option>
+                                    <option value="expense">Expense</option>
+                                    <option value="return">Return</option>
+                                    <option value="lend">Lend</option>
+                                    <option value="settlement w">Settlement (Withdraw)</option>
+                        
+                                    <option value="income">Income</option>
+                                    <option value="refund">Refund</option>
+                                    <option value="borrow">Borrow</option>
+                                    <option value="settlement d">Settlement (deposit)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
-            <option value="income">Income</option>
-            <option value="refund">Refund</option>
-            <option value="borrow">Borrow</option>
-            <option value="settlement d">Settlement (deposit)</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="from_account">From Account</label>
-        <select class="custom-select form-control" id="from_account" name="from_account">
-            <option value="" selected>-- Select Account --</option>
-            @foreach($accounts as $account)
-                <option value="{{ $account->id }}">{{ $account->title }}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="to_account">To Account</label>
-        <select class="custom-select form-control" id="to_account" name="to_account">
-            <option value="" selected>-- Select Account --</option>
-            @foreach($accounts as $account)
-                <option value="{{ $account->id }}">{{ $account->title }}</option>
-            @endforeach
-        </select>
-    </div>
-    {{-- <div class="form-group">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <select class="form-control form-control-alternative" id="from_account" name="from_account">
+                                    <option>From Account</option>
+                                    @foreach ($accounts as $account)
+                                        <option value="{{ $account->id }}" {{ (old('from_account') == $account->title) ? 'selected' : '' }}>{{ $account->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <select class="form-control form-control-alternative" id="to_account" name="to_account">
+                                    <option>To Account</option>
+                                    @foreach ($accounts as $account)
+                                        <option value="{{ $account->id }}" {{ (old('to_account') == $account->title) ? 'selected' : '' }}>{{ $account->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-alternative" id="for_whom" name="for_whom" placeholder="For whom" value="{{ old('for_whom') }}">
+                            </div>
+                        </div>
+                    </div>
+
+                      {{-- <div class="form-group">
         <label for="tags">Tags</label>
         <select multiple class="form-control" id="tags" name="tags[]">
             @foreach($tags as $tag)
@@ -56,14 +102,19 @@
             @endforeach
         </select>
     </div> --}}
-    <div class="form-group">
-        <label for="for_whom">For Whom</label>
-        <input type="text" class="form-control" id="for_whom" name="for_whom" aria-describedby="nameHelp" placeholder="Enter name" required>
-        <small id="nameHelp" class="form-text text-muted">For whom you are lending/borrowing money to/from</small>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-</form>
 
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <div class="form-group">
+                                <span class="p-4"><a class="mr-15" href="{{ route('transactions.index') }}">Go Back</a></span>
+                                <span class="p-4"><button type="submit" class="btn btn-primary btn-lg active">Add Transaction</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

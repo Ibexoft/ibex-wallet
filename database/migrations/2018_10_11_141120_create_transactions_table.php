@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTransactionsTable extends Migration
 {
@@ -21,7 +21,7 @@ class CreateTransactionsTable extends Migration
             $table->enum('type', [
                 'expense', 'return', 'lend', 'settlement w',    // withdrawals
                 'income', 'refund', 'settlement d', 'borrow',   // deposits
-                'transfer'
+                'transfer',
             ]);
             $table->integer('from_account_id')->nullable();
             $table->integer('to_account_id')->nullable();
