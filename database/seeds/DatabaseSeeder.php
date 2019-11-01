@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,41 +18,41 @@ class DatabaseSeeder extends Seeder
             User
         */
         DB::table('users')->insert([
-            'name' => 'Jawaid',
-            'email' => 'mjawaid@gmail.com',
-            'password' => bcrypt('jawaid'),
+            'name'       => 'Jawaid',
+            'email'      => 'mjawaid@gmail.com',
+            'password'   => bcrypt('jawaid'),
             'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'updated_at' => Carbon::now(),
         ]);
 
         /*
             Accounts
         */
         DB::table('accounts')->insert([
-            'user_id' => 1,
-            'title' => 'SCB',
-            'type' => 'bank',
-            'currency' => 'PKR',
+            'user_id'    => 1,
+            'title'      => 'SCB',
+            'type'       => 'bank',
+            'currency'   => 'PKR',
             'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'updated_at' => Carbon::now(),
         ]);
 
         DB::table('accounts')->insert([
-            'user_id' => 1,
-            'title' => 'Cash',
-            'type' => 'cash',
-            'currency' => 'PKR',
+            'user_id'    => 1,
+            'title'      => 'Cash',
+            'type'       => 'cash',
+            'currency'   => 'PKR',
             'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'updated_at' => Carbon::now(),
         ]);
 
         DB::table('accounts')->insert([
-            'user_id' => 1,
-            'title' => 'EasyPaisa',
-            'type' => 'mobile',
-            'currency' => 'PKR',
+            'user_id'    => 1,
+            'title'      => 'EasyPaisa',
+            'type'       => 'mobile',
+            'currency'   => 'PKR',
             'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'updated_at' => Carbon::now(),
         ]);
 
         /*
@@ -83,36 +83,36 @@ class DatabaseSeeder extends Seeder
             Transactions
         */
         DB::table('transactions')->insert([
-            'user_id' => 1,
-            'amount' => 10000,
-            'description' => 'initial load',
-            'type' => 'income',
+            'user_id'         => 1,
+            'amount'          => 10000,
+            'description'     => 'initial load',
+            'type'            => 'income',
             'from_account_id' => null,
-            'to_account_id' => 1,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'to_account_id'   => 1,
+            'created_at'      => Carbon::now(),
+            'updated_at'      => Carbon::now(),
         ]);
 
         DB::table('transactions')->insert([
-            'user_id' => 1,
-            'amount' => 1000,
-            'description' => 'cash withdrawal',
-            'type' => 'transfer',
+            'user_id'         => 1,
+            'amount'          => 1000,
+            'description'     => 'cash withdrawal',
+            'type'            => 'transfer',
             'from_account_id' => 1,
-            'to_account_id' => 2,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'to_account_id'   => 2,
+            'created_at'      => Carbon::now(),
+            'updated_at'      => Carbon::now(),
         ]);
 
         DB::table('transactions')->insert([
-            'user_id' => 1,
-            'amount' => 100,
-            'description' => 'biscuits',
-            'type' => 'expense',
+            'user_id'         => 1,
+            'amount'          => 100,
+            'description'     => 'biscuits',
+            'type'            => 'expense',
             'from_account_id' => 2,
-            'to_account_id' => null,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'to_account_id'   => null,
+            'created_at'      => Carbon::now(),
+            'updated_at'      => Carbon::now(),
         ]);
 
         /*

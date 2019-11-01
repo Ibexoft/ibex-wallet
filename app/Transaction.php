@@ -34,11 +34,11 @@ class Transaction extends Model
         // SELECT user_id
         //         , SUM(COALESCE(CASE WHEN `type` = 'income' THEN amount END,0)) income
         //         , SUM(COALESCE(CASE WHEN `type` = 'withdrawal' THEN amount END,0)) withdrawals
-        //         , SUM(COALESCE(CASE WHEN `type` = 'income' THEN amount END,0)) 
-        //         - SUM(COALESCE(CASE WHEN `type` = 'withdrawal' THEN amount END,0)) balance 
+        //         , SUM(COALESCE(CASE WHEN `type` = 'income' THEN amount END,0))
+        //         - SUM(COALESCE(CASE WHEN `type` = 'withdrawal' THEN amount END,0)) balance
         //     FROM transactions
         //     WHERE user_id = 1
-        //     GROUP  
+        //     GROUP
         //     BY user_id
         // HAVING balance <> 0
 
@@ -112,7 +112,7 @@ class Transaction extends Model
     public static function month_income($user_id)
     {
         $transactions = DB::table('transactions')
-            ->select(DB::raw("SUM(amount) income"))
+            ->select(DB::raw('SUM(amount) income'))
             ->where('user_id', '=', $user_id)
             ->where('type', '=', '\'income\'')
             ->whereMonth('created_at', 'MONTH(CURRENT_DATE())')
@@ -125,7 +125,7 @@ class Transaction extends Model
     public static function month_expense($user_id)
     {
         $transactions = DB::table('transactions')
-            ->select(DB::raw("SUM(amount) expense"))
+            ->select(DB::raw('SUM(amount) expense'))
             ->where('user_id', '=', $user_id)
             ->where('type', '=', '\'expense\'')
             ->whereMonth('created_at', 'MONTH(CURRENT_DATE())')

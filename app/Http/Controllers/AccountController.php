@@ -26,6 +26,7 @@ class AccountController extends Controller
     public function index()
     {
         $accounts = Account::all();
+
         return view('accounts.index', compact('accounts'));
     }
 
@@ -38,29 +39,30 @@ class AccountController extends Controller
     {
         $accountTypes = config('custom.account_types');
         $currencies = config('custom.currencies');
-        
+
         return view('accounts.add', compact(['accountTypes', 'currencies']));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'title' => 'required',
-            'type' => 'required',
+            'title'    => 'required',
+            'type'     => 'required',
             'currency' => 'required',
         ]);
 
         Account::create([
-            'user_id' => Auth::id(),
-            'title' => $request->title,
-            'type' => $request->type,
-            'currency' => $request->currency
+            'user_id'  => Auth::id(),
+            'title'    => $request->title,
+            'type'     => $request->type,
+            'currency' => $request->currency,
         ]);
 
         return redirect('accounts');
@@ -69,7 +71,8 @@ class AccountController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Account  $account
+     * @param \App\Account $account
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Account $account)
@@ -80,47 +83,50 @@ class AccountController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Account  $account
+     * @param \App\Account $account
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Account $account)
     {
         $accountTypes = config('custom.account_types');
         $currencies = config('custom.currencies');
-        
+
         return view('accounts.edit', compact(['account', 'accountTypes', 'currencies']));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Account  $account
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Account             $account
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
         $validatedData = $request->validate([
-            'title' => 'required',
-            'type' => 'required',
+            'title'    => 'required',
+            'type'     => 'required',
             'currency' => 'required',
         ]);
 
         Account::where('user_id', Auth::id())
         ->where('id', $request->id)
         ->update([
-            'title' => $request->title,
-            'type' => $request->type,
-            'currency' => $request->currency
+            'title'    => $request->title,
+            'type'     => $request->type,
+            'currency' => $request->currency,
         ]);
-        
+
         return redirect('accounts');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Account  $account
+     * @param \App\Account $account
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Account $account)
