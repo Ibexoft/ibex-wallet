@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,15 +13,12 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get('/', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::resource('accounts', 'AccountController');
 Route::resource('transactions', 'TransactionController');
+Route::resource('accounts', 'AccountController');
+Route::resource('categories', 'CategoryController');
+Route::resource('wallets', 'WalletController');
