@@ -7,24 +7,24 @@ use Illuminate\Support\Facades\DB;
 
 class Transaction extends Model
 {
-    protected $fillable = ['user_id', 'amount', 'type', 'description', 'from_account_id', 'to_account_id', 'for_whom'];
+    protected $fillable = ['user_id', 'type', 'amount', 'category_id', 'src_account_id', 'dest_account_id', 'details', 'spent_on', 'wallet_id'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class);
-    }
+    // public function tags()
+    // {
+    //     return $this->belongsToMany(Tag::class);
+    // }
 
-    public function from_account()
+    public function src_account()
     {
         return $this->belongsTo(Account::class);
     }
 
-    public function to_account()
+    public function dest_account()
     {
         return $this->belongsTo(Account::class);
     }

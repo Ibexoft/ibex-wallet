@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
 {
-    protected $guarded = [];
+    protected $fillable = ['user_id', 'name', 'type', 'icon', 'currency', 'balance'];
 
     /**
      * Get the user that owns the account.

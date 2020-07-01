@@ -40,7 +40,7 @@ class AccountController extends Controller
         $accountTypes = config('custom.account_types');
         $currencies = config('custom.currencies');
 
-        return view('accounts.add', compact(['accountTypes', 'currencies']));
+        return view('accounts.create', compact(['accountTypes', 'currencies']));
     }
 
     /**
@@ -52,17 +52,18 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title'    => 'required',
-            'type'     => 'required',
-            'currency' => 'required',
-        ]);
+        // $validatedData = $request->validate([
+        //     'title'    => 'required',
+        //     'type'     => 'required',
+        //     'currency' => 'required',
+        // ]);
 
         Account::create([
-            'user_id'  => Auth::id(),
-            'title'    => $request->title,
-            'type'     => $request->type,
-            'currency' => $request->currency,
+            'user_id'   => Auth::id(),
+            'name'      => $request->name,
+            'type'      =>   $request->type,
+            'icon'      => $request->icon,
+            'balance'   => $request->balance
         ]);
 
         return redirect('accounts');
