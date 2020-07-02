@@ -16,7 +16,7 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            
+
             // $table->enum('type', [
             //     'expense', 'return', 'lend', 'settlement w',    // withdrawals
             //     'income', 'refund', 'settlement d', 'borrow',   // deposits

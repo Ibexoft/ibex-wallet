@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Wallet;
 use App\Account;
 use App\Category;
 use App\Transaction;
+use App\Wallet;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
@@ -91,7 +90,7 @@ class TransactionController extends Controller
             'dest_account_id'   => $request->dest_account_id,
             'details'           => $request->details,
             'spent_on'          => $request->spent_on,
-            'wallet_id'         => $request->wallet_id
+            'wallet_id'         => $request->wallet_id,
         ]);
 
         return redirect('transactions');
