@@ -14,18 +14,23 @@ class CreateTransactionsTable extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
+            $table->id();
+            $table->foreignId('user_id');
+
+            // $table->enum('type', [
+            //     'expense', 'return', 'lend', 'settlement w',    // withdrawals
+            //     'income', 'refund', 'settlement d', 'borrow',   // deposits
+            //     'transfer',
+            // ]);
+            $table->integer('type');
+
             $table->float('amount', 8, 2);
-            $table->string('description');
-            $table->enum('type', [
-                'expense', 'return', 'lend', 'settlement w',    // withdrawals
-                'income', 'refund', 'settlement d', 'borrow',   // deposits
-                'transfer',
-            ]);
-            $table->integer('from_account_id')->nullable();
-            $table->integer('to_account_id')->nullable();
-            $table->string('for_whom')->nullable();
+            $table->foreignId('category_id')->nullable();
+            $table->foreignId('src_account_id')->constrained('accounts');
+            $table->foreignId('dest_account_id')->nullable()->constrained('accounts');
+            $table->string('details');
+            $table->string('spent_on')->nullable();
+            $table->foreignId('wallet_id');
             $table->timestamps();
         });
     }

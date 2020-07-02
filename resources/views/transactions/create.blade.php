@@ -1,118 +1,162 @@
-
 @extends('layouts.app')
 
 @section('content')
-<div class="row">
-    <div class="col-xl">
-        <div class="card shadow">
-            <div class="card-header border-0">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <h3 class="mb-0">Add Transaction</h3>
-                    </div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Add Transaction</div>
+
+                <div class="card-body">
+                    <form method="POST" action="{{ route('transactions.store') }}">
+                        @csrf
+
+                        <div class="form-group row">
+                            <label for="type" class="col-md-4 col-form-label text-md-right">Type <span class="text-danger">*</span></label>
+
+                            <div class="col-md-6">
+                                <select name="type" id="type" class="form-control @error('type') is-invalid @enderror" required autocomplete="type" autofocus>
+                                    <option value="1" {{ old('type') == '1' ? 'selected' : ''}}>Expense</option>
+                                    <option value="2" {{ old('type') == '2' ? 'selected' : ''}}>Income</option>
+                                    <option value="3" {{ old('type') == '3' ? 'selected' : ''}}>Transfer</option>
+                                </select>
+
+                                @error('type')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="amount" class="col-md-4 col-form-label text-md-right">Amount <span class="text-danger">*</span></label>
+
+                            <div class="col-md-6">
+                                <input id="amount" type="number" step="0.01" class="form-control @error('amount') is-invalid @enderror" name="amount" value="{{ old('amount') }}" required autocomplete="amount">
+
+                                @error('amount')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="category_id" class="col-md-4 col-form-label text-md-right">Category</label>
+
+                            <div class="col-md-6">
+                                <select name="category_id" id="category_id" class="form-control @error('category_id') is-invalid @enderror" autocomplete="category_id">
+                                    <option></option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('category_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="details" class="col-md-4 col-form-label text-md-right">Details</label>
+
+                            <div class="col-md-6">
+                                <input id="details" type="text" class="form-control @error('details') is-invalid @enderror" name="details" autocomplete="details">
+
+                                @error('details')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="src_account_id" class="col-md-4 col-form-label text-md-right">Account <span class="text-danger">*</span></label>
+
+                            <div class="col-md-6">
+                                <select name="src_account_id" id="src_account_id" class="form-control @error('src_account_id') is-invalid @enderror" required autocomplete="src_account_id">
+                                    <option></option>
+                                    @foreach ($accounts as $account)
+                                        <option value="{{ $account->id }}">{{ $account->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('src_account_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="dest_account_id" class="col-md-4 col-form-label text-md-right">To Account</label>
+
+                            <div class="col-md-6">
+                                <select name="dest_account_id" id="dest_account_id" class="form-control @error('dest_account_id') is-invalid @enderror" autocomplete="dest_account_id">
+                                    <option></option>
+                                    @foreach ($accounts as $account)
+                                        <option value="{{ $account->id }}">{{ $account->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('dest_account_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="wallet_id" class="col-md-4 col-form-label text-md-right">Wallet <span class="text-danger">*</span></label>
+
+                            <div class="col-md-6">
+                                <select name="wallet_id" id="wallet_id" class="form-control @error('wallet_id') is-invalid @enderror" required autocomplete="wallet_id">
+                                    <!-- <option></option> -->
+                                    @foreach ($wallets as $wallet)
+                                        <option value="{{ $wallet->id }}">{{ $wallet->name }}</option>
+                                    @endforeach
+                                </select>
+
+
+                                @error('wallet_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="spent_on" class="col-md-4 col-form-label text-md-right">Spent On</label>
+
+                            <div class="col-md-6">
+                                <input id="spent_on" type="text" class="form-control @error('spent_on') is-invalid @enderror" name="spent_on" autocomplete="spent_on">
+
+                                @error('spent_on')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-0">
+                            <div class="col-md-6 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </div>
-            <div class="card-body">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                <form method="POST" action="{{ url('/transactions') }}">
-                    @csrf
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <input type="text" class="form-control form-control-alternative" id="amount" name="amount" placeholder="100" value="{{ old('amount') }}">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <input type="text" class="form-control form-control-alternative" id="description" name="description" placeholder="Description" value="{{ old('description') }}">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <select class="form-control form-control-alternative" id="type" name="type">
-                                    <option>Type</option>
-                                    <option value="expense">Expense</option>
-                                    <option value="return">Return</option>
-                                    <option value="lend">Lend</option>
-                                    <option value="settlement w">Settlement (Withdraw)</option>
-                        
-                                    <option value="income">Income</option>
-                                    <option value="refund">Refund</option>
-                                    <option value="borrow">Borrow</option>
-                                    <option value="settlement d">Settlement (deposit)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <select class="form-control form-control-alternative" id="from_account" name="from_account">
-                                    <option>From Account</option>
-                                    @foreach ($accounts as $account)
-                                        <option value="{{ $account->id }}" {{ (old('from_account') == $account->title) ? 'selected' : '' }}>{{ $account->title }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <select class="form-control form-control-alternative" id="to_account" name="to_account">
-                                    <option>To Account</option>
-                                    @foreach ($accounts as $account)
-                                        <option value="{{ $account->id }}" {{ (old('to_account') == $account->title) ? 'selected' : '' }}>{{ $account->title }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <input type="text" class="form-control form-control-alternative" id="for_whom" name="for_whom" placeholder="For whom" value="{{ old('for_whom') }}">
-                            </div>
-                        </div>
-                    </div>
-
-                      {{-- <div class="form-group">
-        <label for="tags">Tags</label>
-        <select multiple class="form-control" id="tags" name="tags[]">
-            @foreach($tags as $tag)
-                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
-            @endforeach
-        </select>
-    </div> --}}
-
-                    <div class="row">
-                        <div class="col-md-12 text-right">
-                            <div class="form-group">
-                                <span class="p-4"><a class="mr-15" href="{{ route('transactions.index') }}">Go Back</a></span>
-                                <span class="p-4"><button type="submit" class="btn btn-primary btn-lg active">Add Transaction</button></span>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>

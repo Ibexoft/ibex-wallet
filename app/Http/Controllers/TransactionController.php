@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use App\Category;
 use App\Transaction;
+use App\Wallet;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -52,9 +54,13 @@ class TransactionController extends Controller
     {
         $page_title = 'Add Transaction';
 
+        // $categories = Category::latest()->get();
+        $categories = Category::where('user_id', '=', auth()->id())->get();
         $accounts = Account::where('user_id', '=', auth()->id())->get();
+        $wallets = Wallet::where('user_id', '=', auth()->id())->get();
         // $tags = Tag::where('user_id', '=', auth()->id())->get();
-        return view('transactions.create', compact(['accounts', 'page_title']));
+
+        return view('transactions.create', compact(['categories', 'accounts', 'wallets', 'page_title']));
     }
 
     /**
@@ -76,13 +82,15 @@ class TransactionController extends Controller
         // ]);
 
         Transaction::create([
-            'user_id'         => auth()->id(),
-            'amount'          => $request->amount,
-            'description'     => $request->description,
-            'type'            => $request->type,
-            'from_account_id' => $request->from_account,
-            'to_account_id'   => $request->to_account,
-            'for_whom'        => $request->for_whom,
+            'user_id'           => auth()->id(),
+            'type'              => $request->type,
+            'amount'            => $request->amount,
+            'category_id'       => $request->category_id,
+            'src_account_id'    => $request->src_account_id,
+            'dest_account_id'   => $request->dest_account_id,
+            'details'           => $request->details,
+            'spent_on'          => $request->spent_on,
+            'wallet_id'         => $request->wallet_id,
         ]);
 
         return redirect('transactions');
