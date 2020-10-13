@@ -14,6 +14,16 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function wallet()
+    {
+        return $this->belongsTo(Wallet::class);
+    }
+
     // public function tags()
     // {
     //     return $this->belongsToMany(Tag::class);

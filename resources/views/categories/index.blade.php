@@ -6,8 +6,8 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    Categories
-                    <a href="categories/create" class="small float-right">New Category</a>
+                    Income & Expenses
+                    <a href="categories/create" class="small float-right">New Income & Expense</a>
                 </div>
 
                 <div class="card-body">
