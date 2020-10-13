@@ -22,9 +22,9 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+            
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Ibexpenses') }}
+                    {{ config('app.name', 'ibEXPENSES') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -32,12 +32,18 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
+                    <div class="container">
+                    <ul class="navbar-nav ml-auto mr-auto">
+                        <li class="nav-item {{ Request::is('/') ? 'active' : '' }}"><a class="nav-link" href="/">Dashboard</a></li>
+                        <li class="nav-item {{ Request::is('transactions') ? 'active' : '' }}"><a class="nav-link" href="/transactions">Transactions</a></li>
+                        <li class="nav-item {{ Request::is('accounts') ? 'active' : '' }}"><a class="nav-link" href="/accounts">Accounts</a></li>
+                        <li class="nav-item {{ Request::is('wallets') ? 'active' : '' }}"><a class="nav-link" href="/wallets">Wallets</a></li>
+                        <li class="nav-item {{ Request::is('categories') ? 'active' : '' }}"><a class="nav-link" href="/categories">Income & Expenses</a></li>
                     </ul>
+                    </div>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav">
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
@@ -69,7 +75,6 @@
                         @endguest
                     </ul>
                 </div>
-            </div>
         </nav>
 
         <main class="py-4">

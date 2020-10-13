@@ -14,7 +14,7 @@
                     @foreach ($transactions as $transaction)
                     <div class="row">
                         <div class="col-md-6">
-                            {{ $transaction->amount }}
+                            <a href="{{ route('transactions.edit', ['transaction' => $transaction->id]) }}">{{ $transaction->category->name }}: {{ $transaction->details }}</a>
                         </div>
                     </div>
                     @endforeach

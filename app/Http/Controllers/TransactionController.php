@@ -27,7 +27,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $page_title = 'Dashboard';
+        $pageTitle = 'Dashboard';
         $transactions = Transaction::latest()->get();
 
         $user = \Auth::user();
@@ -41,7 +41,7 @@ class TransactionController extends Controller
 
         return view(
             'transactions.index',
-            compact('transactions', 'page_title', 'total_balance', 'available_balance', 'income_this_month', 'expense_this_month', 'owed', 'other_owed')
+            compact('transactions', 'pageTitle', 'total_balance', 'available_balance', 'income_this_month', 'expense_this_month', 'owed', 'other_owed')
         );
     }
 
@@ -52,7 +52,7 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        $page_title = 'Add Transaction';
+        $pageTitle = 'Add Transaction';
 
         // $categories = Category::latest()->get();
         $categories = Category::where('user_id', '=', auth()->id())->get();
@@ -60,7 +60,7 @@ class TransactionController extends Controller
         $wallets = Wallet::where('user_id', '=', auth()->id())->get();
         // $tags = Tag::where('user_id', '=', auth()->id())->get();
 
-        return view('transactions.create', compact(['categories', 'accounts', 'wallets', 'page_title']));
+        return view('transactions.create', compact(['categories', 'accounts', 'wallets', 'pageTitle']));
     }
 
     /**
@@ -105,9 +105,9 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
-        $page_title = 'Transaction Details';
+        $pageTitle = 'Transaction Details';
 
-        return view('transactions.show', compact('transaction', 'page_title'));
+        return view('transactions.show', compact('transaction', 'pageTitle'));
     }
 
     /**
@@ -119,7 +119,15 @@ class TransactionController extends Controller
      */
     public function edit(Transaction $transaction)
     {
-        //
+        $pageTitle = 'Edit Transaction';
+
+        // $categories = Category::latest()->get();
+        $categories = Category::where('user_id', '=', auth()->id())->get();
+        $accounts = Account::where('user_id', '=', auth()->id())->get();
+        $wallets = Wallet::where('user_id', '=', auth()->id())->get();
+        // $tags = Tag::where('user_id', '=', auth()->id())->get();
+
+        return view('transactions.edit', compact(['transaction', 'categories', 'accounts', 'wallets', 'pageTitle']));
     }
 
     /**
@@ -132,7 +140,18 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
-        //
+        $transaction->type              = $request->type;
+        $transaction->amount            = $request->amount;
+        $transaction->category_id       = $request->category_id;
+        $transaction->src_account_id    = $request->src_account_id;
+        $transaction->dest_account_id   = $request->dest_account_id;
+        $transaction->details           = $request->details;
+        $transaction->spent_on          = $request->spent_on;
+        $transaction->wallet_id         = $request->wallet_id;
+
+        $transaction->save();
+
+        return redirect('transactions');
     }
 
     /**
