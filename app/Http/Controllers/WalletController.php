@@ -52,7 +52,8 @@ class WalletController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -60,7 +61,7 @@ class WalletController extends Controller
         Wallet::create([
             'user_id'               => auth()->id(),
             'name'                  => $request->name,
-            'icon'                  => $request->icon
+            'icon'                  => $request->icon,
         ]);
 
         return redirect('wallets');
@@ -69,7 +70,8 @@ class WalletController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Wallet  $wallet
+     * @param \App\Wallet $wallet
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Wallet $wallet)
@@ -82,7 +84,8 @@ class WalletController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Wallet  $wallet
+     * @param \App\Wallet $wallet
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Wallet $wallet)
@@ -93,8 +96,9 @@ class WalletController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Wallet  $wallet
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Wallet              $wallet
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Wallet $wallet)
@@ -105,7 +109,8 @@ class WalletController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Wallet  $wallet
+     * @param \App\Wallet $wallet
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Wallet $wallet)

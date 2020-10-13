@@ -61,9 +61,9 @@ class AccountController extends Controller
         Account::create([
             'user_id'   => Auth::id(),
             'name'      => $request->name,
-            'type'      =>   $request->type,
+            'type'      => $request->type,
             'icon'      => $request->icon,
-            'balance'   => $request->balance
+            'balance'   => $request->balance,
         ]);
 
         return redirect('accounts');
