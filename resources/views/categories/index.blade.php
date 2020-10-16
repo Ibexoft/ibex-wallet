@@ -6,15 +6,15 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    Income & Expenses
-                    <a href="categories/create" class="small float-right">New Income & Expense</a>
+                    Income & Expenses <small>({{ $categories->count() }})</small>
+                    <a href="categories/create" class="small float-right">New Expense or Income</a>
                 </div>
 
                 <div class="card-body">
                     @foreach ($categories as $category)
                     <div class="row">
                         <div class="col-md-6">
-                            {{ $category->name }}
+                            <a href="{{ route('categories.edit', ['category' => $category->id]) }}">{{ $category->name }}</a>
                         </div>
                     </div>
                     @endforeach
