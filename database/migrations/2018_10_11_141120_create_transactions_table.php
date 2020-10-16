@@ -28,9 +28,9 @@ class CreateTransactionsTable extends Migration
             $table->foreignId('category_id')->nullable();
             $table->foreignId('src_account_id')->constrained('accounts');
             $table->foreignId('dest_account_id')->nullable()->constrained('accounts');
-            $table->string('details');
+            $table->string('details')->nullable();
             $table->string('spent_on')->nullable();
-            $table->foreignId('wallet_id');
+            $table->foreignId('wallet_id')->nullable();
             $table->timestamps();
         });
     }
