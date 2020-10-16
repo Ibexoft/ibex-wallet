@@ -12,90 +12,91 @@ class CategorySeeder extends Seeder
     public function run()
     {
         $categories = [
-            "Household" => [
-                "Grocery" => [
-                    "Food",
-                    "Breakfast",
-                    "Refreshment"
+            'Household' => [
+                'Grocery' => [
+                    'Food',
+                    'Breakfast',
+                    'Refreshment',
                 ],
-                "Toileteries and Personal Supplies",
-                "Household Supplies",
-                "Family expenses",
-                "Housing" => [
-                    "Rent",
-                    "Repair & Maintenance",
-                    "Bills" => [
-                        "Electricity",
-                        "Gas",
-                        "Water",
-                        "Internet",
-                        "Mobile balance",
-                        "Maid",
-                        "Sewerage",
-                        "Trash"
-                    ]
-                ]
-            ],
-            "Personal Care",
-            "Education" => [
-                "School Fee",
-                "Stationary, Books, & Supplies",
-                "Uniforms, Suits",
-                "Qari, Tution"
-            ],
-            "Healthcare" => [
-                "Doctor",
-                "Medicine"
-            ],
-            "Entertainment" => [
-                "Restaurant",
-                "Cafe",
-                "Order Food",
-                "Outing, Picnic"
-            ],
-            "Vehicle" => [
-                "Fuel" => [
-                    "Petrol",
-                    "CNG",
-                    "Diesel"
+                'Toileteries and Personal Supplies',
+                'Household Supplies',
+                'Family expenses',
+                'Housing' => [
+                    'Rent',
+                    'Repair & Maintenance',
+                    'Bills' => [
+                        'Electricity',
+                        'Gas',
+                        'Water',
+                        'Internet',
+                        'Mobile balance',
+                        'Maid',
+                        'Sewerage',
+                        'Trash',
+                    ],
                 ],
-                "Maintenance",
-                "Repair",
-                "Taxes and Documentation"
             ],
-            "Shopping" => [
-                "Apparel",
-                "Beauty, Cosmetics, & Accessories",
-                "Other"
+            'Personal Care',
+            'Education' => [
+                'School Fee',
+                'Stationary, Books, & Supplies',
+                'Uniforms, Suits',
+                'Qari, Tution',
             ],
-            "Religious" => [
-                "Zakat",
-                "Sadqa",
-                "Qurbani",
-                "Hajj, Umrah"
+            'Healthcare' => [
+                'Doctor',
+                'Medicine',
             ],
-            "Gifts",
-            "Home Renovation & Decor",
-            "Transportation" => [
-                "Parking",
-                "Tolls",
-                "Taxi"
+            'Entertainment' => [
+                'Restaurant',
+                'Cafe',
+                'Order Food',
+                'Outing, Picnic',
             ],
-            "Other" => [
-                "Bank and ATM Fee"
+            'Vehicle' => [
+                'Fuel' => [
+                    'Petrol',
+                    'CNG',
+                    'Diesel',
+                ],
+                'Maintenance',
+                'Repair',
+                'Taxes and Documentation',
             ],
-            "Income" => [
-                "Job, Salary",
-                "Profit on business",
-                "Sell",
-                "Other"
-            ]
+            'Shopping' => [
+                'Apparel',
+                'Beauty, Cosmetics, & Accessories',
+                'Other',
+            ],
+            'Religious' => [
+                'Zakat',
+                'Sadqa',
+                'Qurbani',
+                'Hajj, Umrah',
+            ],
+            'Gifts',
+            'Home Renovation & Decor',
+            'Transportation' => [
+                'Parking',
+                'Tolls',
+                'Taxi',
+            ],
+            'Other' => [
+                'Bank and ATM Fee',
+            ],
+            'Income' => [
+                'Job, Salary',
+                'Profit on business',
+                'Sell',
+                'Other',
+            ],
         ];
 
         $this->create(App\User::first()->id, $categories);
     }
 
-    protected function create(int $userId, array $subCategories = null, $category = null, App\Category $parentCategory = null) {
+    protected function create(int $userId, array $subCategories = null, $category = null, App\Category $parentCategory = null)
+    {
         $parentCat = null;
 
         if ($category) {
@@ -112,7 +113,7 @@ class CategorySeeder extends Seeder
             $parentCat = App\Category::create([
                 'user_id'               => $userId,
                 'name'                  => $category,
-                'parent_category_id'    => $parentCategory ? $parentCategory->id : null
+                'parent_category_id'    => $parentCategory ? $parentCategory->id : null,
             ]);
         }
 
