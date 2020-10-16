@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Wallet;
 use App\Account;
 use App\Category;
-use Illuminate\Http\Request;
+use App\Wallet;
 
 class HomeController extends Controller
 {

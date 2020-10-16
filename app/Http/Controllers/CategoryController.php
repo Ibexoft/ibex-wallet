@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Category;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Log;
+
 class CategoryController extends Controller
 {
     /**
@@ -25,9 +27,8 @@ class CategoryController extends Controller
     public function index()
     {
         $page_title = 'Categories';
-        $categories = Category::latest()->get();
 
-        $user = \Auth::user();
+        $categories = \Auth::user()->categories();
 
         return view(
             'categories.index',

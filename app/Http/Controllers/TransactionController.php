@@ -140,14 +140,14 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
-        $transaction->type              = $request->type;
-        $transaction->amount            = $request->amount;
-        $transaction->category_id       = $request->category_id;
-        $transaction->src_account_id    = $request->src_account_id;
-        $transaction->dest_account_id   = $request->dest_account_id;
-        $transaction->details           = $request->details;
-        $transaction->spent_on          = $request->spent_on;
-        $transaction->wallet_id         = $request->wallet_id;
+        $transaction->type = $request->type;
+        $transaction->amount = $request->amount;
+        $transaction->category_id = $request->category_id;
+        $transaction->src_account_id = $request->src_account_id;
+        $transaction->dest_account_id = $request->dest_account_id;
+        $transaction->details = $request->details;
+        $transaction->spent_on = $request->spent_on;
+        $transaction->wallet_id = $request->wallet_id;
 
         $transaction->save();
 

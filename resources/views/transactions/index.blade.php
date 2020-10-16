@@ -6,8 +6,8 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    Transactions
-                    <a href="transactions/create" class="small float-right">New Transaction</a>
+                    Transactions <small>({{ $transactions->count() }})</small>
+                    <a href="transactions/create" class="small float-right">Add Expense/Income</a>
                 </div>
 
                 <div class="card-body">

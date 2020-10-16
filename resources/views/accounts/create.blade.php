@@ -63,7 +63,7 @@
                             <label for="balance" class="col-md-4 col-form-label text-md-right">Starting Balance</label>
 
                             <div class="col-md-6">
-                                <input id="balance" type="number" step="0.01" class="form-control @error('balance') is-invalid @enderror" name="balance" autocomplete="balance">
+                                <input id="balance" type="number" value="0.00" step="0.01" class="form-control @error('balance') is-invalid @enderror" name="balance" autocomplete="balance">
 
                                 @error('balance')
                                     <span class="invalid-feedback" role="alert">
