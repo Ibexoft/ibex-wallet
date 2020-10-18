@@ -22,13 +22,13 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
         $page_title = 'Categories';
 
-        $categories = \Auth::user()->categories();
+        $categories = auth()->user()->categories;
 
         return view(
             'categories.index',
