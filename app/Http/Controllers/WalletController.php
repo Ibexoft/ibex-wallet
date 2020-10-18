@@ -46,7 +46,7 @@ class WalletController extends Controller
 
         // $accounts = Account::where('user_id', '=', auth()->id())->get();
         // $tags = Tag::where('user_id', '=', auth()->id())->get();
-        return view('wallets.create', compact(['accounts', 'page_title']));
+        return view('wallets.create', compact(['page_title']));
     }
 
     /**
