@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class CategorySeeder extends Seeder
+class FirstUserCategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -35,6 +35,23 @@ class CategorySeeder extends Seeder
                         'Trash',
                     ],
                 ],
+                "Toileteries and Personal Supplies",
+                "Household Supplies",
+                "Family expenses",
+                "Housing" => [
+                    "Rent",
+                    "Repair & Maintenance",
+                    "Bills" => [
+                        "Electricity",
+                        "Gas",
+                        "Water",
+                        "Internet",
+                        "Phone/Mobile bill",
+                        "Maid",
+                        "Sewerage",
+                        "Trash"
+                    ]
+                ]
             ],
             'Personal Care',
             'Education' => [
@@ -63,16 +80,18 @@ class CategorySeeder extends Seeder
                 'Repair',
                 'Taxes and Documentation',
             ],
-            'Shopping' => [
-                'Apparel',
-                'Beauty, Cosmetics, & Accessories',
-                'Other',
-            ],
             'Religious' => [
                 'Zakat',
                 'Sadqa',
                 'Qurbani',
                 'Hajj, Umrah',
+            ],
+            "Shopping" => [
+                "Apparel",
+                "Beauty, Cosmetics, Jewelry, & Accessories",
+                "Gadgets, Devices, & Accessories",
+                "Toys & Kids items",
+                "Other"
             ],
             'Gifts',
             'Home Renovation & Decor',

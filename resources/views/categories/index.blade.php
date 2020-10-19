@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     Income & Expenses <small>({{ $categories->count() }})</small>
-                    <a href="categories/create" class="small float-right">New Expense or Income</a>
+                    <a href="categories/create" class="small float-right">Add Expense or Income</a>
                 </div>
 
                 <div class="card-body">
