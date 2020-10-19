@@ -50,7 +50,7 @@
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
-                                
+
                                 @error('category_id')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -78,7 +78,7 @@
 
                             <div class="col-md-6">
                                 <select name="src_account_id" id="src_account_id" class="form-control @error('src_account_id') is-invalid @enderror" required autocomplete="src_account_id">
-                                    <option></option>
+                                    {{-- <option></option> --}}
                                     @foreach ($accounts as $account)
                                         <option value="{{ $account->id }}">{{ $account->name }}</option>
                                     @endforeach

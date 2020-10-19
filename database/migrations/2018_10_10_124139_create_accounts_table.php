@@ -24,7 +24,7 @@ class CreateAccountsTable extends Migration
 
             $table->string('currency')->nullable()->default('PKR');
             $table->string('icon')->nullable();
-            $table->float('balance', 8, 2)->default(0);
+            $table->float('balance', 8, 2)->default(0.00);
             $table->timestamps();
         });
     }
