@@ -51,4 +51,12 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Category');
     }
+
+    /**
+     * Get the user transactions.
+     */
+    public function transactions()
+    {
+        return $this->hasMany('App\Transaction');
+    }
 }
