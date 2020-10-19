@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Account;
 use App\Category;
 use App\Transaction;
@@ -28,7 +29,7 @@ class TransactionController extends Controller
     public function index()
     {
         $pageTitle = 'Dashboard';
-        $transactions = Transaction::latest()->get();
+        $transactions = \Auth::user()->transactions()->get();
 
         $user = \Auth::user();
 
