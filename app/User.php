@@ -45,6 +45,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user wallets.
+     */
+    public function wallets()
+    {
+        return $this->hasMany('App\Wallet');
+    }
+
+    /**
      * Get the user categories.
      */
     public function categories()

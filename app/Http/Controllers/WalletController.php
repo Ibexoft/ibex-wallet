@@ -25,9 +25,7 @@ class WalletController extends Controller
     public function index()
     {
         $page_title = 'Wallets';
-        $wallets = Wallet::latest()->get();
-
-        $user = \Auth::user();
+        $wallets = \Auth::user()->wallets()->get();
 
         return view(
             'wallets.index',
