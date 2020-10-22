@@ -77,6 +77,18 @@ class RegisterController extends Controller
             config('defaultcategories')
         );
 
+        \App\Wallet::create([
+            'user_id'  => $user->id,
+            'name'    => "Default"
+        ]);
+
+        \App\Account::create([
+            'user_id'  => $user->id,
+            'name'    => "Default",
+            'type'     => 1,
+            'currency' => "Rs",
+        ]);
+
         return $user;
     }
 }
