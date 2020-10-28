@@ -15,7 +15,12 @@ class Category extends Model
 
     public function parent_category()
     {
-        return $this->belongsTo(self::class);
+        return $this->belongsTo(self::class, 'parent_category_id');
+    }
+
+    public function subcategories()
+    {
+        return $this->hasMany(self::class, 'parent_category_id');
     }
 
     public static function bulkCreateForUser(int $userId, array $subCategories = null, $category = null, Category $parentCategory = null)
