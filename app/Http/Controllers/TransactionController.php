@@ -55,8 +55,7 @@ class TransactionController extends Controller
     {
         $pageTitle = 'Add Transaction';
 
-        // $categories = Category::latest()->get();
-        $categories = Category::where('user_id', '=', auth()->id())->get();
+        $categories = Category::where('user_id', '=', auth()->id())->where('parent_category_id', null)->get();
         $accounts = Account::where('user_id', '=', auth()->id())->get();
         $wallets = Wallet::where('user_id', '=', auth()->id())->get();
         // $tags = Tag::where('user_id', '=', auth()->id())->get();
