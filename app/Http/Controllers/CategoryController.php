@@ -26,7 +26,7 @@ class CategoryController extends Controller
     {
         $page_title = 'Categories';
 
-        $categories = \Auth::user()->categories()->get();
+        $categories = \Auth::user()->categories()->where('parent_category_id', null)->get();
 
         return view(
             'categories.index',
