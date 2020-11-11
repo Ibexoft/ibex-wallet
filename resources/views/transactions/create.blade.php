@@ -2,6 +2,12 @@
 
 @section('content')
 
-    @include('transactions.create-widget')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            @include('transactions.create-widget')
+        </div>
+    </div>
+</div>
 
 @endsection

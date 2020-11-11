@@ -53,14 +53,11 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        $pageTitle = 'Add Transaction';
-
         $categories = Category::where('user_id', '=', auth()->id())->where('parent_category_id', null)->get();
         $accounts = Account::where('user_id', '=', auth()->id())->get();
         $wallets = Wallet::where('user_id', '=', auth()->id())->get();
-        // $tags = Tag::where('user_id', '=', auth()->id())->get();
 
-        return view('transactions.create', compact(['categories', 'accounts', 'wallets', 'pageTitle']));
+        return view('transactions.create', compact(['categories', 'accounts', 'wallets']));
     }
 
     /**
