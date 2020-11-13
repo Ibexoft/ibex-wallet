@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Transaction extends Model
 {
-    protected $fillable = ['user_id', 'type', 'amount', 'category_id', 'src_account_id', 'dest_account_id', 'details', 'spent_on', 'wallet_id'];
+    protected $fillable = ['user_id', 'type', 'amount', 'transaction_date', 'category_id', 'src_account_id', 'dest_account_id', 'details', 'spent_on', 'wallet_id'];
 
     public function user()
     {

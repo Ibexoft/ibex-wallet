@@ -26,6 +26,23 @@
             </div>
 
             <div class="form-group row">
+                <label for="transaction_date" class="col-md-4 col-form-label text-md-right">Date <span
+                        class="text-danger">*</span></label>
+
+                <div class="col-md-6">
+                    <input id="transaction_date" type="date"
+                        class="form-control @error('transaction_date') is-invalid @enderror" name="transaction_date"
+                        value="{{ old('transaction_date') ?? date("Y-m-d") }}" required autocomplete="transaction_date">
+
+                    @error('transaction_date')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="form-group row">
                 <label for="amount" class="col-md-4 col-form-label text-md-right">Amount <span
                         class="text-danger">*</span></label>
 
@@ -50,12 +67,11 @@
                         class="form-control @error('category_id') is-invalid @enderror" autocomplete="category_id">
                         <option></option>
                         @foreach ($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
 
-                        @if (count($category->subcategories))
-                        @include('categories.subCategoryOption',['subcategories' => $category->subcategories, 'indent'
-                        => 1])
-                        @endif
+                            @if (count($category->subcategories))
+                                @include('categories.subCategoryOption',['subcategories' => $category->subcategories, 'indent' => 1])
+                            @endif
                         @endforeach
                     </select>
 

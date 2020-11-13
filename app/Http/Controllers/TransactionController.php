@@ -82,6 +82,7 @@ class TransactionController extends Controller
             'user_id'           => auth()->id(),
             'type'              => $request->type,
             'amount'            => $request->amount,
+            'transaction_date'  => $request->transaction_date,
             'category_id'       => $request->category_id,
             'src_account_id'    => $request->src_account_id,
             'dest_account_id'   => $request->dest_account_id,
@@ -118,7 +119,6 @@ class TransactionController extends Controller
     {
         $pageTitle = 'Edit Transaction';
 
-        // $categories = Category::latest()->get();
         $categories = Category::where('user_id', '=', auth()->id())->get();
         $accounts = Account::where('user_id', '=', auth()->id())->get();
         $wallets = Wallet::where('user_id', '=', auth()->id())->get();
@@ -139,6 +139,7 @@ class TransactionController extends Controller
     {
         $transaction->type = $request->type;
         $transaction->amount = $request->amount;
+        $transaction->transaction_date = $request->transaction_date;
         $transaction->category_id = $request->category_id;
         $transaction->src_account_id = $request->src_account_id;
         $transaction->dest_account_id = $request->dest_account_id;

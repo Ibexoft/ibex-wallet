@@ -31,6 +31,20 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="transaction_date" class="col-md-4 col-form-label text-md-right">Date <span class="text-danger">*</span></label>
+
+                            <div class="col-md-6">
+                                <input id="transaction_date" type="date" class="form-control @error('transaction_date') is-invalid @enderror" name="transaction_date" value="{{ $transaction->transaction_date }}" required autocomplete="transaction_date">
+
+                                @error('transaction_date')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="amount" class="col-md-4 col-form-label text-md-right">Amount <span class="text-danger">*</span></label>
 
                             <div class="col-md-6">
