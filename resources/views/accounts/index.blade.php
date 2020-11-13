@@ -10,15 +10,28 @@
                     <a href="accounts/create" class="small float-right">New Account</a>
                 </div>
 
-                <div class="card-body">
-                    @foreach ($accounts as $account)
-                    <div class="row">
-                        <div class="col-md-6">
-                            {{ $account->name }}
-                        </div>
-                    </div>
-                    @endforeach
+                <div class="card-body table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($accounts as $account)
+                            <tr>
+                                <td>{{ $account->id }}</td>
+                                <td>{{ $account->name }}</td>
+                                <td>{{ $account->type }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
+
             </div>
         </div>
     </div>

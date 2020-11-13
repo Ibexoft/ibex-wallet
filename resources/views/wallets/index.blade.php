@@ -10,15 +10,26 @@
                     <a href="wallets/create" class="small float-right">New Wallet</a>
                 </div>
 
-                <div class="card-body">
-                    @foreach ($wallets as $wallet)
-                    <div class="row">
-                        <div class="col-md-6">
-                            {{ $wallet->name }}
-                        </div>
-                    </div>
-                    @endforeach
+                <div class="card-body table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($wallets as $wallet)
+                            <tr>
+                                <td>{{ $wallet->id }}</td>
+                                <td>{{ $wallet->name }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
+
             </div>
         </div>
     </div>
