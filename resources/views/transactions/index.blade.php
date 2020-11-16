@@ -41,7 +41,7 @@
                                 <td>{{ $transaction->transaction_date }}</td>
                                 <td>
                                     <a href="{{ route('transactions.edit', ['transaction' => $transaction->id]) }}">
-                                        {{ $transaction->category->name }}<small class="text-muted">{{ $transaction->details ? ' - ' . $transaction->details : '' }}</small>
+                                        {{ $transaction->category ? $transaction->category->name : '' }}<small class="text-muted">{{ $transaction->details ? ' - ' . $transaction->details : '' }}</small>
                                     </a>
                                 </td>
                                 <td>{{ $transaction->src_account->name }}</td>
