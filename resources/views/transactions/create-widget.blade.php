@@ -67,17 +67,16 @@
                     class="form-control @error('category_id') is-invalid @enderror" autocomplete="category_id">
                     <option></option>
                     @foreach ($categories as $category)
-                    <option value="{{ $category->id }}" {{ $transaction ?? '' ? 
-                                $transaction->category ?? '' ?
-                                    $transaction->category->id == $category->id ? 'selected' : ''
-                                    : '' 
-                                : '' }}>
-                        {{ $category->name }}</option>
+                        <option value="{{ $category->id }}" {{ $transaction ?? '' ? 
+                                    $transaction->category ?? '' ?
+                                        $transaction->category->id == $category->id ? 'selected' : ''
+                                        : '' 
+                                    : '' }}>
+                            {{ $category->name }}</option>
 
-                    @if (count($category->subcategories))
-                    @include('categories.subCategoryOption',['subcategories' => $category->subcategories, 'indent'
-                    => 1])
-                    @endif
+                        @if (count($category->subcategories))
+                            @include ('categories.subCategoryOption', ['subcategories' => $category->subcategories, 'indent' => 1])
+                        @endif
                     @endforeach
                 </select>
 
