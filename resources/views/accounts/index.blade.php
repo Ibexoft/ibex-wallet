@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     Accounts
-                    <a href="accounts/create" class="small float-right">New Account</a>
+                    <a href="accounts/create" class="small float-right">Add Account</a>
                 </div>
 
                 <div class="card-body table-responsive">
@@ -16,7 +16,7 @@
                             <tr>
                                 <th>S.No.</th>
                                 <th>Name</th>
-                                <th>Type</th>
+                                {{-- <th>Type</th> --}}
                             </tr>
                         </thead>
 
@@ -24,8 +24,12 @@
                             @foreach ($accounts as $account)
                             <tr>
                                 <td>{{ $account->id }}</td>
-                                <td>{{ $account->name }}</td>
-                                <td>{{ $account->type }}</td>
+                                <td>
+                                    <a href="{{ route('accounts.edit', ['account' => $account->id]) }}">
+                                        {{ $account->name }}
+                                    </a>
+                                </td>
+                                {{-- <td>{{ $account->type }}</td> --}}
                             </tr>
                             @endforeach
                         </tbody>
