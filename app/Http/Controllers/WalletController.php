@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WalletController extends Controller
 {
@@ -40,11 +41,7 @@ class WalletController extends Controller
      */
     public function create()
     {
-        $page_title = 'Add Wallet';
-
-        // $accounts = Account::where('user_id', '=', auth()->id())->get();
-        // $tags = Tag::where('user_id', '=', auth()->id())->get();
-        return view('wallets.create', compact(['accounts', 'page_title']));
+        return view('wallets.create');
     }
 
     /**
@@ -88,7 +85,7 @@ class WalletController extends Controller
      */
     public function edit(Wallet $wallet)
     {
-        //
+        return view('wallets.create', compact(['wallet']));
     }
 
     /**
@@ -101,7 +98,14 @@ class WalletController extends Controller
      */
     public function update(Request $request, Wallet $wallet)
     {
-        //
+        Wallet::where('user_id', Auth::id())
+            ->where('id', $wallet->id)
+            ->update([
+                'name'  => $request->name,
+                'icon'  => $request->icon
+            ]);
+
+        return redirect('wallets');
     }
 
     /**
