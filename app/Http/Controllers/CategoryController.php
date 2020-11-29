@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -41,13 +42,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $page_title = 'Add Category';
+        $parentCategories = Category::where('user_id', '=', auth()->id())->where('parent_category_id', null)->get();
 
-        $parentCategories = Category::latest()->get();
-
-        // $accounts = Account::where('user_id', '=', auth()->id())->get();
-        // $tags = Tag::where('user_id', '=', auth()->id())->get();
-        return view('categories.create', compact(['page_title', 'parentCategories']));
+        return view('categories.create', compact(['parentCategories']));
     }
 
     /**
@@ -92,7 +89,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        $parentCategories = Category::where('user_id', '=', auth()->id())->where('parent_category_id', null)->get();
+
+        return view('categories.create', compact(['category', 'parentCategories']));
     }
 
     /**
@@ -105,7 +104,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        Category::where('user_id', Auth::id())
+        ->where('id', $category->id)
+        ->update([
+            'name'                  => $request->name,
+            'parent_category_id'    => $request->parent_category_id,
+            'icon'                  => $request->icon
+        ]);
+
+        return redirect('categories');
     }
 
     /**
