@@ -16,15 +16,9 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-
-            // $table->enum('type', [
-            //     'expense', 'return', 'lend', 'settlement w',    // withdrawals
-            //     'income', 'refund', 'settlement d', 'borrow',   // deposits
-            //     'transfer',
-            // ]);
             $table->integer('type');
-
             $table->float('amount', 8, 2);
+            $table->date('transaction_date');
             $table->foreignId('category_id')->nullable();
             $table->foreignId('src_account_id')->constrained('accounts');
             $table->foreignId('dest_account_id')->nullable()->constrained('accounts');

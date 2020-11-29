@@ -93,7 +93,7 @@ class AccountController extends Controller
         $accountTypes = config('custom.account_types');
         $currencies = config('custom.currencies');
 
-        return view('accounts.edit', compact(['account', 'accountTypes', 'currencies']));
+        return view('accounts.create', compact(['account', 'accountTypes', 'currencies']));
     }
 
     /**
@@ -104,21 +104,22 @@ class AccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, Account $account)
     {
-        $validatedData = $request->validate([
-            'title'    => 'required',
-            'type'     => 'required',
-            'currency' => 'required',
-        ]);
+        // $validatedData = $request->validate([
+        //     'title'    => 'required',
+        //     'type'     => 'required',
+        //     'currency' => 'required',
+        // ]);
 
         Account::where('user_id', Auth::id())
-        ->where('id', $request->id)
-        ->update([
-            'title'    => $request->title,
-            'type'     => $request->type,
-            'currency' => $request->currency,
-        ]);
+            ->where('id', $account->id)
+            ->update([
+                'name'      => $request->name,
+                'type'      => $request->type,
+                'icon'      => $request->icon,
+                'balance'   => $request->balance
+            ]);
 
         return redirect('accounts');
     }

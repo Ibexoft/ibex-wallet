@@ -30,3 +30,10 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
 });
+
+// Only needed when create-widget is loaded
+if ($('#transfer').is(':checked')) { 
+    $('#collapseToAccount').collapse('show');
+} else {
+    $('#collapseToAccount').collapse('hide');
+}

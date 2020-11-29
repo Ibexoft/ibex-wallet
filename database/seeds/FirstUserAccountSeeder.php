@@ -16,7 +16,7 @@ class FirstUserAccountSeeder extends Seeder
         // TODO: First check if record doesn't exist already
         Account::create([
             'user_id'  => User::first()->id,
-            'name'    => "Default",
+            'name'    => "Cash",
             'type'     => 1,
             'currency' => "Rs",
         ]);
