@@ -5,17 +5,18 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Add Wallet</div>
+                <div class="card-header">{{ $wallet ?? '' ? 'Edit' : 'Add' }} Wallet</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('wallets.store') }}">
+                    <form method="POST" action="{{ $wallet ?? '' ? route('wallets.update', ['wallet' => $wallet->id]) : route('wallets.store') }}">
+                        @if ($wallet ?? '') @method('PUT') @endif
                         @csrf
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $wallet ?? '' ? $wallet->name : old('name') }}" required autocomplete="name" autofocus>
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -42,7 +43,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    Add
+                                    {{ $wallet ?? '' ? 'Save' : 'Add' }}
                                 </button>
                             </div>
                         </div>

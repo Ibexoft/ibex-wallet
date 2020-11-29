@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     Wallets
-                    <a href="wallets/create" class="small float-right">New Wallet</a>
+                    <a href="wallets/create" class="small float-right">Add Wallet</a>
                 </div>
 
                 <div class="card-body table-responsive">
@@ -23,7 +23,11 @@
                             @foreach ($wallets as $wallet)
                             <tr>
                                 <td>{{ $wallet->id }}</td>
-                                <td>{{ $wallet->name }}</td>
+                                <td>
+                                    <a href="{{ route('wallets.edit', ['wallet' => $wallet->id]) }}">
+                                        {{ $wallet->name }}
+                                    </a>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
