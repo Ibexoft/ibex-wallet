@@ -7,4 +7,4 @@ Manage your personal finances and family expenses with ease.
 
 ## Supported by
 
-![JetBrains](jetbrains-variant-4.png "JetBrains")
+<img src="jetbrains-variant-4.png" alt="JetBrains" width="150" />
