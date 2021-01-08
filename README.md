@@ -4,3 +4,7 @@
 (UNDER ACTIVE DEVELOPMENT. NOT EVEN IN 'BETA')
 
 Manage your personal finances and family expenses with ease.
+
+## Supported by
+
+![JetBrains](jetbrains-variant-4.png "JetBrains")
