@@ -25,6 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $pageTitle = "Transactions";
+
         $transactions = \Auth::user()->transactions()->orderByDesc('id')->get();
         $categories = Category::where('user_id', '=', auth()->id())->get();
         $accounts = Account::where('user_id', '=', auth()->id())->get();

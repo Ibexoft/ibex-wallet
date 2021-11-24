@@ -29,7 +29,7 @@ class TransactionController extends Controller
     public function index()
     {
         $pageTitle = 'Dashboard';
-        $transactions = \Auth::user()->transactions()->get();
+        $transactions = \Auth::user()->transactions()->orderByDesc('id')->get();
 
         $user = \Auth::user();
 

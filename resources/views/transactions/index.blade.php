@@ -28,7 +28,9 @@
                             <tr>
                                 <th>S.No.</th>
                                 <th>Date</th>
-                                <th>Details</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Type</th>
                                 <th>Account</th>
                                 <th>Amount</th>
                             </tr>
@@ -39,11 +41,13 @@
                             <tr>
                                 <td>{{ $transaction->id }}</td>
                                 <td>{{ $transaction->transaction_date }}</td>
+                                <td>{{ $transaction->category ? $transaction->category->name : '' }}</td>
                                 <td>
                                     <a href="{{ route('transactions.edit', ['transaction' => $transaction->id]) }}">
-                                        {{ $transaction->category ? $transaction->category->name : '' }}<small class="text-muted">{{ $transaction->details ? ' - ' . $transaction->details : '' }}</small>
+                                        <small class="text-muted">{{ $transaction->details ? $transaction->details : '' }}</small>
                                     </a>
                                 </td>
+                                <td>{{ $transaction->type == 1 ? 'Expense' : ($transaction->type == 2 ? 'Income' : 'Transfer') }}</td>
                                 <td>{{ $transaction->src_account->name }}</td>
                                 <td>{{ $transaction->amount }}</td>
                             </tr>

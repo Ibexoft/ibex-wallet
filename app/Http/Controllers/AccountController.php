@@ -25,7 +25,7 @@ class AccountController extends Controller
      */
     public function index()
     {
-        $accounts = Account::all();
+        $accounts = Account::where('user_id', '=', auth()->id())->get();
 
         return view('accounts.index', compact('accounts'));
     }
