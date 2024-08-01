@@ -1,0 +1,22 @@
+@tailwind base;
+/* @tailwind components; */
+@tailwind utilities;
+
+ul{
+    list-style: disc;
+    margin:7px;
+    margin-left: 30px;
+}
+
+ul ul{
+    margin-left: 25px;
+    list-style: circle;
+}
+
+ul ul ul {
+    list-style: square;
+}
+
+.collapse{
+    visibility: visible;
+}

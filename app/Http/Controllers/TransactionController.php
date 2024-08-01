@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Account;
-use App\Category;
-use App\Transaction;
-use App\Wallet;
+use App\Models\User;
+use App\Models\Account;
+use App\Models\Category;
+use App\Models\Transaction;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
@@ -16,10 +17,6 @@ class TransactionController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
      * Display a listing of the resource.
@@ -29,9 +26,9 @@ class TransactionController extends Controller
     public function index()
     {
         $pageTitle = 'Dashboard';
-        $transactions = \Auth::user()->transactions()->orderByDesc('id')->get();
+        $transactions = Auth::user()->transactions()->orderByDesc('id')->get();
 
-        $user = \Auth::user();
+        $user = Auth::user();
 
         $total_balance = Transaction::total_balance($user->id);
         $available_balance = Transaction::available_balance($user->id);
@@ -97,7 +94,7 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Transaction $transaction
+     * @param \App\Models\Transaction $transaction
      *
      * @return \Illuminate\Http\Response
      */
@@ -111,7 +108,7 @@ class TransactionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Transaction $transaction
+     * @param \App\Models\Transaction $transaction
      *
      * @return \Illuminate\Http\Response
      */
@@ -131,7 +128,7 @@ class TransactionController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Transaction         $transaction
+     * @param \App\Models\Transaction         $transaction
      *
      * @return \Illuminate\Http\Response
      */
@@ -155,7 +152,7 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Transaction $transaction
+     * @param \App\Models\Transaction $transaction
      *
      * @return \Illuminate\Http\Response
      */

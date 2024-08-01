@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Account;
-use App\Category;
-use App\Wallet;
+use App\Models\Account;
+use App\Models\Category;
+use App\Models\Wallet;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -13,10 +14,6 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
      * Show the application dashboard.
@@ -27,7 +24,7 @@ class HomeController extends Controller
     {
         $pageTitle = "Transactions";
 
-        $transactions = \Auth::user()->transactions()->orderByDesc('id')->get();
+        $transactions = Auth::user()->transactions()->orderByDesc('id')->get();
         $categories = Category::where('user_id', '=', auth()->id())->get();
         $accounts = Account::where('user_id', '=', auth()->id())->get();
         $wallets = Wallet::where('user_id', '=', auth()->id())->get();
