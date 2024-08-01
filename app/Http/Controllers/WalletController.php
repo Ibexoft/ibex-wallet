@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Wallet;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,10 +13,6 @@ class WalletController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
      * Display a listing of the resource.
@@ -26,7 +22,7 @@ class WalletController extends Controller
     public function index()
     {
         $page_title = 'Wallets';
-        $wallets = \Auth::user()->wallets()->get();
+        $wallets = Auth::user()->wallets()->get();
 
         return view(
             'wallets.index',
@@ -65,7 +61,7 @@ class WalletController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Wallet $wallet
+     * @param \App\Models\Wallet $wallet
      *
      * @return \Illuminate\Http\Response
      */
@@ -79,7 +75,7 @@ class WalletController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Wallet $wallet
+     * @param \App\Models\Wallet $wallet
      *
      * @return \Illuminate\Http\Response
      */
@@ -92,7 +88,7 @@ class WalletController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Wallet              $wallet
+     * @param \App\Models\Wallet              $wallet
      *
      * @return \Illuminate\Http\Response
      */
@@ -111,7 +107,7 @@ class WalletController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Wallet $wallet
+     * @param \App\Models\Wallet $wallet
      *
      * @return \Illuminate\Http\Response
      */

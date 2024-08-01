@@ -14,7 +14,7 @@
                     @foreach ($categories as $category)
                     <div class="row">
                         <div class="col-md-6">
-                            <a href="{{ route('categories.edit', ['category' => $category->id]) }}">{{ $category->name }}</a>
+                            -  <a href="{{ route('categories.edit', ['category' => $category->id]) }}">{{ $category->name }}</a>
                             
                             @if (count($category->subcategories))
                                 @include('categories.subCategoryList',['subcategories' => $category->subcategories])
