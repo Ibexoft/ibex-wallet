@@ -1,5 +1,5 @@
 @foreach($subcategories as $subcategory)
-    <option value="{{ $subcategory->id }}" 
+    <option value="{{ $subcategory->id }}" {{ isset($category) && $category->id == $subcategory->id ? "disabled" : '' }}
         @if (!empty($transaction) && !empty($transaction->category)) 
             {{ $transaction->category->id == $subcategory->id ? 'selected' : '' }}
         @elseif (!empty($category))

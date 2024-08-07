@@ -33,7 +33,7 @@
                                 <select name="parent_category_id" id="parent_category_id" class="form-control @error('parent_category_id') is-invalid @enderror" autocomplete="parent_category_id">
                                     <option></option>
                                     @foreach ($parentCategories as $cat)
-                                        <option value="{{ $cat->id }}" {{ $category ?? '' ? $category->parent_category_id == $cat->id ? 'selected' : '' : '' }}>{{ $cat->name }}</option>
+                                        <option value="{{ $cat->id }}" {{ $category ?? '' ? $category->parent_category_id == $cat->id ? 'selected' : ($category->id == $cat->id ? "disabled" : '') : '' }}>{{ $cat->name }}</option>
 
                                         @if (count($cat->subcategories))
                                             @include ('categories.subCategoryOption', ['subcategories' => $cat->subcategories, 'indent' => 1])
