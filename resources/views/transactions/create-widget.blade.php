@@ -104,7 +104,7 @@
             <div class="form-group">
                 <label for="amount" class="col-form-label">Amount <span class="text-danger">*</span></label>
 
-                <input id="amount" type="number" step="0.01" class="form-control @error('amount') is-invalid @enderror"
+                <input id="amount" type="number" min=0 step="0.01" class="form-control @error('amount') is-invalid @enderror"
                     name="amount" value="{{ $transaction ?? '' ? $transaction->amount ?? old('amount') : '' }}" required
                     autocomplete="amount">
 
