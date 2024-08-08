@@ -99,13 +99,29 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+
+
+        // dd($request->all(),$parentCategory);
         Category::where('user_id', Auth::id())
-        ->where('id', $category->id)
-        ->update([
-            'name'                  => $request->name,
-            'parent_category_id'    => $request->parent_category_id,
-            'icon'                  => $request->icon
-        ]);
+            ->where('id', $category->id)
+            ->update([
+                'name'                  => $request->name,
+                'parent_category_id'    => $request->parent_category_id,
+                'icon'                  => $request->icon
+            ]);
+        $parentCategory = Category::where('user_id', Auth::id())
+            ->where('id', $request->parent_category_id)->first();
+
+
+        if (
+            $category->id == $parentCategory->parent_category_id
+        ) {
+            Category::where('user_id', Auth::id())
+                ->where('id', $request->parent_category_id)
+                ->update([
+                    'parent_category_id'    => null
+                ]);
+        }
 
         return redirect('categories');
     }
