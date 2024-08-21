@@ -29,6 +29,6 @@ class HomeController extends Controller
         $accounts = Account::where('user_id', '=', auth()->id())->get();
         $wallets = Wallet::where('user_id', '=', auth()->id())->get();
 
-        return view('home', compact(['transactions', 'categories', 'accounts', 'wallets', 'pageTitle']));
+        return view('dashboard', compact(['transactions', 'categories', 'accounts', 'wallets', 'pageTitle']));
     }
 }
