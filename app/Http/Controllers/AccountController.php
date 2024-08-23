@@ -146,7 +146,21 @@ class AccountController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Account $account)
-    {
-        //
+{
+    try {
+        $account->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Account deleted successfully.'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to delete the account.',
+            'error'   => $e->getMessage()
+        ], 500);
     }
+}
+
 }
