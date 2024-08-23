@@ -12,17 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $pageTitle = 'Dashboard';
@@ -36,18 +25,29 @@ class TransactionController extends Controller
         $expense_this_month = Transaction::month_expense($user->id);
         $owed = Transaction::owed($user->id);
         $other_owed = Transaction::other_owed($user->id);
+        $categories = Category::where('user_id', '=', auth()->id())->get();
+        $accounts = Account::where('user_id', '=', auth()->id())->get();
+        $wallets = Wallet::where('user_id', '=', auth()->id())->get();
+        // dd($transactions, $categories, $accounts, $wallets);
 
         return view(
             'transactions.index',
-            compact('transactions', 'pageTitle', 'total_balance', 'available_balance', 'income_this_month', 'expense_this_month', 'owed', 'other_owed')
+            compact(
+                'transactions',
+                'pageTitle',
+                'total_balance',
+                'available_balance',
+                'income_this_month',
+                'expense_this_month',
+                'owed',
+                'other_owed',
+                'categories',
+                'accounts',
+                'wallets'
+            )
         );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $categories = Category::where('user_id', '=', auth()->id())->where('parent_category_id', null)->get();
@@ -57,47 +57,7 @@ class TransactionController extends Controller
         return view('transactions.create', compact(['categories', 'accounts', 'wallets']));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        // $validatedData = $request->validate([
-        //     'amount' => $request->amount,
-        //     'description' => $request->description,
-        //     'type' => $request->type,
-        //     'from_account_id' => $request->from_account_id,
-        //     'to_account_id' => $request->to_account_id,
-        //     'for_whom' => $request->for_whom
-        // ]);
 
-        Transaction::create([
-            'user_id'           => auth()->id(),
-            'type'              => $request->type,
-            'amount'            => $request->amount,
-            'transaction_date'  => $request->transaction_date,
-            'category_id'       => $request->category_id,
-            'src_account_id'    => $request->src_account_id,
-            'dest_account_id'   => $request->dest_account_id,
-            'details'           => $request->details,
-            'spent_on'          => $request->spent_on,
-            'wallet_id'         => $request->wallet_id,
-        ]);
-
-        return redirect('transactions');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Transaction $transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function show(Transaction $transaction)
     {
         $pageTitle = 'Transaction Details';
@@ -105,13 +65,6 @@ class TransactionController extends Controller
         return view('transactions.show', compact('transaction', 'pageTitle'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Transaction $transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Transaction $transaction)
     {
         $pageTitle = 'Edit Transaction';
@@ -124,40 +77,66 @@ class TransactionController extends Controller
         return view('transactions.edit', compact(['transaction', 'categories', 'accounts', 'wallets', 'pageTitle']));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Transaction         $transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Transaction $transaction)
+    public function store(Request $request)
     {
-        $transaction->type = $request->type;
-        $transaction->amount = $request->amount;
-        $transaction->transaction_date = $request->transaction_date;
-        $transaction->category_id = $request->category_id;
-        $transaction->src_account_id = $request->src_account_id;
-        $transaction->dest_account_id = $request->dest_account_id;
-        $transaction->details = $request->details;
-        $transaction->spent_on = $request->spent_on;
-        $transaction->wallet_id = $request->wallet_id;
+        $validated = $request->validate([
+            'amount' => 'required|numeric',
+            'transaction_date' => 'required|date',
+            'type' => 'required|in:1,2,3',
+            'src_account_id' => 'required_if:type,!=,3|exists:accounts,id',
+            'dest_account_id' => [
+                'nullable', 
+                'required_if:type,3', 
+                'exists:accounts,id'
+            ],
+            'category_id' => [
+                'nullable', 
+                'required_if:type,!=,3', 
+                'exists:categories,id'
+            ],
+            'wallet_id' => 'nullable|exists:wallets,id',
+            'details' => 'nullable|string',
+        ]);
 
-        $transaction->save();
+        $validated['user_id'] = auth()->id();
+        Transaction::create($validated);
 
-        return redirect('transactions');
+        return response()->json(['success' => true, 'message' => 'Transaction added successfully!']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Transaction $transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Transaction $transaction)
+    public function update(Request $request, $id)
     {
-        //
+        $transaction = Transaction::findOrFail($id);
+        $validated = $request->validate([
+            'amount' => 'required|numeric',
+            'transaction_date' => 'required|date',
+            'type' => 'required|in:1,2,3',
+            'src_account_id' => 'required_if:type,!=,3|exists:accounts,id',
+            'dest_account_id' => [
+                'nullable', 
+                'required_if:type,3', 
+                'exists:accounts,id'
+            ],
+            'category_id' => [
+                'nullable', 
+                'required_if:type,!=,3', 
+                'exists:categories,id'
+            ],
+            'wallet_id' => 'nullable|exists:wallets,id',
+            'details' => 'nullable|string',
+        ]);
+
+        $transaction->update($validated);
+
+        return response()->json(['success' => true, 'message' => 'Transaction updated successfully!']);
+    }
+
+
+    public function destroy($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        $transaction->delete();
+
+        return response()->json(['success' => true,'message' => 'Transaction deleted successfully!']);
     }
 }
