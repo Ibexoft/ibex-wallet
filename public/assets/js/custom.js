@@ -8,6 +8,38 @@ const swalWithBootstrapButtons = Swal.mixin({
 
 /* Transaction JavaScript */
 
+function transactionInitialConfiguration() {
+    var filterCollapse = document.getElementById("filterCollapse");
+    var filterIcon = document.getElementById("filterIcon");
+
+    if (filterCollapse.classList.contains('show')) {
+        filterIcon.classList.add("fa-angle-up");
+        filterIcon.classList.remove("fa-angle-down");
+    } else {
+        filterIcon.classList.add("fa-angle-down");
+        filterIcon.classList.remove("fa-angle-up");
+    }
+
+    filterCollapse.addEventListener("show.bs.collapse", function () {
+        filterIcon.classList.remove("fa-angle-down");
+        filterIcon.classList.add("fa-angle-up");
+    });
+
+    filterCollapse.addEventListener("hide.bs.collapse", function () {
+        filterIcon.classList.remove("fa-angle-up");
+        filterIcon.classList.add("fa-angle-down");
+    });
+
+    var width = window.innerWidth;
+    if (width < 768) { // Bootstrap's MD breakpoint
+        var bsCollapse = new bootstrap.Collapse(filterCollapse, {
+            toggle: false,
+        });
+        bsCollapse.hide();
+    }
+}
+
+
 function submitTransactionForm(url, formData, method) {
     $.ajax({
         url: url,
@@ -37,14 +69,28 @@ function submitTransactionForm(url, formData, method) {
                 });
             }
         },
-        error: function (xhr, status, error) {
-            console.error("Error:", error);
+        error: function (xhr, textStatus, errorThrown) {
+            let errorMessage = "An error occurred. Please try again.";
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                let errorList = '';
+                for (let field in xhr.responseJSON.errors) {
+                    if (xhr.responseJSON.errors.hasOwnProperty(field)) {
+                        xhr.responseJSON.errors[field].forEach(error => {
+                            errorList += `<p class="mb-0">${error}</p>`;
+                        });
+                    }
+                }
+                errorList += '';
+                errorMessage = errorList;
+            } else if (xhr.responseText) {
+                errorMessage = xhr.responseText;
+            }
             swalWithBootstrapButtons.fire({
                 title: "Error",
-                text: "An error occurred. Please try again.",
+                html: errorMessage,
                 icon: "error",
             });
-        },
+        }
     });
 }
 
@@ -89,14 +135,28 @@ function deleteTransaction(url) {
                             });
                         }
                     },
-                    error: function (xhr, status, error) {
-                        console.error("Error:", error);
+                    error: function (xhr, textStatus, errorThrown) {
+                        let errorMessage = "An error occurred. Please try again.";
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            let errorList = '';
+                            for (let field in xhr.responseJSON.errors) {
+                                if (xhr.responseJSON.errors.hasOwnProperty(field)) {
+                                    xhr.responseJSON.errors[field].forEach(error => {
+                                        errorList += `<p class="mb-0">${error}</p>`;
+                                    });
+                                }
+                            }
+                            errorList += '';
+                            errorMessage = errorList;
+                        } else if (xhr.responseText) {
+                            errorMessage = xhr.responseText;
+                        }
                         swalWithBootstrapButtons.fire({
                             title: "Error",
-                            text: "An error occurred. Please try again.",
+                            html: errorMessage,
                             icon: "error",
                         });
-                    },
+                    }
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 swalWithBootstrapButtons.fire({
@@ -156,11 +216,13 @@ function changeTransactionType(type) {
     }
 }
 
-function toggleSubcategories(subcategoryId, iconElement) {
+function toggleSubcategories(subcategoryId, iconElement, event) {
+    event.preventDefault();
+    event.stopPropagation();
     var subcategoryElement = document.getElementById(subcategoryId);
     subcategoryElement.classList.toggle("collapse");
-    iconElement.classList.toggle("fa-caret-right");
-    iconElement.classList.toggle("fa-caret-down");
+    iconElement.classList.toggle("fa-angle-right");
+    iconElement.classList.toggle("fa-angle-down");
 }
 
 document.querySelectorAll(".category-checkbox").forEach(function (checkbox) {
@@ -175,13 +237,16 @@ document.querySelectorAll(".category-checkbox").forEach(function (checkbox) {
     });
 });
 
-$('#transactionForm').on('submit', function(e) {
+$("#transactionForm").on("submit", function (e) {
     e.preventDefault();
-    var transactionId = $('#transaction_id').val();
+    var transactionId = $("#transaction_id").val();
     var isEdit = transactionId !== "";
-    var url = isEdit ?
-        window.transactionRoutes.update.replace('__TRANSACTION_ID__', transactionId) :
-        window.transactionRoutes.store;
+    var url = isEdit
+        ? window.transactionRoutes.update.replace(
+              "__TRANSACTION_ID__",
+              transactionId
+          )
+        : window.transactionRoutes.store;
     var formData = $(this).serialize();
     var method = isEdit ? "PUT" : "POST";
     submitTransactionForm(url, formData, method);

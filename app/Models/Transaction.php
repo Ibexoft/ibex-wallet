@@ -144,4 +144,49 @@ class Transaction extends Model
 
         return $transactions[0]->expense;
     }
+
+    public function scopeWithCategories($query, $categories)
+    {
+        if (!empty($categories)) {
+            $query->whereIn('category_id', $categories);
+        }
+    }
+
+    // Scope to filter by accounts
+    public function scopeWithAccounts($query, $accounts)
+    {
+        if (!empty($accounts)) {
+            $query->whereIn('src_account_id', $accounts);
+        }
+    }
+
+    // Scope to filter by transaction types
+    public function scopeWithTransactionTypes($query, $types)
+    {
+        if (!empty($types)) {
+            $query->whereIn('type', $types);
+        }
+    }
+
+    // Scope to filter by amount range
+    public function scopeWithAmountRange($query, $min, $max)
+    {
+        if (!is_null($min)) {
+            $query->where('amount', '>=', $min);
+        }
+        if (!is_null($max)) {
+            $query->where('amount', '<=', $max);
+        }
+    }
+
+    // Scope to filter by date range
+    public function scopeWithDateRange($query, $start, $end)
+    {
+        if (!is_null($start)) {
+            $query->where('transaction_date', '>=', $start);
+        }
+        if (!is_null($end)) {
+            $query->where('transaction_date', '<=', $end);
+        }
+    }
 }

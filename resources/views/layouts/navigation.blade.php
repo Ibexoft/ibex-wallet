@@ -17,30 +17,26 @@
                             <span class="navbar-toggler-bar bar3"></span>
                         </span>
                     </button>
-                    <div class="collapse navbar-collapse d-flex justify-content-between" id="navigation">
+                    <div class="collapse navbar-collapse" id="navigation">
                         <ul class="navbar-nav mx-auto ms-xl-auto ">
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center me-2 active" aria-current="page"
                                     href="{{route('dashboard')}}">
-                                    <i class="fa fa-chart-pie opacity-6 text-dark me-1"></i>
                                     Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link me-2" href="{{route('transactions.index')}}">
-                                    <i class="fa fa-user opacity-6 text-dark me-1"></i>
                                     Transactions
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link me-2" href="{{route('accounts.index')}}">
-                                    <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
                                    Accounts
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link me-2" href="{{route('categories.index')}}">
-                                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
                                     Categories
                                 </a>
                             </li>

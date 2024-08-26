@@ -1,0 +1,11 @@
+/* Transaction */
+
+.transaction-card {
+    min-height: 500px;
+}
+
+.transaction-item:hover {
+    background-color: rgba(0, 0, 0, 0.025);
+}
+
+/* Transaction */
