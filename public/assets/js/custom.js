@@ -318,7 +318,6 @@ function addAccount(url, formData) {
                     }
                 }
                 errorList += '';
-
                 swalWithBootstrapButtons.fire({
                     title: "Validation Errors",
                     html: errorList,
@@ -338,7 +337,6 @@ function addAccount(url, formData) {
                     }
                 }
                 errorList += '';
-
                 errorMessage = errorList;
             } else if (xhr.responseText) {
                 errorMessage = xhr.responseText;
@@ -504,4 +502,221 @@ function deleteAccount(accountId) {
 
 /* Accounts JavaScript */
 
+/* Categories JavaScript */
 
+function toggleCategory() {
+    $(this).siblings('.subcategory-card').toggle();
+    $(this).find('.category-toggle-icon').toggleClass('fa-chevron-down fa-chevron-up');
+}
+
+function setCategory(id, name) { // set id and name of selected category for edit or delete
+    document.getElementById('parentCategoryId').value = id;
+    document.getElementById('edit-category-input').value = name
+}
+
+function addCategory(event) {
+    event.preventDefault();
+    // Get the input field for the subcategory
+    const inputSelector = event.target.querySelector('.category-input');
+    const categoryName = $(inputSelector).val();
+
+    if (categoryName.trim() === '') {
+        swalWithBootstrapButtons.fire({
+            title: "Failed",
+            text: "Category name cannot be empty",
+            icon: "error"
+        });
+        return;
+    }
+    const parentCategoryId = document.getElementById('parentCategoryId').value;
+
+    // Send AJAX request to the server to save the category
+    $.ajax({
+        url: '/categories',
+        method: 'POST',
+        data: {
+            parent_category_id: parentCategoryId,
+            name: categoryName,
+            icon: "fa fa-check",
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+            if (response.success) {
+                swalWithBootstrapButtons.fire({
+                    title: "Success!",
+                    text: response.message,
+                    icon: "success"
+                }).then(() => {
+                    $(inputSelector).val('');
+                    location.reload();
+                });
+
+            } else {
+                let errorList = '';
+                for (let field in data.errors) {
+                    if (data.errors.hasOwnProperty(field)) {
+                        data.errors[field].forEach(error => {
+                            errorList += `<p class="mb-0">${error}</p>`;
+                        });
+                    }
+                }
+                errorList += '';
+                swalWithBootstrapButtons.fire({
+                    title: "Validation Errors",
+                    html: errorList,
+                    icon: "error",
+                });
+            }
+        },
+        error: function (xhr) {
+            let errorMessage = "An error occurred. Please try again.";
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                let errorList = '';
+                for (let field in xhr.responseJSON.errors) {
+                    if (xhr.responseJSON.errors.hasOwnProperty(field)) {
+                        xhr.responseJSON.errors[field].forEach(error => {
+                            errorList += `<p class="mb-0">${error}</p>`;
+                        });
+                    }
+                }
+                errorList += '';
+                errorMessage = errorList;
+            } else if (xhr.responseText) {
+                errorMessage = xhr.responseText;
+            }
+            swalWithBootstrapButtons.fire({
+                title: "Error",
+                html: errorMessage,
+                icon: "error",
+            });
+        }
+    });
+}
+
+function deleteCategory(id) {
+    var categoryId = id;
+
+    swalWithBootstrapButtons.fire({
+        title: "Are you sure?",
+        text: "You want want to delete this category?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/categories/' + categoryId,
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    if (response.success) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Deleted!",
+                            text: response.message,
+                            icon: "success"
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        swalWithBootstrapButtons.fire({
+                            title: "Failed",
+                            text: response.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    swalWithBootstrapButtons.fire({
+                        title: "Error",
+                        text: "An error occurred. Please try again.",
+                        icon: "error"
+                    });
+                }
+            });
+        }
+    });
+}
+
+
+function updateCategory(event) {
+    event.preventDefault();
+
+    // input field for the category name and the new name value
+    const inputSelector = event.target.querySelector('.edit-category-input');
+    const categoryName = $(inputSelector).val();
+
+    if (categoryName.trim() === '') {
+        swalWithBootstrapButtons.fire({
+            title: "Failed",
+            text: "Category name cannot be empty",
+            icon: "error"
+        });
+        return;
+    }
+
+    const id = document.getElementById('parentCategoryId').value;
+
+    // Send AJAX request to the server to update the category
+    $.ajax({
+        url: '/categories/' + id,
+        method: 'PUT',
+        data: {
+            name: categoryName,
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+            if (response.success) {
+                swalWithBootstrapButtons.fire({
+                    title: "Updated!",
+                    text: response.message,
+                    icon: "success"
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                let errorList = '';
+                for (let field in data.errors) {
+                    if (data.errors.hasOwnProperty(field)) {
+                        data.errors[field].forEach(error => {
+                            errorList += `<p class="mb-0">${error}</p>`;
+                        });
+                    }
+                }
+                errorList += '';
+                swalWithBootstrapButtons.fire({
+                    title: "Validation Errors",
+                    html: errorList,
+                    icon: "error",
+                });
+            }
+        },
+        error: function (xhr) {
+            let errorMessage = "An error occurred. Please try again.";
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                let errorList = '';
+                for (let field in xhr.responseJSON.errors) {
+                    if (xhr.responseJSON.errors.hasOwnProperty(field)) {
+                        xhr.responseJSON.errors[field].forEach(error => {
+                            errorList += `<p class="mb-0">${error}</p>`;
+                        });
+                    }
+                }
+                errorList += '';
+                errorMessage = errorList;
+            } else if (xhr.responseText) {
+                errorMessage = xhr.responseText;
+            }
+            swalWithBootstrapButtons.fire({
+                title: "Error",
+                html: errorMessage,
+                icon: "error",
+            });
+        }
+    });
+}
+
+/* Categories JavaScript */

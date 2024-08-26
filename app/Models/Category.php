@@ -28,11 +28,13 @@ class Category extends Model
         $parentCat = null;
 
         if ($category) {
+            // Extract icon if it's present
+            $icon = $subCategories['icon'] ?? null;
+
             $found = self::where('user_id', $userId)
-                        ->where('name', $category)
-                        ->where('parent_category_id', $parentCategory ? $parentCategory->id : null)
-                        ->get()
-                        ->count();
+                ->where('name', $category)
+                ->where('parent_category_id', $parentCategory ? $parentCategory->id : null)
+                ->count();
 
             if ($found > 0) {
                 return;
@@ -42,16 +44,22 @@ class Category extends Model
                 'user_id'               => $userId,
                 'name'                  => $category,
                 'parent_category_id'    => $parentCategory ? $parentCategory->id : null,
+                'icon'                  => $icon, // Save the icon
             ]);
         }
 
         if (is_array($subCategories)) {
             foreach ($subCategories as $categoryName => $subCats) {
-                if (is_array($subCats)) {
-                    self::bulkCreateForUser($userId, $subCats, $categoryName, $parentCat);
+                // Skip 'icon' key to avoid treating it as a subcategory
+                if ($categoryName === 'icon') {
                     continue;
                 }
-                self::bulkCreateForUser($userId, null, $subCats, $parentCat);
+
+                if (is_array($subCats)) {
+                    self::bulkCreateForUser($userId, $subCats, $categoryName, $parentCat);
+                } else {
+                    self::bulkCreateForUser($userId, null, $subCats, $parentCat);
+                }
             }
         }
     }
