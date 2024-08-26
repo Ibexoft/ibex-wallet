@@ -13,7 +13,8 @@
                     <div class="row">
                         <div class="col-sm-12 col-lg-9 form-group">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control" placeholder="Account Name" name="name" id="name" required>
+                            <input type="text" class="form-control" placeholder="Account Name" name="name"
+                                id="name" required>
                         </div>
                         <div class="col-sm-12 col-lg-3 form-group">
                             <label for="color">Color</label>
@@ -32,11 +33,12 @@
                     <div class="row">
                         <div class="col-sm-12 col-lg-9 form-group">
                             <label for="balance">Initial amount</label>
-                            <input type="number" class="form-control" placeholder="0" name="balance" id="balance" required>
+                            <input type="number" class="form-control" placeholder="0" name="balance" id="balance"
+                                required>
                         </div>
                         <div class="col-sm-12 col-lg-3 form-group">
                             <label for="Type">Currency</label>
-                            <select name="currency" class="form-select form-control">
+                            <select name="currency" class="form-select form-control" required>
                                 @foreach ($currencies as $currency)
                                     <option value="{{ $currency }}">{{ $currency }}</option>
                                 @endforeach
@@ -44,9 +46,8 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <button type="button" id="saveAccountBtn"
-                            class="btn bg-gradient-primary w-100 mt-4 mb-0"
-                            onclick="saveAccount()">Save</button>
+                        <button type="submit" id="saveAccountBtn"
+                            class="btn bg-gradient-primary w-100 mt-4 mb-0">Save</button>
                     </div>
                 </form>
             </div>

@@ -39,17 +39,17 @@
                         </div>
                         <div class="col-sm-12 col-lg-3 form-group">
                             <label for="editCurrency">Currency</label>
-                            <select name="currency" class="form-select form-control" id="editCurrency">
+                            <select name="currency" class="form-select form-control" id="editCurrency" required>
                                 @foreach (config('custom.currencies') as $value => $text)
-                                    <option value="{{ $text }}">{{$text}}
+                                    <option value="{{ $text }}">{{ $text }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="text-center">
-                        <button type="button" id="updateAccountBtn" class="btn bg-gradient-primary w-100 mt-4 mb-0"
-                            onclick="updateAccount()">Update</button>
+                        <button type="submit" id="updateAccountBtn"
+                            class="btn bg-gradient-primary w-100 mt-4 mb-0">Update</button>
                     </div>
                 </form>
             </div>

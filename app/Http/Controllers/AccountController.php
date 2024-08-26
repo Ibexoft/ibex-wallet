@@ -53,10 +53,10 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name'    => 'required',
-            'type'     => 'required',
-            'balance' => 'required',
-            'currency' => 'required',
+            'name'      => 'required|string|max:35',
+            'type'      => 'required|in:' . implode(',', array_keys(config('custom.account_types'))),
+            'balance'   => 'required|numeric|min:0',
+            'currency'  => 'required|in:' . implode(',', array_keys(config('custom.currencies'))),
         ]);
 
         Account::create([
@@ -113,10 +113,10 @@ class AccountController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'name'      => 'required',
-            'type'      => 'required',
-            'balance'   => 'required',
-            'currency'  => 'required',
+            'name'      => 'required|string|max:35',
+            'type'      => 'required|in:' . implode(',', array_keys(config('custom.account_types'))),
+            'balance'   => 'required|numeric|min:0',
+            'currency'  => 'required|in:' . implode(',', array_keys(config('custom.currencies'))),
         ]);
 
         // Find the account by ID
@@ -144,21 +144,20 @@ class AccountController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Account $account)
-{
-    try {
-        $account->delete();
+    {
+        try {
+            $account->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Account deleted successfully.'
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to delete the account.',
-            'error'   => $e->getMessage()
-        ], 500);
+            return response()->json([
+                'success' => true,
+                'message' => 'Account deleted successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete the account.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
     }
-}
-
 }
