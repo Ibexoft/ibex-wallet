@@ -112,8 +112,6 @@ class AccountController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request->all());
-        // Validate the incoming request data
         $validatedData = $request->validate([
             'name'      => 'required',
             'type'      => 'required',
