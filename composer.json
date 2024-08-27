@@ -1,16 +1,24 @@
 {
-    "name": "laravel/laravel",
+    "name": "ibexoft/ibexpenses",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Ibexpenses - Manage your personal expenses",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "fideloper/proxy": "^4.2",
+        "fruitcake/laravel-cors": "^2.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "laravel/ui": "^2.0",
         "laravel/breeze": "^2.1",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9"
     },
     "require-dev": {
+        "facade/ignition": "^2.0",
         "fakerphp/faker": "^1.23",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
