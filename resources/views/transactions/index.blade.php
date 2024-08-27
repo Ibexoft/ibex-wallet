@@ -150,7 +150,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body pt-4 px-3">
+                    <div class="card-body pt-4 px-3 d-flex flex-column">
                         @foreach ($transactions as $date => $transactionsOnDate)
                             <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">{{ $date }}</h6>
                             <ul class="list-group">
@@ -190,13 +190,15 @@
                                                 <div class="row h-100 d-flex align-items-center">
                                                     <div class="d-none d-md-block col-0 col-md-7">
                                                         <div class="d-flex align-items-center justify-content-center">
-                                                            @if ($transaction->type == 3)
-                                                                {{ $transaction->src_account->name }}
-                                                                <i class="fas fa-long-arrow-alt-right mx-2"></i>
-                                                                {{ $transaction->dest_account->name }}
-                                                            @else
-                                                                {{ $transaction->src_account->name }}
-                                                            @endif
+                                                            <span class="text-sm">
+                                                                @if ($transaction->type == 3)
+                                                                    {{ $transaction->src_account->name }}
+                                                                    <i class="fas fa-long-arrow-alt-right mx-2"></i>
+                                                                    {{ $transaction->dest_account->name }}
+                                                                @else
+                                                                    {{ $transaction->src_account->name }}
+                                                                @endif
+                                                            </span>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md-5">
@@ -235,7 +237,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-center">
-                                            <a class="icon text-primary" href="#" data-bs-toggle="dropdown"
+                                            <a class="icon text-primary pb-4" href="#" data-bs-toggle="dropdown"
                                                 onclick="event.stopPropagation();">
                                                 <i class="fa fa-ellipsis-h py-1"></i>
                                             </a>
@@ -252,6 +254,51 @@
                                 @endforeach
                             </ul>
                         @endforeach
+                        <div class="d-flex justify-content-center mt-4 flex-grow-1 align-items-end">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination pagination-lg justify-content-center align-items-center">
+                                    @if (!$paginatedTransactions->onFirstPage())
+                                        <li class="page-item">
+                                            <a class="page-link text-primary"
+                                                href="{{ $paginatedTransactions->previousPageUrl() }}"
+                                                aria-label="Previous">
+                                                &laquo;
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @foreach ($paginatedTransactions->links()->elements as $element)
+                                        @if (is_string($element))
+                                            <li class="page-item disabled"><span
+                                                    class="page-link">{{ $element }}</span></li>
+                                        @endif
+
+                                        @if (is_array($element))
+                                            @foreach ($element as $page => $url)
+                                                @if ($page == $paginatedTransactions->currentPage())
+                                                    <li class="page-item active mx-1"><span
+                                                            class="page-link bg-gradient-primary text-white border-0">{{ $page }}</span>
+                                                    </li>
+                                                @else
+                                                    <li class="page-item mx-1"><a class="page-link text-primary border"
+                                                            href="{{ $url }}">{{ $page }}</a></li>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+
+                                    @if ($paginatedTransactions->hasMorePages())
+                                        <li class="page-item">
+                                            <a class="page-link text-primary"
+                                                href="{{ $paginatedTransactions->nextPageUrl() }}" aria-label="Next">
+                                                &raquo;
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </nav>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -298,6 +345,7 @@
                                         class="text-danger">*</span></label>
                                 <select name="src_account_id" id="src_account_id" class="form-control" required
                                     autocomplete="src_account_id">
+                                    <option selected disabled>Select Account</option>
                                     @foreach ($accounts as $account)
                                         <option value="{{ $account->id }}">{{ $account->name }}</option>
                                     @endforeach
@@ -307,7 +355,7 @@
                                 <label for="dest_account_id">To Account</label>
                                 <select name="dest_account_id" id="dest_account_id" class="form-control"
                                     autocomplete="dest_account_id">
-                                    <option></option>
+                                    <option selected disabled>Select Account</option>
                                     @foreach ($accounts as $account)
                                         <option value="{{ $account->id }}">{{ $account->name }}</option>
                                     @endforeach
@@ -315,14 +363,14 @@
                             </div>
                             <div class="col-6 form-group" id="amount-field">
                                 <label for="amount">Amount <span class="text-danger">*</span></label>
-                                <input id="amount" type="number" min="0" step="0.01" class="form-control"
+                                <input id="amount" type="number" min="0" step="0.01" class="form-control" placeholder="Enter Amount"
                                     name="amount" required autocomplete="amount">
                             </div>
                             <div class="col-6 form-group" id="category-field">
                                 <label for="category_id">Category <span class="text-danger">*</span></label>
                                 <select name="category_id" id="category_id" class="form-control"
                                     autocomplete="category_id">
-                                    <option></option>
+                                    <option selected disabled>Select Category</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @if (count($category->subcategories))
@@ -345,19 +393,19 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="details">Description</label>
+                            <label for="details">Details</label>
                             <input id="details" type="text" class="form-control" name="details" maxlength="200"
-                                autocomplete="details" placeholder="Enter Details e.g. Eggs, bread, oil etc."
+                                autocomplete="details" placeholder="Enter Details"
                                 title="Details about the transaction">
                         </div>
                         <div class="form-group">
                             <label for="transaction_date">Date <span class="text-danger">*</span></label>
                             <input id="transaction_date" type="date" class="form-control" name="transaction_date"
-                                required autocomplete="transaction_date">
+                                value="{{ date('Y-m-d') }}" required autocomplete="transaction_date">
                         </div>
                         <div class="text-center">
                             <button type="submit" id="transactionModalSubmitBtn"
-                                class="btn bg-gradient-primary w-75">Add</button>
+                                class="btn bg-gradient-primary w-100 w-md-50">Add</button>
                         </div>
                     </form>
                 </div>
