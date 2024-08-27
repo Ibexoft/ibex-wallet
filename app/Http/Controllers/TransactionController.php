@@ -16,13 +16,14 @@ class TransactionController extends Controller
     public function index()
     {
         $pageTitle = 'Dashboard';
-        $transactions = Auth::user()->transactions()->orderByDesc('transaction_date')->get()
-            ->groupBy(function ($transaction) {
-                return Carbon::parse($transaction->transaction_date)->format('d M Y');
-            });
+
+        $paginatedTransactions = Auth::user()->transactions()->orderByDesc('transaction_date')->paginate(10);
+
+        $transactions = $paginatedTransactions->getCollection()->groupBy(function ($transaction) {
+            return Carbon::parse($transaction->transaction_date)->format('d M Y');
+        });
 
         $user = Auth::user();
-
         $total_balance = Transaction::total_balance($user->id);
         $available_balance = Transaction::available_balance($user->id);
         $income_this_month = Transaction::month_income($user->id);
@@ -33,11 +34,11 @@ class TransactionController extends Controller
         $accounts = Account::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
         $wallets = Wallet::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
 
-
         return view(
             'transactions.index',
             compact(
                 'transactions',
+                'paginatedTransactions',
                 'pageTitle',
                 'total_balance',
                 'available_balance',
@@ -51,6 +52,7 @@ class TransactionController extends Controller
             )
         );
     }
+
 
     public function filter(Request $request)
     {
@@ -67,16 +69,18 @@ class TransactionController extends Controller
             'end_date' => 'date|nullable',
         ]);
 
-        $transactions = Auth::user()->transactions();
-        $transactions = Auth::user()->transactions()->orderByDesc('transaction_date')->withCategories($request->categories ?? [])
-        ->withAccounts($request->accounts ?? [])
-        ->withTransactionTypes($request->transaction_types ?? [])
-        ->withAmountRange($request->min_amount, $request->max_amount)
-        ->withDateRange($request->start_date, $request->end_date)->get()
-        ->groupBy(function ($transaction) {
+        $paginatedTransactions = Auth::user()->transactions()
+            ->orderByDesc('transaction_date')
+            ->withCategories($request->categories ?? [])
+            ->withAccounts($request->accounts ?? [])
+            ->withTransactionTypes($request->transaction_types ?? [])
+            ->withAmountRange($request->min_amount, $request->max_amount)
+            ->withDateRange($request->start_date, $request->end_date)
+            ->paginate(10);
+
+        $transactions = $paginatedTransactions->getCollection()->groupBy(function ($transaction) {
             return Carbon::parse($transaction->transaction_date)->format('d M Y');
         });
-
 
         $categories = Category::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
         $accounts = Account::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
@@ -84,12 +88,14 @@ class TransactionController extends Controller
 
         return view('transactions.index', [
             'transactions' => $transactions,
+            'paginatedTransactions' => $paginatedTransactions,
             'filters' => $request->all(),
             'categories' => $categories,
             'accounts' => $accounts,
-            'wallets' => $wallets
+            'wallets' => $wallets,
         ]);
     }
+
 
     public function create()
     {
@@ -126,7 +132,7 @@ class TransactionController extends Controller
             'amount' => [
                 'required',
                 'numeric',
-                'between:0,9999999.99' 
+                'between:0,9999999.99'
             ],
             'transaction_date' => 'required|date',
             'type' => 'required|in:1,2,3',
@@ -151,11 +157,11 @@ class TransactionController extends Controller
             'details' => [
                 'nullable',
                 'string',
-                'min:3', 
-                'max:200' 
+                'min:3',
+                'max:200'
             ],
         ]);
-        
+
 
         $validated['user_id'] = auth()->id();
         Transaction::create($validated);
@@ -170,7 +176,7 @@ class TransactionController extends Controller
             'amount' => [
                 'required',
                 'numeric',
-                'between:0,9999999.99' 
+                'between:0,9999999.99'
             ],
             'transaction_date' => 'required|date',
             'type' => 'required|in:1,2,3',
@@ -195,8 +201,8 @@ class TransactionController extends Controller
             'details' => [
                 'nullable',
                 'string',
-                'min:3', 
-                'max:200' 
+                'min:3',
+                'max:200'
             ],
         ]);
 
