@@ -311,11 +311,14 @@
                                         <div
                                             class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                                             @if (config('custom.account_types')[$account->type] == 'Cash')
-                                                <i class="fa-solid fa-coins text-lg opacity-10 top-0 mt-3" aria-hidden="true"></i>
-                                            @elseif (config('custom.account_types')[$account->type] == 'General') 
-                                                <i class="fa-solid fa-wallet text-lg opacity-10 top-0 mt-3" aria-hidden="true"></i>
+                                                <i class="fa-solid fa-coins text-lg opacity-10 top-0 mt-3"
+                                                    aria-hidden="true"></i>
+                                            @elseif (config('custom.account_types')[$account->type] == 'General')
+                                                <i class="fa-solid fa-wallet text-lg opacity-10 top-0 mt-3"
+                                                    aria-hidden="true"></i>
                                             @elseif (config('custom.account_types')[$account->type] == 'Current Account')
-                                                <i class="fa-solid fa-landmark text-lg opacity-10 top-0 mt-3" aria-hidden="true"></i>
+                                                <i class="fa-solid fa-landmark text-lg opacity-10 top-0 mt-3"
+                                                    aria-hidden="true"></i>
                                             @endif
                                         </div>
                                     </div>
@@ -340,5 +343,18 @@
         </div>
     </div>
 @endsection
+
 @include('accounts.partials.add-account-modal')
 @include('accounts.partials.edit-account-modal')
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            window.accountRoutes = {
+                store: "{{ route('accounts.store') }}",
+                update: "{{ route('accounts.update', ['account' => '__ACCOUNT_ID__']) }}",
+                destroy: "{{ route('accounts.destroy', ['account' => '__ACCOUNT_ID__']) }}"
+            };
+        });
+    </script>
+@endsection

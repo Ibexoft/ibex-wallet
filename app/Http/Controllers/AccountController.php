@@ -29,19 +29,6 @@ class AccountController extends Controller
         return view('accounts.index', get_defined_vars());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    // public function create()
-    // {
-    //     $accountTypes = config('custom.account_types');
-    //     $currencies = config('custom.currencies');
-
-    //     return view('accounts.create', compact(['accountTypes', 'currencies']));
-    // }
 
     /**
      * Store a newly created resource in storage.
@@ -87,20 +74,6 @@ class AccountController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Account $account
-     *
-     * @return \Illuminate\Http\Response
-     */
-    // public function edit(Account $account)
-    // {
-    //     $accountTypes = config('custom.account_types');
-    //     $currencies = config('custom.currencies');
-
-    //     return view('accounts.create', compact(['account', 'accountTypes', 'currencies']));
-    // }
 
     /**
      * Update the specified resource in storage.

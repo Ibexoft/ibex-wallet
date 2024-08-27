@@ -260,11 +260,11 @@ $("#accountForm").on("submit", function (e) {
     e.preventDefault();
 
     var formData = new FormData(this);
-    var url = '/accounts';
+    var url = window.accountRoutes.store;
 
     addAccount(url, formData);
 });
-
+ 
 function addAccount(url, formData) {
     $.ajax({
         url: url,
@@ -335,8 +335,9 @@ function addAccount(url, formData) {
 
 
 function openEditAccountModal(account) {
-    // Set the action URL for the form
-    $('#editAccountForm').attr('action', `/accounts/${account.id}`);
+    var updateUrl = window.accountRoutes.update.replace('__ACCOUNT_ID__', account.id);
+    
+    $('#editAccountForm').attr('action', updateUrl);
 
     // Populate fields with account data
     $('#editAccountId').val(account.id);
@@ -428,6 +429,8 @@ function updateAccount(url, formData) {
 
 
 function deleteAccount(accountId) {
+    var deleteUrl = window.accountRoutes.destroy.replace('__ACCOUNT_ID__', accountId);
+
     swalWithBootstrapButtons.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -439,7 +442,7 @@ function deleteAccount(accountId) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: `/accounts/${accountId}`,
+                url: deleteUrl,
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
