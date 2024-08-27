@@ -352,7 +352,7 @@
                                 </select>
                             </div>
                             <div class="col-6 form-group" id="collapseToAccount" style="display: none;">
-                                <label for="dest_account_id">To Account</label>
+                                <label for="dest_account_id">To Account <span class="text-danger">*</span></label>
                                 <select name="dest_account_id" id="dest_account_id" class="form-control"
                                     autocomplete="dest_account_id">
                                     <option selected disabled>Select Account</option>

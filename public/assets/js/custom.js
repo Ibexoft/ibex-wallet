@@ -204,7 +204,7 @@ function changeTransactionType(type) {
     $("#transfer-btn").toggleClass("active", isTransfer);
 
     $("#collapseToAccount").toggle(isTransfer);
-    $("#account-label").text(isTransfer ? "From Account" : "Account");
+    $("#account-label").html(isTransfer ? "From Account <span class='text-danger'>*</span>" : "Account <span class='text-danger'>*</span>");
     $("#category-field").toggle(isExpenseOrIncome);
     $("#wallet-field").toggle(isExpenseOrIncome);
 

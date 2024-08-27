@@ -135,9 +135,8 @@ class TransactionController extends Controller
                 'between:0,9999999.99'
             ],
             'transaction_date' => 'required|date',
-            'type' => 'required|in:1,2,3',
+            'type' => 'required',
             'src_account_id' => [
-                'required_if:type,!=,3',
                 'exists:accounts,id'
             ],
             'dest_account_id' => [
@@ -147,7 +146,7 @@ class TransactionController extends Controller
             ],
             'category_id' => [
                 'nullable',
-                'required_if:type,!=,3',
+                'required_unless:type,3',
                 'exists:categories,id'
             ],
             'wallet_id' => [
@@ -160,8 +159,11 @@ class TransactionController extends Controller
                 'min:3',
                 'max:200'
             ],
+        ], [
+            'dest_account_id.required_if' => 'The destination account field is required.',
+            'category_id.required_unless' => 'The category field is required.'
         ]);
-
+        
 
         $validated['user_id'] = auth()->id();
         Transaction::create($validated);
@@ -179,9 +181,8 @@ class TransactionController extends Controller
                 'between:0,9999999.99'
             ],
             'transaction_date' => 'required|date',
-            'type' => 'required|in:1,2,3',
+            'type' => 'required',
             'src_account_id' => [
-                'required_if:type,!=,3',
                 'exists:accounts,id'
             ],
             'dest_account_id' => [
@@ -191,7 +192,7 @@ class TransactionController extends Controller
             ],
             'category_id' => [
                 'nullable',
-                'required_if:type,!=,3',
+                'required_unless:type,3',
                 'exists:categories,id'
             ],
             'wallet_id' => [
@@ -204,6 +205,9 @@ class TransactionController extends Controller
                 'min:3',
                 'max:200'
             ],
+        ], [
+            'dest_account_id.required_if' => 'The destination account field is required.',
+            'category_id.required_unless' => 'The category field is required.'
         ]);
 
         $transaction->update($validated);
