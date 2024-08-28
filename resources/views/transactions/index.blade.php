@@ -6,131 +6,173 @@
                 <div class="card">
                     <form id="transaction-filter-form" action="{{ route('transactions.filter') }}" method="POST">
                         <div class="card-header pb-0 px-3">
-                            <button type="button"
-                                class="btn btn-link text-dark px-2 d-flex justify-content-between w-100 align-items-center"
+                            <span class="text-dark px-2 d-flex justify-content-between w-100 align-items-center"
                                 data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="true"
                                 aria-controls="filterCollapse">
                                 <h6 class="mb-0">Filter</h6>
                                 <i class="fas fa-angle-down" id="filterIcon"></i>
-                            </button>
+                            </span>
                         </div>
-                        <div id="filterCollapse" class="pt-0 collapse show" data-bs-parent="#accordionExample">
-                            <div class="card-body">
+                        <div class="card-body pb-0">
+                            <div id="filterCollapse" class="pt-0 collapse show" data-bs-parent="#accordionExample">
+
                                 @csrf
+
+                                <!-- Categories Filter -->
                                 <div class="mb-3">
-                                    <h6>Categories</h6>
-                                    <ul style="list-style: none; padding: 0;">
-                                        @foreach ($categories as $category)
-                                            @if (!$category->parent_category_id)
-                                                <li>
-                                                    <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input category-checkbox"
-                                                            id="category{{ $category->id }}" name="categories[]"
-                                                            value="{{ $category->id }}"
-                                                            {{ isset($filters['categories']) && in_array($category->id, $filters['categories']) ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="category{{ $category->id }}">
-                                                            <i class="fa fa-angle-right toggle-icon"
-                                                                onclick="toggleSubcategories('subcategory-category{{ $category->id }}', this, event)"></i>
-                                                            {{ $category->name }}
-                                                        </label>
-                                                    </div>
-                                                    <ul id="subcategory-category{{ $category->id }}" class="collapse"
-                                                        style="list-style: none; padding-left: 20px;">
-                                                        @if (count($category->subcategories))
-                                                            @include('categories.subCategoryCheckbox', [
-                                                                'subcategories' => $category->subcategories,
-                                                                'indent' => 1,
-                                                            ])
-                                                        @endif
-                                                    </ul>
-                                                </li>
-                                            @endif
+                                    <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
+                                        data-bs-toggle="collapse" data-bs-target="#categoriesCollapse" aria-expanded="false"
+                                        aria-controls="categoriesCollapse">
+                                        <h6 class="mb-0 text-sm">Categories</h6>
+                                        <i class="fas fa-angle-right" id="categoriesIcon"></i>
+                                    </span>
+                                    <div id="categoriesCollapse" class="collapse pt-2">
+                                        <ul style="list-style: none; padding: 0;">
+                                            @foreach ($categories as $category)
+                                                @if (!$category->parent_category_id)
+                                                    <li>
+                                                        <div class="form-check">
+                                                            <input type="checkbox"
+                                                                class="form-check-input category-checkbox"
+                                                                id="category{{ $category->id }}" name="categories[]"
+                                                                value="{{ $category->id }}"
+                                                                {{ isset($filters['categories']) && in_array($category->id, $filters['categories']) ? 'checked' : '' }}>
+                                                            <label class="form-check-label"
+                                                                for="category{{ $category->id }}">
+                                                                <i class="fa fa-angle-right toggle-icon"
+                                                                    onclick="toggleSubcategories('subcategory-category{{ $category->id }}', this, event)"></i>
+                                                                {{ $category->name }}
+                                                            </label>
+                                                        </div>
+                                                        <ul id="subcategory-category{{ $category->id }}"
+                                                            class="collapse pt-2"
+                                                            style="list-style: none; padding-left: 20px;">
+                                                            @if (count($category->subcategories))
+                                                                @include('categories.subCategoryCheckbox', [
+                                                                    'subcategories' => $category->subcategories,
+                                                                    'indent' => 1,
+                                                                ])
+                                                            @endif
+                                                        </ul>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Accounts Filter -->
+                                <div class="mb-3">
+                                    <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
+                                        data-bs-toggle="collapse" data-bs-target="#accountCollapse" aria-expanded="false"
+                                        aria-controls="accountCollapse">
+                                        <h6 class="mb-0 text-sm">Accounts</h6>
+                                        <i class="fas fa-angle-right" id="accountIcon"></i>
+                                    </span>
+                                    <div id="accountCollapse" class="collapse pt-2">
+                                        @foreach ($accounts as $account)
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input"
+                                                    id="account{{ $account->id }}" name="accounts[]"
+                                                    value="{{ $account->id }}"
+                                                    {{ isset($filters['accounts']) && in_array($account->id, $filters['accounts']) ? 'checked' : '' }}>
+                                                <label class="form-check-label"
+                                                    for="account{{ $account->id }}">{{ $account->name }}</label>
+                                            </div>
                                         @endforeach
-                                    </ul>
+                                    </div>
                                 </div>
 
-                                <!-- Dynamic Accounts -->
+                                <!-- Transaction Type Filter -->
                                 <div class="mb-3">
-                                    <h6>Accounts</h6>
-                                    @foreach ($accounts as $account)
+                                    <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
+                                        data-bs-toggle="collapse" data-bs-target="#transactionTypeCollapse"
+                                        aria-expanded="false" aria-controls="transactionTypeCollapse">
+                                        <h6 class="mb-0 text-sm">Transaction Type</h6>
+                                        <i class="fas fa-angle-right" id="transactionTypeIcon"></i>
+                                    </span>
+                                    <div id="transactionTypeCollapse" class="collapse pt-2">
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="account{{ $account->id }}"
-                                                name="accounts[]" value="{{ $account->id }}"
-                                                {{ isset($filters['accounts']) && in_array($account->id, $filters['accounts']) ? 'checked' : '' }}>
-                                            <label class="form-check-label"
-                                                for="account{{ $account->id }}">{{ $account->name }}</label>
+                                            <input type="checkbox" class="form-check-input" id="transactionType2"
+                                                name="transaction_types[]" value="1"
+                                                {{ isset($filters['transaction_types']) && in_array('1', $filters['transaction_types']) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="transactionType2">Expense</label>
                                         </div>
-                                    @endforeach
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="transactionType1"
+                                                name="transaction_types[]" value="2"
+                                                {{ isset($filters['transaction_types']) && in_array('2', $filters['transaction_types']) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="transactionType1">Income</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="transactionType3"
+                                                name="transaction_types[]" value="3"
+                                                {{ isset($filters['transaction_types']) && in_array('3', $filters['transaction_types']) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="transactionType3">Transfer</label>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <!-- Transaction Type -->
+                                <!-- Amount Range Filter -->
                                 <div class="mb-3">
-                                    <h6>Transaction Type</h6>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="transactionType2"
-                                            name="transaction_types[]" value="1"
-                                            {{ isset($filters['transaction_types']) && in_array('1', $filters['transaction_types']) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="transactionType2">Expense</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="transactionType1"
-                                            name="transaction_types[]" value="2"
-                                            {{ isset($filters['transaction_types']) && in_array('2', $filters['transaction_types']) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="transactionType1">Income</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="transactionType3"
-                                            name="transaction_types[]" value="3"
-                                            {{ isset($filters['transaction_types']) && in_array('3', $filters['transaction_types']) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="transactionType3">Transfer</label>
+                                    <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
+                                        data-bs-toggle="collapse" data-bs-target="#amountCollapse" aria-expanded="false"
+                                        aria-controls="amountCollapse">
+                                        <h6 class="mb-0 text-sm">Amount Range</h6>
+                                        <i class="fas fa-angle-right" id="amountIcon"></i>
+                                    </span>
+                                    <div id="amountCollapse" class="collapse pt-2">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="min_amount" class="form-label">Min:</label>
+                                                <input type="number" id="min_amount" name="min_amount"
+                                                    class="form-control"
+                                                    value="{{ isset($filters['min_amount']) ? $filters['min_amount'] : '' }}">
+                                            </div>
+                                            <div class="col">
+                                                <label for="max_amount" class="form-label">Max:</label>
+                                                <input type="number" id="max_amount" name="max_amount"
+                                                    class="form-control"
+                                                    value="{{ isset($filters['max_amount']) ? $filters['max_amount'] : '' }}">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Amount Filter -->
+                                <!-- Date Range Filter -->
                                 <div class="mb-3">
-                                    <h6>Amount Range</h6>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="min_amount" class="form-label">Min:</label>
-                                            <input type="number" id="min_amount" name="min_amount" class="form-control"
-                                                value="{{ isset($filters['min_amount']) ? $filters['min_amount'] : '' }}">
-                                        </div>
-                                        <div class="col">
-                                            <label for="max_amount" class="form-label">Max:</label>
-                                            <input type="number" id="max_amount" name="max_amount" class="form-control"
-                                                value="{{ isset($filters['max_amount']) ? $filters['max_amount'] : '' }}">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Date Range -->
-                                <div class="mb-3">
-                                    <h6>Date Range</h6>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="start_date" class="form-label">Start Date:</label>
-                                            <input type="date" id="start_date" name="start_date" class="form-control"
-                                                value="{{ isset($filters['start_date']) ? $filters['start_date'] : '' }}">
-                                        </div>
-                                        <div class="col">
-                                            <label for="end_date" class="form-label">End Date:</label>
-                                            <input type="date" id="end_date" name="end_date" class="form-control"
-                                                value="{{ isset($filters['end_date']) ? $filters['end_date'] : '' }}">
+                                    <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
+                                        data-bs-toggle="collapse" data-bs-target="#dateCollapse" aria-expanded="false"
+                                        aria-controls="dateCollapse">
+                                        <h6 class="mb-0 text-sm">Date Range</h6>
+                                        <i class="fas fa-angle-right" id="dateIcon"></i>
+                                    </span>
+                                    <div id="dateCollapse" class="collapse pt-2">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="start_date" class="form-label">Start Date:</label>
+                                                <input type="date" id="start_date" name="start_date"
+                                                    class="form-control"
+                                                    value="{{ isset($filters['start_date']) ? $filters['start_date'] : '' }}">
+                                            </div>
+                                            <div class="col">
+                                                <label for="end_date" class="form-label">End Date:</label>
+                                                <input type="date" id="end_date" name="end_date"
+                                                    class="form-control"
+                                                    value="{{ isset($filters['end_date']) ? $filters['end_date'] : '' }}">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
 
-                            </div>
-                            <div class="card-footer">
-                                <button type="submit" class="btn bg-gradient-primary w-100">Apply Filters</button>
+                                <button type="submit" class="btn bg-gradient-primary w-100 my-2">Apply Filters</button>
                                 <a href="{{ route('transactions.index') }}" class="btn bg-gradient-secondary w-100">Clear
                                     All Filters</a>
                             </div>
                         </div>
                     </form>
                 </div>
-
             </div>
             <div class="col">
                 <div class="card transaction-card mb-4">
@@ -152,10 +194,10 @@
                     </div>
                     <div class="card-body pt-4 px-3 d-flex flex-column">
                         @foreach ($transactions as $date => $transactionsOnDate)
-                            <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">{{ $date }}</h6>
+                            <h6 class="text-uppercase text-body text-xs font-weight-bolder my-1">{{ $date }}</h6>
                             <ul class="list-group">
                                 @foreach ($transactionsOnDate as $transaction)
-                                    <li class="list-group-item transaction-item border-0 d-flex px-2 mb-2 border-radius-lg"
+                                    <li class="list-group-item transaction-item border-0 d-flex px-2 border-radius-lg"
                                         data-id="{{ $transaction->id }}" data-type="{{ $transaction->type }}"
                                         data-src-account-id="{{ $transaction->src_account_id }}"
                                         data-dest-account-id="{{ $transaction->dest_account_id }}"
@@ -182,6 +224,16 @@
                                                         </h6>
                                                         <span class="text-xs d-none d-sm-block text-truncate"
                                                             style="max-width: 250px;">{{ $transaction->details }}</span>
+
+                                                        <span class="text-xs d-block d-sm-none">
+                                                            @if ($transaction->type == 3)
+                                                                {{ $transaction->src_account->name }}
+                                                                <i class="fas fa-long-arrow-alt-right mx-2"></i>
+                                                                {{ $transaction->dest_account->name }}
+                                                            @else
+                                                                {{ $transaction->src_account->name }}
+                                                            @endif
+                                                        </span>
 
                                                     </div>
                                                 </div>
@@ -220,19 +272,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="d-block d-sm-none py-1">
-                                                <div class="d-flex align-items-center justify-content-start">
-                                                    <span class="text-xs">
-                                                        @if ($transaction->type == 3)
-                                                            {{ $transaction->src_account->name }}
-                                                            <i class="fas fa-long-arrow-alt-right mx-2"></i>
-                                                            {{ $transaction->dest_account->name }}
-                                                        @else
-                                                            {{ $transaction->src_account->name }}
-                                                        @endif
-                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -363,8 +402,8 @@
                             </div>
                             <div class="col-6 form-group" id="amount-field">
                                 <label for="amount">Amount <span class="text-danger">*</span></label>
-                                <input id="amount" type="number" min="0" step="0.01" class="form-control" placeholder="Enter Amount"
-                                    name="amount" required autocomplete="amount">
+                                <input id="amount" type="number" min="0" step="0.01" class="form-control"
+                                    placeholder="Enter Amount" name="amount" required autocomplete="amount">
                             </div>
                             <div class="col-6 form-group" id="category-field">
                                 <label for="category_id">Category <span class="text-danger">*</span></label>
@@ -395,8 +434,7 @@
                         <div class="form-group">
                             <label for="details">Details</label>
                             <input id="details" type="text" class="form-control" name="details" maxlength="200"
-                                autocomplete="details" placeholder="Enter Details"
-                                title="Details about the transaction">
+                                autocomplete="details" placeholder="Enter Details" title="Details about the transaction">
                         </div>
                         <div class="form-group">
                             <label for="transaction_date">Date <span class="text-danger">*</span></label>
