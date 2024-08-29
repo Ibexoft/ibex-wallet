@@ -137,6 +137,7 @@ class TransactionController extends Controller
             'transaction_date' => 'required|date',
             'type' => 'required',
             'src_account_id' => [
+                'required',
                 'exists:accounts,id'
             ],
             'dest_account_id' => [
@@ -161,7 +162,8 @@ class TransactionController extends Controller
             ],
         ], [
             'dest_account_id.required_if' => 'The destination account field is required.',
-            'category_id.required_unless' => 'The category field is required.'
+            'category_id.required_unless' => 'The category field is required.',
+            'src_account_id.required' => 'The source account field is required.',
         ]);
         
 
@@ -183,6 +185,7 @@ class TransactionController extends Controller
             'transaction_date' => 'required|date',
             'type' => 'required',
             'src_account_id' => [
+                'required',
                 'exists:accounts,id'
             ],
             'dest_account_id' => [
@@ -207,7 +210,8 @@ class TransactionController extends Controller
             ],
         ], [
             'dest_account_id.required_if' => 'The destination account field is required.',
-            'category_id.required_unless' => 'The category field is required.'
+            'category_id.required_unless' => 'The category field is required.',
+            'src_account_id.required' => 'The source account field is required.',
         ]);
 
         $transaction->update($validated);

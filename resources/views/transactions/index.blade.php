@@ -263,7 +263,7 @@
                                                     <div class="col-12 col-md-5">
                                                         <div
                                                             class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == 1 ? 'danger' : ($transaction->type == 3 ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
-                                                            {{ $transaction->type == 3 ? '' : ($transaction->type == 1 ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
+                                                            {{ $transaction->type == 3 ? '' : ($transaction->type == 1 ? '-' : '+') }}{{$transaction->src_account->currency}} {{ number_format($transaction->amount, 2) }}
                                                         </div>
                                                         <div class="d-none d-sm-block d-md-none">
                                                             <div class="d-flex align-items-center justify-content-center">
@@ -353,7 +353,7 @@
     <!-- Combined Modal for Add/Edit -->
     <div class="modal fade" id="transactionModal" tabindex="-1" role="dialog" aria-labelledby="transactionModalTitle"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header px-5">
                     <h6 class="modal-title" id="transactionModalTitle">New Transaction</h6>
@@ -391,7 +391,7 @@
                                         class="text-danger">*</span></label>
                                 <select name="src_account_id" id="src_account_id" class="form-control" required
                                     autocomplete="src_account_id">
-                                    <option selected disabled>Select Account</option>
+                                    <option selected disabled value="">Select Account</option>
                                     @foreach ($accounts as $account)
                                         <option value="{{ $account->id }}">{{ $account->name }}</option>
                                     @endforeach
@@ -416,7 +416,7 @@
                                 <label for="category_id">Category <span class="text-danger">*</span></label>
                                 <select name="category_id" id="category_id" class="form-control"
                                     autocomplete="category_id">
-                                    <option selected disabled>Select Category</option>
+                                    <option selected disabled value="">Select Category</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @if (count($category->subcategories))
