@@ -11,8 +11,7 @@
         <div class="category-list pb-2">
             @foreach ($categories as $category)
                 {{-- Parent Category --}}
-                <div class="category-card bg-white m-auto position-relative row align-items-center justify-content-between py-2 px-0 rounded my-3 shadow-sm"
-                    style="" id="category-{{$category->id}}">
+                <div class="category-card bg-white m-auto position-relative row align-items-center justify-content-between py-2 px-0 rounded my-3 shadow-sm" id="category-{{$category->id}}">
                     <!-- Column 1: Category Info -->
                     <div onclick="toggleCategory.call(this)"
                         class="dropdown-toggler col-lg-5 col-md-5 col-10 d-flex align-items-center opacity-10"
@@ -49,14 +48,14 @@
                                 <li>
                                     <a class="dropdown-item py-1" href="#" style="font-size: 12px;"
                                         data-bs-toggle="modal" data-bs-target="#exampleModalMessage"
-                                        onclick="setCategory({{ $category->id }})">
+                                        onclick="setCategory({{ $category->id }}, null, false)">
                                         Add subcategory
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item py-1" href="#" style="font-size: 12px;"
                                         data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                                        onclick="setCategory({{ $category->id }}, '{{$category->name}}')">
+                                        onclick="setCategory({{ $category->id }}, '{{$category->name}}', false)">
                                         Edit
                                     </a>
                                 </li>
@@ -86,5 +85,4 @@
 
     @include('categories.addCategoryForm')
     @include('categories.updateCategoryForm')
-    {{-- @include('categories.addSubCategoryForm') --}}
 @endsection

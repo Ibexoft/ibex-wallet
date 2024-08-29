@@ -509,9 +509,14 @@ function toggleCategory() {
     $(this).find('.category-toggle-icon').toggleClass('fa-chevron-down fa-chevron-up');
 }
 
-function setCategory(id, name) { // set id and name of selected category for edit or delete
+function setCategory(id, name, isSubcategory = false) { // set id and name of selected category for edit or delete
     document.getElementById('parentCategoryId').value = id;
     document.getElementById('edit-category-input').value = name
+
+    document.getElementById('add-category-name-input').placeholder = id ? 'Subcategory name' : 'Category name'
+    document.getElementById('add-category-form-title').innerText = id ? 'Add Subcategory' : 'Add Category';
+
+    document.getElementById('edit-category-form-title').innerText = isSubcategory ? 'Edit Subcategory' : 'Edit Category';
 }
 
 function addCategory(event) {
