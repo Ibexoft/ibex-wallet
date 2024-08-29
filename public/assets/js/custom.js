@@ -272,3 +272,236 @@ $("#transactionForm").on("submit", function (e) {
 });
 
 /* Transaction JavaScript */
+
+/* Accounts JavaScript */
+
+$("#accountForm").on("submit", function (e) {
+    e.preventDefault();
+
+    var formData = new FormData(this);
+    var url = window.accountRoutes.store;
+
+    addAccount(url, formData);
+});
+ 
+function addAccount(url, formData) {
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: formData,
+        processData: false,  // Prevent jQuery from automatically transforming the data into a query string
+        contentType: false,  // Prevent jQuery from setting the Content-Type header
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.success) {
+                swalWithBootstrapButtons.fire({
+                    title: "Success!",
+                    text: "Your account has been created successfully.",
+                    icon: "success",
+                    confirmButtonText: "OK"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#modal-default').modal('hide');
+                        window.location.reload();
+                    }
+                });
+            } else {
+                let errorList = '';
+                for (let field in data.errors) {
+                    if (data.errors.hasOwnProperty(field)) {
+                        data.errors[field].forEach(error => {
+                            errorList += `<p class="mb-0">${error}</p>`;
+                        });
+                    }
+                }
+                errorList += '';
+
+                swalWithBootstrapButtons.fire({
+                    title: "Validation Errors",
+                    html: errorList,
+                    icon: "error",
+                });
+            }
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            let errorMessage = "An error occurred. Please try again.";
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                let errorList = '';
+                for (let field in xhr.responseJSON.errors) {
+                    if (xhr.responseJSON.errors.hasOwnProperty(field)) {
+                        xhr.responseJSON.errors[field].forEach(error => {
+                            errorList += `<p class="mb-0">${error}</p>`;
+                        });
+                    }
+                }
+                errorList += '';
+
+                errorMessage = errorList;
+            } else if (xhr.responseText) {
+                errorMessage = xhr.responseText;
+            }
+            swalWithBootstrapButtons.fire({
+                title: "Error",
+                html: errorMessage,
+                icon: "error",
+            });
+        }
+    });
+}
+
+
+function openEditAccountModal(account) {
+    var updateUrl = window.accountRoutes.update.replace('__ACCOUNT_ID__', account.id);
+    
+    $('#editAccountForm').attr('action', updateUrl);
+
+    // Populate fields with account data
+    $('#editAccountId').val(account.id);
+    $('#editName').val(account.name);
+    $('#editColor').val(account.color);
+    $('#editBalance').val(account.balance);
+    $('#editType').val(account.type);
+    $('#editCurrency').val(account.currency);
+
+    // Show the modal
+    $('#modal-edit').modal('show');
+}
+
+$("#editAccountForm").on("submit", function (e) {
+    e.preventDefault();
+
+    var formData = new FormData(this);
+    var url = this.action;
+
+    updateAccount(url, formData);
+});
+
+function updateAccount(url, formData) {
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: formData,
+        processData: false,  // Prevent jQuery from automatically transforming the data into a query string
+        contentType: false,  // Prevent jQuery from setting the Content-Type header
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.success) {
+                swalWithBootstrapButtons.fire({
+                    title: "Success!",
+                    text: "Your account has been updated successfully.",
+                    icon: "success",
+                    confirmButtonText: "OK"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#modal-edit').modal('hide');
+                        window.location.reload();
+                    }
+                });
+            } else {
+                let errorList = '';
+                for (let field in data.errors) {
+                    if (data.errors.hasOwnProperty(field)) {
+                        data.errors[field].forEach(error => {
+                            errorList += `<p class="mb-0">${error}</p>`;
+                        });
+                    }
+                }
+
+                swalWithBootstrapButtons.fire({
+                    title: "Validation Errors",
+                    html: errorList,
+                    icon: "error",
+                });
+            }
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            let errorMessage = "An error occurred. Please try again.";
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                let errorList = '';
+                for (let field in xhr.responseJSON.errors) {
+                    if (xhr.responseJSON.errors.hasOwnProperty(field)) {
+                        xhr.responseJSON.errors[field].forEach(error => {
+                            errorList += `<p class="mb-0">${error}</p>`;
+                        });
+                    }
+                }
+
+                errorMessage = errorList;
+            } else if (xhr.responseText) {
+                errorMessage = xhr.responseText;
+            }
+
+            swalWithBootstrapButtons.fire({
+                title: "Error",
+                html: errorMessage,
+                icon: "error",
+            });
+        }
+    });
+}
+
+
+function deleteAccount(accountId) {
+    var deleteUrl = window.accountRoutes.destroy.replace('__ACCOUNT_ID__', accountId);
+
+    swalWithBootstrapButtons.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: deleteUrl,
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    if (response.success) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Deleted!",
+                            text: "The account has been deleted.",
+                            icon: "success"
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        swalWithBootstrapButtons.fire({
+                            title: "Failed",
+                            text: "Failed to delete the account. Please try again.",
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('AJAX Error:', textStatus, errorThrown);
+                    swalWithBootstrapButtons.fire({
+                        title: "Error",
+                        text: "An error occurred. Please try again.",
+                        icon: "error"
+                    });
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            swalWithBootstrapButtons.fire({
+                title: "Cancelled",
+                text: "Your account is safe :)",
+                icon: "error"
+            });
+        }
+    });
+}
+
+/* Accounts JavaScript */
+
+
