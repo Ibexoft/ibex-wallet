@@ -8,6 +8,27 @@ const swalWithBootstrapButtons = Swal.mixin({
 
 /* Transaction JavaScript */
 
+function toggleSubcategories(subcategoryId, iconElement, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var subcategoryElement = document.getElementById(subcategoryId);
+    subcategoryElement.classList.toggle("collapse");
+    iconElement.classList.toggle("fa-angle-right");
+    iconElement.classList.toggle("fa-angle-down");
+}
+
+document.querySelectorAll(".category-checkbox").forEach(function (checkbox) {
+    checkbox.addEventListener("change", function () {
+        const isChecked = checkbox.checked;
+        let allSubCheckboxes = checkbox
+            .closest("li")
+            .querySelectorAll('input[type="checkbox"]');
+        allSubCheckboxes.forEach(function (subCheckbox) {
+            subCheckbox.checked = isChecked;
+        });
+    });
+});
+
 function transactionInitialConfiguration() {
     const filterButtons = document.querySelectorAll(
         'span[data-bs-toggle="collapse"]'
