@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <link href="{{ asset('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/css/soft-ui-dashboard.css') }}" rel="stylesheet" />
     <link id="pagestyle" href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" />
@@ -50,7 +51,7 @@
     </main>
     <div class="fixed-plugin">
         <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
-            <i class="fa fa-cog py-2"> </i>
+            <i class="fa fa-plus py-1"> </i>
         </a>
         <div class="card shadow-lg ">
             <div class="card-header pb-0 pt-3 ">
@@ -102,10 +103,6 @@
                 <!-- Navbar Fixed -->
                 <div class="mt-3">
                     <h6 class="mb-0">Navbar Fixed</h6>
-                </div>
-                <div class="form-check form-switch ps-0">
-                    <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed"
-                        onclick="navbarFixed(this)">
                 </div>
                 <hr class="horizontal dark my-sm-4">
                 <a class="btn bg-gradient-dark w-100"

@@ -51,14 +51,23 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        Category::create([
+        $request->validate([
+            'name' => 'required|string|max:35',
+        ]);
+
+        $subcategory = Category::create([
             'user_id'               => auth()->id(),
             'name'                  => $request->name,
             'parent_category_id'    => $request->parent_category_id,
             'icon'                  => $request->icon,
         ]);
 
-        return redirect('categories');
+        // Return a JSON response with the subcategory and a success flag
+        return response()->json([
+            'success' => true,
+            'message' => "Category Added successfully",
+            'subcategory' => $subcategory
+        ]);
     }
 
     /**
@@ -99,15 +108,19 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        Category::where('user_id', Auth::id())
-        ->where('id', $category->id)
-        ->update([
-            'name'                  => $request->name,
-            'parent_category_id'    => $request->parent_category_id,
-            'icon'                  => $request->icon
+        // Validate the input to ensure 'name' is present
+        $request->validate([
+            'name' => 'required|string|max:35',
         ]);
 
-        return redirect('categories');
+        // Update only the 'name' field of the category
+        $category->where('user_id', Auth::id())
+                ->where('id', $category->id)
+                ->update([
+                    'name' => $request->name,
+                ]);
+
+        return response()->json(['success' => true, 'message' => 'Category name updated successfully.']);
     }
 
     /**
@@ -119,6 +132,28 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $hasChildren = Category::where('parent_category_id', $category->id)->exists();
+        $hasTransactions = \DB::table('transactions')->where('category_id', $category->id)->exists();
+
+        if ($hasChildren) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete a parent category'
+            ]);
+        }
+        if($hasTransactions) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete a category associated with a transaction'
+            ]);
+        }
+
+        // If both checks pass, delete the category
+        $category->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Category deleted successfully.'
+        ]);
     }
 }
