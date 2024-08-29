@@ -5,7 +5,7 @@
         <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
             <div class="modal-content">
                 <div class="modal-header px-5">
-                    <h6 class="modal-title" id="modal-title-default">ADD CATEGORY</h6>
+                    <h6 class="modal-title" id="add-category-form-title">Add Category</h6>
                     <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -16,8 +16,8 @@
                         <div class="row">
                             <div class="col-sm-12 col-lg-9 form-group">
                                 <label for="name">Name</label>
-                                <input type="text" class="category-input form-control" placeholder="Category Name"
-                                    name="name" id="name" required>
+                                <input type="text" id="add-category-name-input" class="category-input form-control" placeholder="Category Name"
+                                    name="name" required>
                             </div>
                             <input type="hidden" name="parent_category_id" id="parentCategoryId" value="">
                             <input type="hidden" name="category_name" id="categoryName" value="">
@@ -29,7 +29,7 @@
                         </div>
                         <div class="text-center">
                             <button type="submit" id="saveAccountBtn"
-                                class="btn bg-gradient-primary w-100 mt-4 mb-0">Save</button>
+                                class="btn bg-gradient-primary w-100 mt-4 mb-0">Add</button>
                         </div>
                     </form>
                 </div>

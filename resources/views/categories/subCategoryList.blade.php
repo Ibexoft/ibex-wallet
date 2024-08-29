@@ -33,13 +33,13 @@
                         <li>
                             <a class="dropdown-item py-1" href="#" style="font-size: 12px;" data-bs-toggle="modal"
                                 data-bs-target="#exampleModalMessage"
-                                onclick="setCategory({{ $subcategory->id }})">
+                                onclick="setCategory({{ $subcategory->id }}, null, true)">
                                 Add sub category
                             </a>
                         </li>
                     @endif
                     <li data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                        onclick="setCategory({{ $subcategory->id }}, '{{$subcategory->name}}')">
+                        onclick="setCategory({{ $subcategory->id }}, '{{$subcategory->name}}', true)">
                         <a class="dropdown-item py-1" href="#" style="font-size: 12px;">
                             Edit
                         </a>

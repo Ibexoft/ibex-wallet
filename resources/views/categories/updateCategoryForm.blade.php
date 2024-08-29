@@ -5,7 +5,7 @@
         <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
             <div class="modal-content">
                 <div class="modal-header px-5">
-                    <h6 class="modal-title" id="modal-title-default">EDIT CATEGORY</h6>
+                    <h6 class="modal-title" id="edit-category-form-title">Edit Category</h6>
                     <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -29,7 +29,7 @@
                         </div>
                         <div class="text-center">
                             <button type="submit" id="saveAccountBtn"
-                                class="btn bg-gradient-primary w-100 mt-4 mb-0">Save</button>
+                                class="btn bg-gradient-primary w-100 mt-4 mb-0">Update</button>
                         </div>
                     </form>
                 </div>
