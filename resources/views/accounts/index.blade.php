@@ -248,26 +248,22 @@
                 <div class="card-body pt-4 p-3">
                     <ul class="list-group">
                         @foreach ($accounts as $account)
-                            <li class="list-group-item border-0 px-4 mb-3 bg-gray-100 border-radius-lg">
+                            <li class="list-group-item border-0 px-4 mb-3 bg-gray-100 border-radius-lg account-item"
+                                onclick="openEditAccountModal({{ json_encode($account) }})">
                                 <!-- Dropdown Trigger -->
                                 <div class="w-100 text-end">
                                     <div class="dropdown d-inline ">
                                         <i class="icon fa fa-ellipsis-h text-sm text-primary"
                                             id="dropdownMenuButton{{ $account->id }}" data-bs-toggle="dropdown"
-                                            aria-expanded="false" style="cursor: pointer;"></i>
+                                            aria-expanded="false" style="cursor: pointer;"
+                                            onclick="event.stopPropagation();"></i>
 
                                         <!-- Dropdown Menu -->
                                         <ul class="dropdown-menu dropdown-menu-end"
                                             aria-labelledby="dropdownMenuButton{{ $account->id }}">
                                             <li>
                                                 <a class="dropdown-item text-danger" href="javascript:;"
-                                                    onclick="deleteAccount({{ $account->id }})">Delete
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item text-dark" href="javascript:;"
-                                                    onclick="openEditAccountModal({{ json_encode($account) }})">
-                                                    Edit
+                                                    onclick="event.stopPropagation(); deleteAccount({{ $account->id }});">Delete
                                                 </a>
                                             </li>
                                         </ul>
@@ -278,22 +274,15 @@
                                     <div class="col-2">
                                         <div
                                             class="icon icon-sm icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                                            @if (config('custom.account_types')[$account->type] == 'Cash')
-                                                <i class="fa-solid fa-coins text-lg opacity-10 mt-1"
-                                                    aria-hidden="true"></i>
-                                            @elseif (config('custom.account_types')[$account->type] == 'General')
-                                                <i class="fa-solid fa-wallet text-lg opacity-10 mt-1"
-                                                    aria-hidden="true"></i>
-                                            @elseif (config('custom.account_types')[$account->type] == 'Current Account')
-                                                <i class="fa-solid fa-landmark text-lg opacity-10 mt-1"
-                                                    aria-hidden="true"></i>
-                                            @endif
+                                            <i class="{{ config('custom.account_types')[$account->type]['icon'] }} text-lg opacity-10 mt-1"
+                                                aria-hidden="true"></i>
                                         </div>
                                     </div>
                                     <div class="col-10">
                                         <div class="d-flex flex-column ps-2 ps-md-0">
                                             <h6 class="m-0 text-sm">{{ $account->name }}</h6>
-                                            <p class="m-0 text-xs">{{ config('custom.account_types')[$account->type] }}</p>
+                                            <p class="m-0 text-xs">
+                                                {{ config('custom.account_types')[$account->type]['name'] }}</p>
                                         </div>
                                     </div>
                                     <div class="col-12 mt-2">
@@ -310,22 +299,17 @@
                                     <div class="col-1">
                                         <div
                                             class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                                            @if (config('custom.account_types')[$account->type] == 'Cash')
-                                                <i class="fa-solid fa-coins text-lg opacity-10 top-0 mt-3"
-                                                    aria-hidden="true"></i>
-                                            @elseif (config('custom.account_types')[$account->type] == 'General')
-                                                <i class="fa-solid fa-wallet text-lg opacity-10 top-0 mt-3"
-                                                    aria-hidden="true"></i>
-                                            @elseif (config('custom.account_types')[$account->type] == 'Current Account')
-                                                <i class="fa-solid fa-landmark text-lg opacity-10 top-0 mt-3"
-                                                    aria-hidden="true"></i>
-                                            @endif
+                                            <i class="{{ config('custom.account_types')[$account->type]['icon'] }} text-lg opacity-10 top-0 mt-3"
+                                                aria-hidden="true"></i>
                                         </div>
+
                                     </div>
                                     <div class="col-11 d-flex align-items-center">
                                         <div class="d-flex flex-column">
                                             <h6 class="m-0">{{ $account->name }}</h6>
-                                            <p class="m-0 text-xs">{{ config('custom.account_types')[$account->type] }}</p>
+                                            <p class="m-0 text-xs">
+                                                {{ config('custom.account_types')[$account->type]['name'] }}
+                                            </p>
                                         </div>
                                         <div class="ms-auto text-end ">
                                             <h5 class="text-dark font-weight-bold m-0">

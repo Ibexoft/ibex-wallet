@@ -2,9 +2,23 @@
 
 return [
     'account_types' => [
-        1 => 'Cash',
-        2 => 'General',
-        3 => 'Current Account',
+        1 => [
+            'name' => 'Cash',
+            'icon' => 'fa-solid fa-coins',
+        ],
+        2 => [
+            'name' => 'Credit Card',
+            'icon' => 'fa-solid fa-credit-card',
+        ],
+        3 => [
+            'name' => 'Bank',
+            'icon' => 'fa-solid fa-landmark',
+        ],
+        4 => [
+            'name' => 'Mobile Payment',
+            'icon' => 'fa-solid fa-mobile-screen-button',
+        ],
+        // Add more types here as needed
     ],
     'currencies' => [
         'PKR' => 'PKR',

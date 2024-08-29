@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header px-5">
-                <h6 class="modal-title" id="modal-title-edit">EDIT ACCOUNT</h6>
+                <h6 class="modal-title" id="modal-title-edit">Edit Account</h6>
                 <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -27,14 +27,14 @@
                         <label for="editType">Account Type</label>
                         <select name="type" class="form-select form-control" id="editType">
                             @foreach (config('custom.account_types') as $value => $text)
-                                <option value="{{ $value }}">{{ $text }}</option>
+                                <option value="{{ $value }}">{{ $text['name'] }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-lg-9 form-group">
                             <label for="editBalance">Initial Amount</label>
-                            <input type="number" class="form-control" placeholder="0" name="balance" id="editBalance"
+                            <input type="number" class="form-control" placeholder="0" name="balance" id="editBalance" step="0.01"
                                 required>
                         </div>
                         <div class="col-sm-12 col-lg-3 form-group">

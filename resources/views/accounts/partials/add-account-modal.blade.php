@@ -2,7 +2,7 @@
     <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
         <div class="modal-content">
             <div class="modal-header px-5">
-                <h6 class="modal-title" id="modal-title-default">ADD ACCOUNT</h6>
+                <h6 class="modal-title" id="modal-title-default">Add Account</h6>
                 <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -26,14 +26,14 @@
                         <label for="Type">Account type</label>
                         <select name="type" class="form-select form-control">
                             @foreach (config('custom.account_types') as $value => $text)
-                                <option value="{{ $value }}">{{ $text }}</option>
+                                <option value="{{ $value }}">{{ $text['name'] }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-lg-9 form-group">
                             <label for="balance">Initial amount</label>
-                            <input type="number" class="form-control" placeholder="0" name="balance" id="balance"
+                            <input type="number" class="form-control" placeholder="0" name="balance" id="balance" step="0.01"
                                 required>
                         </div>
                         <div class="col-sm-12 col-lg-3 form-group">
@@ -47,7 +47,7 @@
                     </div>
                     <div class="text-center">
                         <button type="submit" id="saveAccountBtn"
-                            class="btn bg-gradient-primary w-100 mt-4 mb-0">Save</button>
+                            class="btn bg-gradient-primary w-100 mt-4 mb-0">Add</button>
                     </div>
                 </form>
             </div>
