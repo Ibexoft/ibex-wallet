@@ -5,10 +5,10 @@
         <div class="card-header pb-0 mt-4 d-flex justify-content-between">
             <h6 class="mb-0">Categories</h6>
             <button type="button" class="btn btn-sm btn-block bg-gradient-primary mb-3" data-bs-toggle="modal"
-                data-bs-target="#exampleModalMessage" onclick="setCategory(null)">Add Category</button>
+                data-bs-target="#exampleModalMessage" onclick="setCategory(null)">+ Add Category</button>
         </div>
 
-        <div class="category-list">
+        <div class="category-list pb-2">
             @foreach ($categories as $category)
                 {{-- Parent Category --}}
                 <div class="category-card bg-white m-auto position-relative row align-items-center justify-content-between py-2 px-0 rounded my-3 shadow-sm"
