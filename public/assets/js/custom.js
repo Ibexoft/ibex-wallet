@@ -1,11 +1,18 @@
 const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
         confirmButton: "btn bg-gradient-success",
-        cancelButton: "btn bg-gradient-danger",
+        cancelButton: "btn bg-gradient-secondary",
     },
     buttonsStyling: true,
 });
 
+const swalForDeleteConfirmation = Swal.mixin({
+    customClass: {
+        confirmButton: "btn bg-gradient-danger",
+        cancelButton: "btn bg-gradient-secondary",
+    },
+    buttonsStyling: true,
+})
 /* Transaction JavaScript */
 
 function toggleSubcategories(subcategoryId, iconElement, event) {
@@ -124,7 +131,7 @@ function submitTransactionForm(url, formData, method) {
 }
 
 function deleteTransaction(url) {
-    swalWithBootstrapButtons
+    swalForDeleteConfirmation
         .fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -448,7 +455,7 @@ function updateAccount(url, formData) {
 function deleteAccount(accountId) {
     var deleteUrl = window.accountRoutes.destroy.replace('__ACCOUNT_ID__', accountId);
 
-    swalWithBootstrapButtons.fire({
+    swalForDeleteConfirmation.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
         icon: "warning",
