@@ -141,7 +141,7 @@
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{asset('assets/js/custom.js?v=1.0.0')}}"></script>
+    <script src="{{asset('assets/js/custom.js?v=1.0.1')}}"></script>
     @yield('script')
 </body>
 

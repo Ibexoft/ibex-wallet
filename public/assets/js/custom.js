@@ -8,37 +8,66 @@ const swalWithBootstrapButtons = Swal.mixin({
 
 /* Transaction JavaScript */
 
-function transactionInitialConfiguration() {
-    var filterCollapse = document.getElementById("filterCollapse");
-    var filterIcon = document.getElementById("filterIcon");
+function toggleSubcategories(subcategoryId, iconElement, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var subcategoryElement = document.getElementById(subcategoryId);
+    subcategoryElement.classList.toggle("collapse");
+    iconElement.classList.toggle("fa-angle-right");
+    iconElement.classList.toggle("fa-angle-down");
+}
 
-    if (filterCollapse.classList.contains('show')) {
-        filterIcon.classList.add("fa-angle-up");
-        filterIcon.classList.remove("fa-angle-down");
-    } else {
-        filterIcon.classList.add("fa-angle-down");
-        filterIcon.classList.remove("fa-angle-up");
-    }
-
-    filterCollapse.addEventListener("show.bs.collapse", function () {
-        filterIcon.classList.remove("fa-angle-down");
-        filterIcon.classList.add("fa-angle-up");
+document.querySelectorAll(".category-checkbox").forEach(function (checkbox) {
+    checkbox.addEventListener("change", function () {
+        const isChecked = checkbox.checked;
+        let allSubCheckboxes = checkbox
+            .closest("li")
+            .querySelectorAll('input[type="checkbox"]');
+        allSubCheckboxes.forEach(function (subCheckbox) {
+            subCheckbox.checked = isChecked;
+        });
     });
+});
 
-    filterCollapse.addEventListener("hide.bs.collapse", function () {
-        filterIcon.classList.remove("fa-angle-up");
-        filterIcon.classList.add("fa-angle-down");
+function transactionInitialConfiguration() {
+    const filterButtons = document.querySelectorAll(
+        'span[data-bs-toggle="collapse"]'
+    );
+
+    filterButtons.forEach(function (button) {
+        let icon = button.querySelector("i"); // Directly reference the <i> element within the button
+
+        // Find the specific collapse element associated with this button
+        const collapseTarget = document.querySelector(
+            button.getAttribute("data-bs-target")
+        );
+
+        // Show event for this specific collapse
+        collapseTarget.addEventListener("show.bs.collapse", function (event) {
+            // Stop any parent events from being triggered
+            event.stopPropagation();
+            icon.classList.remove("fa-angle-right");
+            icon.classList.add("fa-angle-down");
+        });
+
+        // Hide event for this specific collapse
+        collapseTarget.addEventListener("hide.bs.collapse", function (event) {
+            // Stop any parent events from being triggered
+            event.stopPropagation();
+            icon.classList.remove("fa-angle-down");
+            icon.classList.add("fa-angle-right");
+        });
     });
 
     var width = window.innerWidth;
-    if (width < 768) { // Bootstrap's MD breakpoint
+    if (width < 768) {
+        // Bootstrap's MD breakpoint
         var bsCollapse = new bootstrap.Collapse(filterCollapse, {
             toggle: false,
         });
         bsCollapse.hide();
     }
 }
-
 
 function submitTransactionForm(url, formData, method) {
     $.ajax({
@@ -72,15 +101,15 @@ function submitTransactionForm(url, formData, method) {
         error: function (xhr, textStatus, errorThrown) {
             let errorMessage = "An error occurred. Please try again.";
             if (xhr.responseJSON && xhr.responseJSON.errors) {
-                let errorList = '';
+                let errorList = "";
                 for (let field in xhr.responseJSON.errors) {
                     if (xhr.responseJSON.errors.hasOwnProperty(field)) {
-                        xhr.responseJSON.errors[field].forEach(error => {
+                        xhr.responseJSON.errors[field].forEach((error) => {
                             errorList += `<p class="mb-0">${error}</p>`;
                         });
                     }
                 }
-                errorList += '';
+                errorList += "";
                 errorMessage = errorList;
             } else if (xhr.responseText) {
                 errorMessage = xhr.responseText;
@@ -90,7 +119,7 @@ function submitTransactionForm(url, formData, method) {
                 html: errorMessage,
                 icon: "error",
             });
-        }
+        },
     });
 }
 
@@ -136,17 +165,24 @@ function deleteTransaction(url) {
                         }
                     },
                     error: function (xhr, textStatus, errorThrown) {
-                        let errorMessage = "An error occurred. Please try again.";
+                        let errorMessage =
+                            "An error occurred. Please try again.";
                         if (xhr.responseJSON && xhr.responseJSON.errors) {
-                            let errorList = '';
+                            let errorList = "";
                             for (let field in xhr.responseJSON.errors) {
-                                if (xhr.responseJSON.errors.hasOwnProperty(field)) {
-                                    xhr.responseJSON.errors[field].forEach(error => {
-                                        errorList += `<p class="mb-0">${error}</p>`;
-                                    });
+                                if (
+                                    xhr.responseJSON.errors.hasOwnProperty(
+                                        field
+                                    )
+                                ) {
+                                    xhr.responseJSON.errors[field].forEach(
+                                        (error) => {
+                                            errorList += `<p class="mb-0">${error}</p>`;
+                                        }
+                                    );
                                 }
                             }
-                            errorList += '';
+                            errorList += "";
                             errorMessage = errorList;
                         } else if (xhr.responseText) {
                             errorMessage = xhr.responseText;
@@ -156,7 +192,7 @@ function deleteTransaction(url) {
                             html: errorMessage,
                             icon: "error",
                         });
-                    }
+                    },
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 swalWithBootstrapButtons.fire({
@@ -204,7 +240,11 @@ function changeTransactionType(type) {
     $("#transfer-btn").toggleClass("active", isTransfer);
 
     $("#collapseToAccount").toggle(isTransfer);
-    $("#account-label").text(isTransfer ? "From Account" : "Account");
+    $("#account-label").html(
+        isTransfer
+            ? "From Account <span class='text-danger'>*</span>"
+            : "Account <span class='text-danger'>*</span>"
+    );
     $("#category-field").toggle(isExpenseOrIncome);
     $("#wallet-field").toggle(isExpenseOrIncome);
 
@@ -215,27 +255,6 @@ function changeTransactionType(type) {
         amountField.removeClass("col-md-12").addClass("col-md-6");
     }
 }
-
-function toggleSubcategories(subcategoryId, iconElement, event) {
-    event.preventDefault();
-    event.stopPropagation();
-    var subcategoryElement = document.getElementById(subcategoryId);
-    subcategoryElement.classList.toggle("collapse");
-    iconElement.classList.toggle("fa-angle-right");
-    iconElement.classList.toggle("fa-angle-down");
-}
-
-document.querySelectorAll(".category-checkbox").forEach(function (checkbox) {
-    checkbox.addEventListener("change", function () {
-        const isChecked = checkbox.checked;
-        let allSubCheckboxes = checkbox
-            .closest("li")
-            .querySelectorAll('input[type="checkbox"]');
-        allSubCheckboxes.forEach(function (subCheckbox) {
-            subCheckbox.checked = isChecked;
-        });
-    });
-});
 
 $("#transactionForm").on("submit", function (e) {
     e.preventDefault();
