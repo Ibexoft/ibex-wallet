@@ -243,13 +243,13 @@
                 <div class="card-header pb-0 d-block d-sm-flex justify-content-between mt-0">
                     <h6 class="mb-sm-2 mb-md-0 text-center text-sm-start">Accounts Information</h6>
                     <button type="button" class="btn btn-block bg-gradient-primary mb-3 w-100 w-sm-auto"
-                        data-bs-toggle="modal" data-bs-target="#modal-default">Add Account</button>
+                        data-bs-toggle="modal" data-bs-target="#modal-default">+ Add Account</button>
                 </div>
                 <div class="card-body pt-4 p-3">
                     <ul class="list-group">
                         @foreach ($accounts as $account)
                             <li class="list-group-item border-0 px-4 mb-3 bg-gray-100 border-radius-lg account-item"
-                                onclick="openEditAccountModal({{ json_encode($account) }})">
+                                onclick='openEditAccountModal({{ json_encode($account) }})'>
                                 <!-- Dropdown Trigger -->
                                 <div class="w-100 text-end">
                                     <div class="dropdown d-inline ">
