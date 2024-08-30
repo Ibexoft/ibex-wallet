@@ -1,4 +1,5 @@
-<div class="container position-sticky z-index-sticky top-0">
+<div class="container  z-index-sticky top-0 position-sticky">
+    
     <div class="row">
         <div class="col-12">
             <!-- Navbar -->
@@ -19,6 +20,7 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navigation">
                         <ul class="navbar-nav mx-auto ms-xl-auto ">
+                            @if (Auth::user())
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center me-2 active" aria-current="page"
                                     href="{{route('dashboard')}}">
@@ -40,13 +42,31 @@
                                     Categories
                                 </a>
                             </li>
+                            @endif  
                         </ul>
                         <ul class="navbar-nav d-lg-block d-none">
-                            <li class="nav-item">
-                                <a href="https://www.creative-tim.com/product/soft-ui-dashboard"
-                                    class="btn btn-sm btn-round mb-0 me-1 bg-gradient-dark">Free download</a>
-                            </li>
+                            @if (Auth::check())
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle show border rounded-pill px-4" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{-- I want to show user icon here in i tag --}}
+                                    <i class="fas fa-user pe-1"></i>
+                                    {{ Auth::user()->name }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <a class="nav-link dropdown-item" onclick="event.preventDefault(); this.closest('form').submit();">
+                                                Logout
+                                            </a>
+                                        </form>
+                                    </li>
+                                </ul>
+                              </div>
+                            @endif
                         </ul>
+                        
+                        
                     </div>
                 </div>
             </nav>
