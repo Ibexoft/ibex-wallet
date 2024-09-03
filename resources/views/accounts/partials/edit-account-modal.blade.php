@@ -12,32 +12,28 @@
                     @csrf
                     @method('PUT')
                     <div class="row">
-                        <div class="col-sm-12 col-lg-9 form-group">
+                        <div class="col-sm-12 col-lg-6 form-group">
                             <label for="editName">Name</label>
                             <input type="text" class="form-control" placeholder="Account Name" name="name"
                                 id="editName" required>
                         </div>
-                        <div class="col-sm-12 col-lg-3 form-group">
-                            <label for="editColor">Color</label>
-                            <input style="height: 2.5rem;" type="color" value="#cb0c9f" class="form-control"
-                                aria-label="Color" aria-describedby="color-addon" name="color" id="editColor">
+                        <div class="col-sm-12 col-lg-6 form-group form-group">
+                            <label for="editType">Account Type</label>
+                            <select name="type" class="form-select form-control" id="editType">
+                                @foreach (config('custom.account_types') as $value => $text)
+                                    <option value="{{ $value }}">{{ $text['name'] }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="editType">Account Type</label>
-                        <select name="type" class="form-select form-control" id="editType">
-                            @foreach (config('custom.account_types') as $value => $text)
-                                <option value="{{ $value }}">{{ $text['name'] }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+
                     <div class="row">
-                        <div class="col-sm-12 col-lg-9 form-group">
+                        <div class="col-sm-12 col-lg-6 form-group">
                             <label for="editBalance">Initial Amount</label>
-                            <input type="number" class="form-control" placeholder="0" name="balance" id="editBalance" step="0.01"
-                                required>
+                            <input type="number" class="form-control" placeholder="0" name="balance" id="editBalance"
+                                step="0.01" required>
                         </div>
-                        <div class="col-sm-12 col-lg-3 form-group">
+                        <div class="col-sm-12 col-lg-6 form-group">
                             <label for="editCurrency">Currency</label>
                             <select name="currency" class="form-select form-control" id="editCurrency" required>
                                 @foreach (config('custom.currencies') as $value => $text)

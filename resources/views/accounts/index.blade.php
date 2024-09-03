@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row mx-3 mt-4">
+    <div class="row mx-3 mt-2">
         <div class="col-lg-3 mb-4 mb-lg-0">
             <div class="card">
                 <ul class="nav flex-column bg-white border-radius-lg p-3">
