@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <title>
-        {{{ config('app.name', 'Ibex Wallet') }}}
+        {{ config('app.name', 'Ibex Wallet') }}
     </title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!--     Fonts and icons     -->
@@ -41,13 +41,19 @@
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
-    @yield('sidebar')
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
-        <!-- Navbar -->
+        @if (Auth::user())
+            <!-- Navbar -->
         @include('layouts.navigation')
         <!-- End Navbar -->
-        @yield('content')
-        
+        @endif
+        <div class="container">
+            <div class="row">
+                @yield('sidebar')
+                @yield('content')
+            </div>
+        </div>
+
     </main>
     <div class="fixed-plugin">
         <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
@@ -105,8 +111,8 @@
                     <h6 class="mb-0">Navbar Fixed</h6>
                 </div>
                 <hr class="horizontal dark my-sm-4">
-                <a class="btn bg-gradient-dark w-100"
-                    href="https://www.creative-tim.com/product/soft-ui-dashboard">Free Download</a>
+                <a class="btn bg-gradient-dark w-100" href="https://www.creative-tim.com/product/soft-ui-dashboard">Free
+                    Download</a>
                 <a class="btn btn-outline-dark w-100"
                     href="https://www.creative-tim.com/learning-lab/bootstrap/license/soft-ui-dashboard">View
                     documentation</a>
@@ -138,7 +144,7 @@
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{asset('assets/js/custom.js?v=1.0.2')}}"></script>
+    <script src="{{asset('assets/js/custom.js?v=1.0.3')}}"></script>
     @yield('script')
 </body>
 
