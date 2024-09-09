@@ -9,7 +9,7 @@
 
             <!-- ---------- EXPENSE TYPE ---------- -->
 
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
                     <label
                         class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == TransactionType::Expense || old('type') == TransactionType::Expense ? 'active' : '') : 'active' }}">
@@ -30,6 +30,26 @@
                         <input type="radio" class="d-none" name="type" id="transfer" value="{{ TransactionType::Transfer }}"
                             {{ $transaction ?? '' ? $transaction->type == TransactionType::Transfer || old('type') == TransactionType::Transfer ? 'checked' : '' : '' }}
                             onclick="$('#collapseToAccount').collapse('show')">
+                        Transfer
+                    </label>
+                </div>
+            </div> -->
+
+            <div class="form-group row">
+                <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
+                    <label class="btn btn-outline-primary active" id="expense-btn">
+                        <input type="radio" class="d-none" name="type" value="1" checked
+                            onclick="changeTransactionType('expense')">
+                        Expense
+                    </label>
+                    <label class="btn btn-outline-primary" id="income-btn">
+                        <input type="radio" class="d-none" name="type" value="2"
+                            onclick="changeTransactionType('income')">
+                        Income
+                    </label>
+                    <label class="btn btn-outline-primary" id="transfer-btn">
+                        <input type="radio" class="d-none" name="type" value="3"
+                            onclick="changeTransactionType('transfer')">
                         Transfer
                     </label>
                 </div>
@@ -68,16 +88,17 @@
                     class="form-control @error('category_id') is-invalid @enderror" autocomplete="category_id">
                     <option></option>
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" {{ $transaction ?? '' ? 
+                    <option value="{{ $category->id }}" {{ $transaction ?? '' ? 
                                     $transaction->category ?? '' ?
                                         $transaction->category->id == $category->id ? 'selected' : ''
                                         : '' 
                                     : '' }}>
-                            {{ $category->name }}</option>
+                        {{ $category->name }}
+                    </option>
 
-                        @if (count($category->subcategories))
-                            @include ('categories.subCategoryOption', ['subcategories' => $category->subcategories, 'indent' => 1])
-                        @endif
+                    @if (count($category->subcategories))
+                    @include ('categories.subCategoryOption', ['subcategories' => $category->subcategories, 'indent' => 1])
+                    @endif
                     @endforeach
                 </select>
 
@@ -129,7 +150,8 @@
                     @foreach ($accounts as $account)
                     <option value="{{ $account->id }}"
                         {{ $transaction ?? '' ? $transaction->src_account->id == $account->id ? 'selected' : '' : '' }}>
-                        {{ $account->name }}</option>
+                        {{ $account->name }}
+                    </option>
                     @endforeach
                 </select>
 
@@ -153,7 +175,8 @@
                     @foreach ($accounts as $account)
                     <option value="{{ $account->id }}"
                         {{ $transaction ?? '' ? $transaction->dest_account && $transaction->dest_account->id == $account->id ? 'selected' : '' : '' }}>
-                        {{ $account->name }}</option>
+                        {{ $account->name }}
+                    </option>
                     @endforeach
                 </select>
 
@@ -183,7 +206,8 @@
                         @foreach ($wallets as $wallet)
                         <option value="{{ $wallet->id }}"
                             {{ $transaction ?? '' ? $transaction->wallet->id == $wallet->id ? 'selected' : '' : '' }}>
-                            {{ $wallet->name }}</option>
+                            {{ $wallet->name }}
+                        </option>
                         @endforeach
                     </select>
 
