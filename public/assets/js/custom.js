@@ -516,13 +516,16 @@ function toggleCategory() {
     $(this).find('.category-toggle-icon').toggleClass('fa-chevron-down fa-chevron-up');
 }
 
-function setCategory(id, name, isSubcategory = false) { // set id and name of selected category for edit or delete
-    document.getElementById('parentCategoryId').value = id;
-    document.getElementById('edit-category-input').value = name
-
+function setCategory(id, isSubcategory = false) { // set id and name of selected category for edit or delete
+    if(id) {
+        document.getElementById('parentCategoryId').value = id;
+        const name = document.querySelector(`#category-${id}-name`).innerText;
+        document.getElementById('edit-category-name-input').value = name;
+    }
     document.getElementById('add-category-name-input').placeholder = id ? 'Subcategory name' : 'Category name'
     document.getElementById('add-category-form-title').innerText = id ? 'Add Subcategory' : 'Add Category';
 
+    document.getElementById('edit-category-name-input').placeholder = isSubcategory ? 'Edit Subcategory' : 'Edit Category'
     document.getElementById('edit-category-form-title').innerText = isSubcategory ? 'Edit Subcategory' : 'Edit Category';
 }
 
@@ -531,7 +534,8 @@ function addCategory(event) {
     // Get the input field for the subcategory
     const inputSelector = event.target.querySelector('.category-input');
     const categoryName = $(inputSelector).val();
-
+    $(inputSelector).val('');
+    
     if (categoryName.trim() === '') {
         swalWithBootstrapButtons.fire({
             title: "Failed",
@@ -541,6 +545,7 @@ function addCategory(event) {
         return;
     }
     const parentCategoryId = document.getElementById('parentCategoryId').value;
+    $('#exampleModalMessage').modal('hide');
 
     // Send AJAX request to the server to save the category
     $.ajax({
@@ -631,7 +636,8 @@ function deleteCategory(id) {
                             text: response.message,
                             icon: "success"
                         }).then(() => {
-                            location.reload();
+                            $(`#category-${categoryId}`).hide();
+                            // location.reload();
                         });
                     } else {
                         swalWithBootstrapButtons.fire({
@@ -687,7 +693,10 @@ function updateCategory(event) {
                     text: response.message,
                     icon: "success"
                 }).then(() => {
-                    location.reload();
+                    $(`#category-${id}-name`).text(categoryName);
+                    $(inputSelector).val(categoryName);
+                    $('#editCategoryModal').modal('hide');
+                    // location.reload();
                 });
             } else {
                 let errorList = '';

@@ -5,7 +5,7 @@
         <div class="card-header pb-0 mt-4 d-flex justify-content-between">
             <h6 class="mb-0">Categories</h6>
             <button type="button" class="btn btn-sm btn-block bg-gradient-primary mb-3" data-bs-toggle="modal"
-                data-bs-target="#exampleModalMessage" onclick="setCategory(null)">+ Add Category</button>
+                data-bs-target="#exampleModalMessage" onclick="setCategory(null, false)">+ Add Category</button>
         </div>
 
         <div class="category-list pb-2">
@@ -15,13 +15,13 @@
                     <!-- Column 1: Category Info -->
                     <div onclick="toggleCategory.call(this)"
                         class="dropdown-toggler col-lg-5 col-md-5 col-10 d-flex align-items-center opacity-10"
-                        style="cursor: pointer;">
+                        style="{{ count($category->subcategories) ? 'cursor: pointer;' : '' }}">
                         <div class="col-auto icon icon-sm icon-shape bg-gradient-primary shadow text-center border-radius-md">
                             <i class="fa {{$category->icon}} opacity-10" aria-hidden="true" style="font-size: 0.85rem;"></i>
                         </div>
                         <div class="mx-2 col">
                             <h6 class="mb-0 fw-bold d-flex align-items-center text-muted">
-                                {{ $category->name }}
+                                <span id="category-{{$category->id}}-name">{{ $category->name }}</span>
                                 @if (count($category->subcategories))
                                     <i class="fa fa-chevron-down ms-2 category-toggle-icon" style="font-size: 10px"></i>
                                 @endif
@@ -48,14 +48,14 @@
                                 <li>
                                     <a class="dropdown-item py-1" href="#" style="font-size: 12px;"
                                         data-bs-toggle="modal" data-bs-target="#exampleModalMessage"
-                                        onclick="setCategory({{ $category->id }}, null, false)">
+                                        onclick="setCategory({{ $category->id }}, false)">
                                         Add subcategory
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item py-1" href="#" style="font-size: 12px;"
                                         data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                                        onclick="setCategory({{ $category->id }}, '{{$category->name}}', false)">
+                                        onclick="setCategory({{ $category->id }}, false)">
                                         Edit
                                     </a>
                                 </li>
