@@ -5,7 +5,7 @@
         <div class="card-header pb-0 mt-4 d-flex justify-content-between">
             <h6 class="mb-0">Categories</h6>
             <button type="button" class="btn btn-sm btn-block bg-gradient-primary mb-3" data-bs-toggle="modal"
-                data-bs-target="#exampleModalMessage" onclick="setCategory(null, false)">+ Add Category</button>
+                data-bs-target="#addCategoryModal" onclick="setCategory(null, false)">+ Add Category</button>
         </div>
 
         <div class="category-list pb-2">
@@ -20,7 +20,7 @@
                             <i class="fa {{$category->icon}} opacity-10" aria-hidden="true" style="font-size: 0.85rem;"></i>
                         </div>
                         <div class="mx-2 col">
-                            <h6 class="mb-0 fw-bold d-flex align-items-center text-muted">
+                            <h6 class="mb-0 fw-bold d-flex align-items-center text-muted category-title">
                                 <span id="category-{{$category->id}}-name">{{ $category->name }}</span>
                                 @if (count($category->subcategories))
                                     <i class="fa fa-chevron-down ms-2 category-toggle-icon" style="font-size: 10px"></i>
@@ -47,7 +47,7 @@
                             <ul class="dropdown-menu shadow-md">
                                 <li>
                                     <a class="dropdown-item py-1" href="#" style="font-size: 12px;"
-                                        data-bs-toggle="modal" data-bs-target="#exampleModalMessage"
+                                        data-bs-toggle="modal" data-bs-target="#addCategoryModal"
                                         onclick="setCategory({{ $category->id }}, false)">
                                         Add subcategory
                                     </a>

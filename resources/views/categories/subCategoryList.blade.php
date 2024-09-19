@@ -8,7 +8,7 @@
                 <i class="fa {{ $subcategory->icon }} opacity-10" aria-hidden="true" style="font-size: 0.85rem;"></i>
             </div>
             <div class="mx-md-2 ms-2 me-1 col">
-                <h6 class="mb-0 fw-bold d-flex align-items-center text-muted">
+                <h6 class="mb-0 fw-bold d-flex align-items-center text-muted category-title">
                     <span id="category-{{$subcategory->id}}-name">{{ $subcategory->name }}</span>
                     @if (count($subcategory->subcategories))
                         <i class="fa fa-chevron-down ms-2 category-toggle-icon" style="font-size: 10px"></i>
@@ -32,7 +32,7 @@
                     @if ($isParentable)
                         <li>
                             <a class="dropdown-item py-1" href="#" style="font-size: 12px;" data-bs-toggle="modal"
-                                data-bs-target="#exampleModalMessage"
+                                data-bs-target="#addCategoryModal"
                                 onclick="setCategory({{ $subcategory->id }}, null, true)">
                                 Add sub category
                             </a>

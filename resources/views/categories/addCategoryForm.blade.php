@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="col-md-4">
-    <div class="modal fade" id="exampleModalMessage" tabindex="-1" role="dialog"
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog"
         aria-labelledby="exampleModalMessageTitle" aria-hidden="true">
         <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
             <div class="modal-content">

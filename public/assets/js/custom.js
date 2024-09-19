@@ -533,8 +533,8 @@ function addCategory(event) {
     event.preventDefault();
     // Get the input field for the subcategory
     const inputSelector = event.target.querySelector('.category-input');
-    const categoryName = $(inputSelector).val();
-    $(inputSelector).val('');
+    const categoryName = inputSelector.value;
+    inputSelector.value = "";
     
     if (categoryName.trim() === '') {
         swalWithBootstrapButtons.fire({
@@ -545,7 +545,7 @@ function addCategory(event) {
         return;
     }
     const parentCategoryId = document.getElementById('parentCategoryId').value;
-    $('#exampleModalMessage').modal('hide');
+    $('#addCategoryModal').modal('hide');
 
     // Send AJAX request to the server to save the category
     $.ajax({
@@ -636,8 +636,12 @@ function deleteCategory(id) {
                             text: response.message,
                             icon: "success"
                         }).then(() => {
-                            $(`#category-${categoryId}`).hide();
-                            // location.reload();
+                            const categoryElement = $(`#category-${categoryId}`)
+                            if (categoryElement.find('.subcategory-card').length === 0) { // if no subcategory
+                                categoryElement.parent().find('.category-title').find('i').remove();
+                                categoryElement.parent().find('.dropdown-toggler').css('cursor', '');
+                            }
+                            $(`#category-${categoryId}`).remove();
                         });
                     } else {
                         swalWithBootstrapButtons.fire({
@@ -696,7 +700,6 @@ function updateCategory(event) {
                     $(`#category-${id}-name`).text(categoryName);
                     $(inputSelector).val(categoryName);
                     $('#editCategoryModal').modal('hide');
-                    // location.reload();
                 });
             } else {
                 let errorList = '';
