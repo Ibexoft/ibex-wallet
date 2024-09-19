@@ -545,7 +545,9 @@ function addCategory(event) {
         return;
     }
     const parentCategoryId = document.getElementById('parentCategoryId').value;
-    $('#addCategoryModal').modal('hide');
+    const addCategoryModal = document.getElementById('addCategoryModal');
+    const modal = bootstrap.Modal.getInstance(addCategoryModal);
+    modal.hide();
 
     // Send AJAX request to the server to save the category
     $.ajax({
@@ -699,7 +701,9 @@ function updateCategory(event) {
                 }).then(() => {
                     $(`#category-${id}-name`).text(categoryName);
                     $(inputSelector).val(categoryName);
-                    $('#editCategoryModal').modal('hide');
+                    const editCategoryModal = document.getElementById('editCategoryModal');
+                    const modal = bootstrap.Modal.getInstance(editCategoryModal);
+                    modal.hide();
                 });
             } else {
                 let errorList = '';
