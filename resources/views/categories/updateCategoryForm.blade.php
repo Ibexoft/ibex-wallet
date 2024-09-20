@@ -17,7 +17,7 @@
                             <input type="hidden" name="_method" value="PUT">
                             <div class="col-sm-12 col-lg-9 form-group">
                                 <label for="name">Name</label>
-                                <input type="text" class="edit-category-input form-control" id="edit-category-input" placeholder="Category Name"
+                                <input type="text" class="edit-category-input form-control" id="edit-category-name-input" placeholder="Category Name"
                                     name="name" id="name" required>
                             </div>
                             <input type="hidden" name="parent_category_id" id="parentCategoryId" value="">
