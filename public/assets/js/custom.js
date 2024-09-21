@@ -552,15 +552,14 @@ function addCategory(event) {
         },
         success: function (response) {
             if (response.success) {
-                swalWithBootstrapButtons.fire({
-                    title: "Success!",
-                    text: response.message,
-                    icon: "success"
-                }).then(() => {
-                    $(inputSelector).val('');
-                    location.reload();
-                });
+                // Save the message and a flag in localStorage
+                localStorage.setItem('showToast', true);
+                localStorage.setItem('toastMessage', response.message);
 
+                $(inputSelector).val('');
+
+                // Reload the page
+                window.location.reload();
             } else {
                 let errorList = '';
                 for (let field in data.errors) {
@@ -624,32 +623,27 @@ function deleteCategory(id, parentId) {
                 },
                 success: function (response) {
                     if (response.success) {
-                        swalWithBootstrapButtons.fire({
-                            title: "Deleted!",
-                            text: response.message,
-                            icon: "success"
-                        }).then(() => {
-                            const categoryElement = document.querySelector(`#category-${categoryId}`);
-                            const parentCategory = categoryElement.parentElement;
-                            categoryElement.remove();
-                            if (parentCategory.querySelectorAll('.subcategory-card').length === 0) { // if no subcategory
-                                const categoryTitle = parentCategory.querySelector('.category-title');
-                                const icon = categoryTitle.querySelector('.category-toggle-icon');
-                                if (icon) {
-                                    icon.remove();
-                                }
-                                const dropdownToggler = parentCategory.querySelector('.dropdown-toggler');
-                                dropdownToggler.style.cursor = '';
-                                
-                                if (parentId) {
-                                    const dropdownMenu = parentCategory.querySelector('.dropdown-menu');
-                                    const deleteOption = dropdownMenu.querySelector('.delete-option');
-                                    if (deleteOption) {
-                                        deleteOption.classList.remove('d-none');
-                                    }
+                        const categoryElement = document.querySelector(`#category-${categoryId}`);
+                        const parentCategory = categoryElement.parentElement;
+                        categoryElement.remove();
+                        if (parentCategory.querySelectorAll('.subcategory-card').length === 0) { // if no subcategory
+                            const categoryTitle = parentCategory.querySelector('.category-title');
+                            const icon = categoryTitle.querySelector('.category-toggle-icon');
+                            if (icon) {
+                                icon.remove();
+                            }
+                            const dropdownToggler = parentCategory.querySelector('.dropdown-toggler');
+                            dropdownToggler.style.cursor = '';
+
+                            if (parentId) {
+                                const dropdownMenu = parentCategory.querySelector('.dropdown-menu');
+                                const deleteOption = dropdownMenu.querySelector('.delete-option');
+                                if (deleteOption) {
+                                    deleteOption.classList.remove('d-none');
                                 }
                             }
-                        });
+                        }
+                        showToast(response.message);
                     } else {
                         swalWithBootstrapButtons.fire({
                             title: "Failed",
@@ -699,17 +693,13 @@ function updateCategory(event) {
         },
         success: function (response) {
             if (response.success) {
-                swalWithBootstrapButtons.fire({
-                    title: "Updated!",
-                    text: response.message,
-                    icon: "success"
-                }).then(() => {
-                    $(`#category-${id}-name`).text(categoryName);
-                    $(inputSelector).val(categoryName);
-                    const editCategoryModal = document.getElementById('editCategoryModal');
-                    const modal = bootstrap.Modal.getInstance(editCategoryModal);
-                    modal.hide();
-                });
+                $(`#category-${id}-name`).text(categoryName);
+                $(inputSelector).val(categoryName);
+                const editCategoryModal = document.getElementById('editCategoryModal');
+                const modal = bootstrap.Modal.getInstance(editCategoryModal);
+                modal.hide();
+
+                showToast(response.message);
             } else {
                 let errorList = '';
                 for (let field in data.errors) {
