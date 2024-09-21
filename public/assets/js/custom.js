@@ -86,16 +86,15 @@ function submitTransactionForm(url, formData, method) {
         },
         success: function (response) {
             if (response.success) {
-                $("#transactionModal").modal("hide");
-                swalWithBootstrapButtons
-                    .fire({
-                        title: "Success!",
-                        text: "Transaction has been successfully processed.",
-                        icon: "success",
-                    })
-                    .then(() => {
-                        location.reload();
-                    });
+                // Hide the modal
+                $('#transactionModal').modal('hide');
+
+                // Save the message and a flag in localStorage
+                localStorage.setItem('showToast', true);
+                localStorage.setItem('toastMessage', "Transaction has been successfully processed.");
+
+                // Reload the page
+                window.location.reload();
             } else {
                 console.error(response.message);
                 swalWithBootstrapButtons.fire({
@@ -153,15 +152,12 @@ function deleteTransaction(url) {
                     },
                     success: function (response) {
                         if (response.success) {
-                            swalWithBootstrapButtons
-                                .fire({
-                                    title: "Deleted!",
-                                    text: "Your transaction has been deleted.",
-                                    icon: "success",
-                                })
-                                .then(() => {
-                                    location.reload();
-                                });
+                            // Save the message and a flag in localStorage
+                            localStorage.setItem('showToast', true);
+                            localStorage.setItem('toastMessage', "Your transaction has been deleted.");
+
+                            // Reload the page
+                            window.location.reload();
                         } else {
                             console.error(response.message);
                             swalWithBootstrapButtons.fire({
@@ -269,9 +265,9 @@ $("#transactionForm").on("submit", function (e) {
     var isEdit = transactionId !== "";
     var url = isEdit
         ? window.transactionRoutes.update.replace(
-              "__TRANSACTION_ID__",
-              transactionId
-          )
+            "__TRANSACTION_ID__",
+            transactionId
+        )
         : window.transactionRoutes.store;
     var formData = $(this).serialize();
     var method = isEdit ? "PUT" : "POST";
@@ -290,7 +286,7 @@ $("#accountForm").on("submit", function (e) {
 
     addAccount(url, formData);
 });
- 
+
 function addAccount(url, formData) {
     $.ajax({
         url: url,
@@ -304,17 +300,15 @@ function addAccount(url, formData) {
         dataType: 'json',
         success: function (data) {
             if (data.success) {
-                swalWithBootstrapButtons.fire({
-                    title: "Success!",
-                    text: "Your account has been created successfully.",
-                    icon: "success",
-                    confirmButtonText: "OK"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#modal-default').modal('hide');
-                        window.location.reload();
-                    }
-                });
+                // Hide the modal
+                $('#modal-default').modal('hide');
+
+                // Save the message and a flag in localStorage
+                localStorage.setItem('showToast', true);
+                localStorage.setItem('toastMessage', "Your account has been added successfully!");
+
+                // Reload the page
+                window.location.reload();
             } else {
                 let errorList = '';
                 for (let field in data.errors) {
@@ -360,7 +354,7 @@ function addAccount(url, formData) {
 
 function openEditAccountModal(account) {
     var updateUrl = window.accountRoutes.update.replace('__ACCOUNT_ID__', account.id);
-    
+
     $('#editAccountForm').attr('action', updateUrl);
 
     // Populate fields with account data
@@ -397,17 +391,15 @@ function updateAccount(url, formData) {
         dataType: 'json',
         success: function (data) {
             if (data.success) {
-                swalWithBootstrapButtons.fire({
-                    title: "Success!",
-                    text: "Your account has been updated successfully.",
-                    icon: "success",
-                    confirmButtonText: "OK"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#modal-edit').modal('hide');
-                        window.location.reload();
-                    }
-                });
+                // Hide the modal
+                $('#modal-edit').modal('hide');
+
+                // Save the message and a flag in localStorage
+                localStorage.setItem('showToast', true);
+                localStorage.setItem('toastMessage', "Your account has been updated successfully!");
+
+                // Reload the page
+                window.location.reload();
             } else {
                 let errorList = '';
                 for (let field in data.errors) {
@@ -473,13 +465,12 @@ function deleteAccount(accountId) {
                 },
                 success: function (response) {
                     if (response.success) {
-                        swalWithBootstrapButtons.fire({
-                            title: "Deleted!",
-                            text: "The account has been deleted.",
-                            icon: "success"
-                        }).then(() => {
-                            window.location.reload();
-                        });
+                        // Save the message and a flag in localStorage
+                        localStorage.setItem('showToast', true);
+                        localStorage.setItem('toastMessage', "The account has been deleted.");
+
+                        // Reload the page
+                        window.location.reload();
                     } else {
                         swalWithBootstrapButtons.fire({
                             title: "Failed",
@@ -517,7 +508,7 @@ function toggleCategory() {
 }
 
 function setCategory(id, isSubcategory = false) { // set id and name of selected category for edit or delete
-    if(id) {
+    if (id) {
         document.getElementById('parentCategoryId').value = id;
         const name = document.querySelector(`#category-${id}-name`).innerText;
         document.getElementById('edit-category-name-input').value = name;
@@ -535,7 +526,7 @@ function addCategory(event) {
     const inputSelector = event.target.querySelector('.category-input');
     const categoryName = inputSelector.value;
     inputSelector.value = "";
-    
+
     if (categoryName.trim() === '') {
         swalWithBootstrapButtons.fire({
             title: "Failed",
@@ -762,3 +753,30 @@ function updateCategory(event) {
 }
 
 /* Categories JavaScript */
+
+window.onload = function () {
+    if (localStorage.getItem('showToast')) {
+        // Get the stored message
+        const message = localStorage.getItem('toastMessage');
+
+        // Show the toast with the message
+        showToast(message);
+
+        // Remove the flag and message after the toast is displayed
+        localStorage.removeItem('showToast');
+        localStorage.removeItem('toastMessage');
+    }
+};
+
+/* Success Toast */
+
+function showToast(message) {
+    // Set the message dynamically
+    document.getElementById('successToastBody').innerText = message;
+
+    // Show the toast
+    var toastElement = new bootstrap.Toast(document.getElementById('successToast'));
+    toastElement.show();
+}
+
+/* Success Toast */
