@@ -254,7 +254,7 @@
                                     <i class="icon fa fa-ellipsis-h text-sm text-primary"
                                         id="dropdownMenuButton{{ $account->id }}" data-bs-toggle="dropdown"
                                         aria-expanded="false" style="cursor: pointer;"
-                                        onclick="event.stopPropagation();"></i>
+                                        onclick="event.stopPropagation();handleDropdown(this)"></i>
 
                                     <!-- Dropdown Menu -->
                                     <ul class="dropdown-menu dropdown-menu-end"

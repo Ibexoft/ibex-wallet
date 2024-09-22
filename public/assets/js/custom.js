@@ -15,6 +15,25 @@ const swalForDeleteConfirmation = Swal.mixin({
 })
 /* Transaction JavaScript */
 
+function handleDropdown(element) {
+    // Close all open dropdowns
+    var dropdowns = document.querySelectorAll('.dropdown-menu.show');
+    dropdowns.forEach(function(dropdown) {
+        dropdown.classList.remove('show');
+    });
+
+    // Open the current dropdown
+    var dropdownMenu = element.nextElementSibling;
+    dropdownMenu.classList.toggle('show');
+    
+    // Close the dropdown when clicking outside
+    document.addEventListener('click', function (event) {
+        if (!element.contains(event.target)) {
+            dropdownMenu.classList.remove('show');
+        }
+    }, { once: true });
+}
+
 function toggleSubcategories(subcategoryId, iconElement, event) {
     event.preventDefault();
     event.stopPropagation();
