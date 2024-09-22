@@ -278,7 +278,8 @@
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <a class="icon text-primary pb-4" href="#" data-bs-toggle="dropdown"
-                                            onclick="event.stopPropagation();">
+                                            onclick="event.stopPropagation();handleDropdown(this)"
+                                            >
                                             <i class="fa fa-ellipsis-h py-1"></i>
                                         </a>
                                         <ul class="dropdown-menu shadow-md">
