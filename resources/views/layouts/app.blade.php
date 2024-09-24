@@ -53,17 +53,7 @@
                 @yield('content')
             </div>
         </div>
-
-        {{-- Success Toast --}}
-        <div id="successToast" class="toast align-items-center text-white bg-gradient-primary border-0 position-fixed bottom-0 start-0 mb-3 ms-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
-            <div class="d-flex">
-              <div id="successToastBody" class="toast-body">
-                <!-- The message will be updated dynamically -->
-              </div>
-              <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-          </div>
-        
+        @include('partials.success-toast')       
     </main>
     <div class="fixed-plugin">
         <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
@@ -154,7 +144,7 @@
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{asset('assets/js/custom.js?v=1.0.4')}}"></script>
+    <script src="{{asset('assets/js/custom.js?v=1.0.5')}}"></script>
     @yield('script')
 </body>
 

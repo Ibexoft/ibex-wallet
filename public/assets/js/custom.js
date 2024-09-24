@@ -87,12 +87,11 @@ function submitTransactionForm(url, formData, method) {
         success: function (response) {
             if (response.success) {
                 // Hide the modal
-                $('#transactionModal').modal('hide');
+                var transactionModal = document.getElementById('transactionModal');
+                var modalInstance = bootstrap.Modal.getInstance(transactionModal);
+                modalInstance.hide();
 
-                // Save the message and a flag in localStorage
-                localStorage.setItem('showToast', true);
-                localStorage.setItem('toastMessage', "Transaction has been successfully processed.");
-
+                setToastMessage("Your account has been deleted.");
                 // Reload the page
                 window.location.reload();
             } else {
@@ -152,10 +151,7 @@ function deleteTransaction(url) {
                     },
                     success: function (response) {
                         if (response.success) {
-                            // Save the message and a flag in localStorage
-                            localStorage.setItem('showToast', true);
-                            localStorage.setItem('toastMessage', "Your transaction has been deleted.");
-
+                            setToastMessage("Your transaction has been deleted.");
                             // Reload the page
                             window.location.reload();
                         } else {
@@ -301,11 +297,11 @@ function addAccount(url, formData) {
         success: function (data) {
             if (data.success) {
                 // Hide the modal
-                $('#modal-default').modal('hide');
+                var modalElement = document.getElementById('modal-default');
+                var modalInstance = bootstrap.Modal.getInstance(modalElement);
+                modalInstance.hide()
 
-                // Save the message and a flag in localStorage
-                localStorage.setItem('showToast', true);
-                localStorage.setItem('toastMessage', "Your account has been added successfully!");
+                setToastMessage("Your account has been added successfully!");
 
                 // Reload the page
                 window.location.reload();
@@ -392,12 +388,11 @@ function updateAccount(url, formData) {
         success: function (data) {
             if (data.success) {
                 // Hide the modal
-                $('#modal-edit').modal('hide');
+                var modalElement = document.getElementById('modal-edit');
+                var modalInstance = bootstrap.Modal.getInstance(modalElement);
+                modalInstance.hide();
 
-                // Save the message and a flag in localStorage
-                localStorage.setItem('showToast', true);
-                localStorage.setItem('toastMessage', "Your account has been updated successfully!");
-
+                setToastMessage("Your account has been updated successfully!");
                 // Reload the page
                 window.location.reload();
             } else {
@@ -465,10 +460,7 @@ function deleteAccount(accountId) {
                 },
                 success: function (response) {
                     if (response.success) {
-                        // Save the message and a flag in localStorage
-                        localStorage.setItem('showToast', true);
-                        localStorage.setItem('toastMessage', "The account has been deleted.");
-
+                        setToastMessage("The account has been deleted.");
                         // Reload the page
                         window.location.reload();
                     } else {
@@ -552,12 +544,8 @@ function addCategory(event) {
         },
         success: function (response) {
             if (response.success) {
-                // Save the message and a flag in localStorage
-                localStorage.setItem('showToast', true);
-                localStorage.setItem('toastMessage', response.message);
-
+                setToastMessage(response.message);
                 $(inputSelector).val('');
-
                 // Reload the page
                 window.location.reload();
             } else {
@@ -746,10 +734,7 @@ function updateCategory(event) {
 
 window.onload = function () {
     if (localStorage.getItem('showToast')) {
-        // Get the stored message
         const message = localStorage.getItem('toastMessage');
-
-        // Show the toast with the message
         showToast(message);
 
         // Remove the flag and message after the toast is displayed
@@ -760,11 +745,14 @@ window.onload = function () {
 
 /* Success Toast */
 
-function showToast(message) {
-    // Set the message dynamically
-    document.getElementById('successToastBody').innerText = message;
+function setToastMessage(message) {
+    // Save the message and a flag in localStorage
+    localStorage.setItem('showToast', true);
+    localStorage.setItem('toastMessage', message);
+}
 
-    // Show the toast
+function showToast(message) {
+    document.getElementById('successToastBody').innerText = message;
     var toastElement = new bootstrap.Toast(document.getElementById('successToast'));
     toastElement.show();
 }
