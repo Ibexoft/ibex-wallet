@@ -612,7 +612,7 @@ function addCategory(event) {
     });
 }
 
-function deleteCategory(id) {
+function deleteCategory(id, parentId) {
     var categoryId = id;
 
     swalWithBootstrapButtons.fire({
@@ -642,6 +642,15 @@ function deleteCategory(id) {
                             if (categoryElement.find('.subcategory-card').length === 0) { // if no subcategory
                                 categoryElement.parent().find('.category-title').find('i').remove();
                                 categoryElement.parent().find('.dropdown-toggler').css('cursor', '');
+                                if(parentId) {
+                                    categoryElement.parent().find('.dropdown-menu').append(`
+                                        <li onclick="deleteCategory(${parentId})">
+                                            <a class="dropdown-item py-1" href="#" style="font-size: 12px;">
+                                                Delete
+                                            </a>
+                                        </li>
+                                    `);
+                                }   
                             }
                             $(`#category-${categoryId}`).remove();
                         });

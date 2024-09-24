@@ -45,7 +45,7 @@
                         </a>
                     </li>
                     @if (!count($subcategory->subcategories))
-                        <li onclick="deleteCategory({{ $subcategory->id }})">
+                        <li onclick="deleteCategory({{ $subcategory->id }}, {{$subcategory->parent_category_id}})">
                             <a class="dropdown-item py-1" href="#" style="font-size: 12px;">
                                 Delete
                             </a>
