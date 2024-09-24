@@ -206,44 +206,27 @@
                                     data-category-id="{{ $transaction->category_id }}"
                                     data-wallet-id="{{ $transaction->wallet_id }}"
                                     data-details="{{ $transaction->details }}"
-                                    data-transaction-date="{{ $transaction->transaction_date }}"
-                                    onclick="openModalForEdit(this)">
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <button
-                                            class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == 3 ? 'info' : ($transaction->type == 1 ? 'danger' : 'success') }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
-                                            <i
-                                                class="fas fa-{{ $transaction->type == 3 ? 'exchange-alt' : ($transaction->type == 1 ? 'arrow-down' : 'arrow-up') }}"></i>
-                                        </button>
-                                    </div>
-                                    <div class="row w-100 d-flex align-items-center">
-                                        <div class="col-6 h-100">
-                                            <div class="d-flex align-items-center">
-
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="mb-1 text-dark text-sm">
-                                                        {{ $transaction->type == 3 ? 'Transfer' : ($transaction->category ? $transaction->category->name : 'N/A') }}
-                                                    </h6>
-                                                    <span class="text-xs d-none d-sm-block text-truncate"
-                                                        style="max-width: 250px;">{{ $transaction->details }}</span>
-
-                                                    <span class="text-xs d-block d-sm-none">
-                                                        @if ($transaction->type == 3)
-                                                            {{ $transaction->src_account->name }}
-                                                            <i class="fas fa-long-arrow-alt-right mx-2"></i>
-                                                            {{ $transaction->dest_account->name }}
-                                                        @else
-                                                            {{ $transaction->src_account->name }}
-                                                        @endif
-                                                    </span>
-
-                                                </div>
-                                            </div>
+                                    data-transaction-date="{{ $transaction->transaction_date }}">
+                                    <div class="d-flex w-100" onclick="openModalForEdit(this)">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <button
+                                                class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == 3 ? 'info' : ($transaction->type == 1 ? 'danger' : 'success') }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
+                                                <i
+                                                    class="fas fa-{{ $transaction->type == 3 ? 'exchange-alt' : ($transaction->type == 1 ? 'arrow-down' : 'arrow-up') }}"></i>
+                                            </button>
                                         </div>
-                                        <div class="col-6 h-100">
-                                            <div class="row h-100 d-flex align-items-center">
-                                                <div class="d-none d-md-block col-0 col-md-7">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <span class="text-sm">
+                                        <div class="row w-100 d-flex align-items-center">
+                                            <div class="col-6 h-100">
+                                                <div class="d-flex align-items-center">
+
+                                                    <div class="d-flex flex-column">
+                                                        <h6 class="mb-1 text-dark text-sm">
+                                                            {{ $transaction->type == 3 ? 'Transfer' : ($transaction->category ? $transaction->category->name : 'N/A') }}
+                                                        </h6>
+                                                        <span class="text-xs d-none d-sm-block text-truncate"
+                                                            style="max-width: 250px;">{{ $transaction->details }}</span>
+
+                                                        <span class="text-xs d-block d-sm-none">
                                                             @if ($transaction->type == 3)
                                                                 {{ $transaction->src_account->name }}
                                                                 <i class="fas fa-long-arrow-alt-right mx-2"></i>
@@ -252,16 +235,15 @@
                                                                 {{ $transaction->src_account->name }}
                                                             @endif
                                                         </span>
+
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-md-5">
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == 1 ? 'danger' : ($transaction->type == 3 ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
-                                                        {{ $transaction->type == 3 ? '' : ($transaction->type == 1 ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
-                                                    </div>
-                                                    <div class="d-none d-sm-block d-md-none">
+                                            </div>
+                                            <div class="col-6 h-100">
+                                                <div class="row h-100 d-flex align-items-center">
+                                                    <div class="d-none d-md-block col-0 col-md-7">
                                                         <div class="d-flex align-items-center justify-content-center">
-                                                            <span class="text-xs">
+                                                            <span class="text-sm">
                                                                 @if ($transaction->type == 3)
                                                                     {{ $transaction->src_account->name }}
                                                                     <i class="fas fa-long-arrow-alt-right mx-2"></i>
@@ -272,20 +254,37 @@
                                                             </span>
                                                         </div>
                                                     </div>
+                                                    <div class="col-12 col-md-5">
+                                                        <div
+                                                            class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == 1 ? 'danger' : ($transaction->type == 3 ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
+                                                            {{ $transaction->type == 3 ? '' : ($transaction->type == 1 ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
+                                                        </div>
+                                                        <div class="d-none d-sm-block d-md-none">
+                                                            <div class="d-flex align-items-center justify-content-center">
+                                                                <span class="text-xs">
+                                                                    @if ($transaction->type == 3)
+                                                                        {{ $transaction->src_account->name }}
+                                                                        <i class="fas fa-long-arrow-alt-right mx-2"></i>
+                                                                        {{ $transaction->dest_account->name }}
+                                                                    @else
+                                                                        {{ $transaction->src_account->name }}
+                                                                    @endif
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <a class="icon text-primary pb-4" href="#" data-bs-toggle="dropdown"
-                                            onclick="event.stopPropagation();handleDropdown(this)"
-                                            >
+                                        <a class="icon text-primary pb-4" href="#" data-bs-toggle="dropdown">
                                             <i class="fa fa-ellipsis-h py-1"></i>
                                         </a>
                                         <ul class="dropdown-menu shadow-md">
                                             <li>
                                                 <a class="dropdown-item py-1" href="#" style="font-size: 12px;"
-                                                    onclick="event.stopPropagation(); deleteTransaction(`{{ route('transactions.destroy', ['transaction' => $transaction->id]) }}`);">
+                                                    onclick="deleteTransaction(`{{ route('transactions.destroy', ['transaction' => $transaction->id]) }}`);">
                                                     Delete
                                                 </a>
                                             </li>
