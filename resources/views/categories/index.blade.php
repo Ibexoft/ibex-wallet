@@ -44,30 +44,15 @@
                             <a class="icon text-primary" href="#" data-bs-toggle="dropdown">
                                 <i class="fa fa-ellipsis-h py-1"></i>
                             </a>
-                            <ul class="dropdown-menu shadow-md">
-                                <li>
-                                    <a class="dropdown-item py-1" href="#" style="font-size: 12px;"
-                                        data-bs-toggle="modal" data-bs-target="#addCategoryModal"
-                                        onclick="setCategory({{ $category->id }}, false)">
-                                        Add subcategory
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item py-1" href="#" style="font-size: 12px;"
-                                        data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                                        onclick="setCategory({{ $category->id }}, false)">
-                                        Edit
-                                    </a>
-                                </li>
-                                {{-- {{dd(count($categories))}} --}}
-                                @if (!count($category->subcategories) && count($categories) > 1)
-                                    <li onclick="deleteCategory({{$category->id}})">
-                                        <a class="dropdown-item py-1" href="#" style="font-size: 12px;">
-                                            Delete
-                                        </a>
-                                    </li>
-                                @endif
-                            </ul>
+                            @include('categories.dropdownMenu', [
+                                'categoryId' => $category->id,
+                                'categoryName' => $category->name,
+                                'isSubcategory' => false,
+                                'subcategories' => $category->subcategories,
+                                'canDelete' => !count($category->subcategories),
+                                'isParentable' => true,
+                                'parentId' => null
+                            ])
                         </div>
                     </div>
 

@@ -638,21 +638,26 @@ function deleteCategory(id, parentId) {
                             text: response.message,
                             icon: "success"
                         }).then(() => {
-                            const categoryElement = $(`#category-${categoryId}`)
-                            if (categoryElement.find('.subcategory-card').length === 0) { // if no subcategory
-                                categoryElement.parent().find('.category-title').find('i').remove();
-                                categoryElement.parent().find('.dropdown-toggler').css('cursor', '');
-                                if(parentId) {
-                                    categoryElement.parent().find('.dropdown-menu').append(`
-                                        <li onclick="deleteCategory(${parentId})">
-                                            <a class="dropdown-item py-1" href="#" style="font-size: 12px;">
-                                                Delete
-                                            </a>
-                                        </li>
-                                    `);
-                                }   
+                            const categoryElement = document.querySelector(`#category-${categoryId}`);
+                            const parentCategory = categoryElement.parentElement;
+                            categoryElement.remove();
+                            if (parentCategory.querySelectorAll('.subcategory-card').length === 0) { // if no subcategory
+                                const categoryTitle = parentCategory.querySelector('.category-title');
+                                const icon = categoryTitle.querySelector('.category-toggle-icon');
+                                if (icon) {
+                                    icon.remove();
+                                }
+                                const dropdownToggler = parentCategory.querySelector('.dropdown-toggler');
+                                dropdownToggler.style.cursor = '';
+                                
+                                if (parentId) {
+                                    const dropdownMenu = parentCategory.querySelector('.dropdown-menu');
+                                    const deleteOption = dropdownMenu.querySelector('.delete-option');
+                                    if (deleteOption) {
+                                        deleteOption.classList.remove('d-none');
+                                    }
+                                }
                             }
-                            $(`#category-${categoryId}`).remove();
                         });
                     } else {
                         swalWithBootstrapButtons.fire({
