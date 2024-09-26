@@ -2,7 +2,7 @@
     <div class="subcategory-card row mx-auto ps-md-3 ps-2 position-relative align-items-center justify-content-between rounded px-0 my-3 mb-0 py-1"
         style="display:none;" id="category-{{ $subcategory->id }}">
         <!-- Column 1: Category Info -->
-        <div onclick="toggleCategory.call(this)" class="col-lg-5 col-md-5 col-10 opacity-50 d-flex align-items-center"
+        <div onclick="toggleCategory.call(this)" class="dropdown-toggler col-lg-5 col-md-5 col-10 opacity-50 d-flex align-items-center"
             style="{{ count($subcategory->subcategories) ? 'cursor: pointer;' : '' }}">
             <div class="col-auto icon icon-sm icon-shape bg-gradient-primary shadow text-center border-radius-md">
                 <i class="fa {{ $subcategory->icon }} opacity-10" aria-hidden="true" style="font-size: 0.85rem;"></i>
@@ -28,30 +28,15 @@
                 <a class="icon text-primary" href="#" data-bs-toggle="dropdown">
                     <i class="fa fa-ellipsis-h py-1"></i>
                 </a>
-                <ul class="dropdown-menu shadow-md">
-                    @if ($isParentable)
-                        <li>
-                            <a class="dropdown-item py-1" href="#" style="font-size: 12px;" data-bs-toggle="modal"
-                                data-bs-target="#addCategoryModal"
-                                onclick="setCategory({{ $subcategory->id }}, null, true)">
-                                Add sub category
-                            </a>
-                        </li>
-                    @endif
-                    <li data-bs-toggle="modal" data-bs-target="#editCategoryModal"
-                        onclick="setCategory({{ $subcategory->id }}, '{{ $subcategory->name }}', true)">
-                        <a class="dropdown-item py-1" href="#" style="font-size: 12px;">
-                            Edit
-                        </a>
-                    </li>
-                    @if (!count($subcategory->subcategories))
-                        <li onclick="deleteCategory({{ $subcategory->id }})">
-                            <a class="dropdown-item py-1" href="#" style="font-size: 12px;">
-                                Delete
-                            </a>
-                        </li>
-                    @endif
-                </ul>
+                @include('categories.dropdownMenu', [
+                    'categoryId' => $subcategory->id,
+                    'categoryName' => $subcategory->name,
+                    'isSubcategory' => false,
+                    'subcategories' => $subcategory->subcategories,
+                    'canDelete' => !count($subcategory->subcategories),
+                    'isParentable' => $isParentable,
+                    'parentId' => $subcategory->parent_category_id
+                ])
             </div>
         </div>
 

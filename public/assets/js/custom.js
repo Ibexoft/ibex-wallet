@@ -612,7 +612,7 @@ function addCategory(event) {
     });
 }
 
-function deleteCategory(id) {
+function deleteCategory(id, parentId) {
     var categoryId = id;
 
     swalWithBootstrapButtons.fire({
@@ -638,12 +638,26 @@ function deleteCategory(id) {
                             text: response.message,
                             icon: "success"
                         }).then(() => {
-                            const categoryElement = $(`#category-${categoryId}`)
-                            if (categoryElement.find('.subcategory-card').length === 0) { // if no subcategory
-                                categoryElement.parent().find('.category-title').find('i').remove();
-                                categoryElement.parent().find('.dropdown-toggler').css('cursor', '');
+                            const categoryElement = document.querySelector(`#category-${categoryId}`);
+                            const parentCategory = categoryElement.parentElement;
+                            categoryElement.remove();
+                            if (parentCategory.querySelectorAll('.subcategory-card').length === 0) { // if no subcategory
+                                const categoryTitle = parentCategory.querySelector('.category-title');
+                                const icon = categoryTitle.querySelector('.category-toggle-icon');
+                                if (icon) {
+                                    icon.remove();
+                                }
+                                const dropdownToggler = parentCategory.querySelector('.dropdown-toggler');
+                                dropdownToggler.style.cursor = '';
+                                
+                                if (parentId) {
+                                    const dropdownMenu = parentCategory.querySelector('.dropdown-menu');
+                                    const deleteOption = dropdownMenu.querySelector('.delete-option');
+                                    if (deleteOption) {
+                                        deleteOption.classList.remove('d-none');
+                                    }
+                                }
                             }
-                            $(`#category-${categoryId}`).remove();
                         });
                     } else {
                         swalWithBootstrapButtons.fire({
