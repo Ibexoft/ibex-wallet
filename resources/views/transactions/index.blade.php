@@ -280,7 +280,7 @@
                                         </a>
                                         <ul class="dropdown-menu shadow-md">
                                             <li>
-                                                <a class="dropdown-item py-1" href="#" style="font-size: 12px;"
+                                                <a class="dropdown-item py-1" href="#"
                                                     onclick="deleteTransaction(`{{ route('transactions.destroy', ['transaction' => $transaction->id]) }}`);">
                                                     Delete
                                                 </a>
