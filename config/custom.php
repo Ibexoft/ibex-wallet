@@ -200,4 +200,9 @@ return [
         "ZMW" => "Zambian Kwacha",
         "ZWL" => "Zimbabwean Dollar"       
     ],
+    'transaction_types' => [
+        'income' => 2,
+        'expense' => 1,
+        'transfer' => 3,
+    ],
 ];

@@ -12,28 +12,29 @@
             <div class="form-group row">
                 <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
                     <label
-                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == '1' || old('type') == '1' ? 'active' : '') : 'active'}}">
-                        <input type="radio" class="d-none" name="type" id="expense" value="1"
-                            {{ $transaction ?? '' ? $transaction->type == '1' || old('type') == '1' ? 'checked' : '' : 'checked'}}
+                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == config('custom.transaction_types.expense') || old('type') == config('custom.transaction_types.expense') ? 'active' : '') : 'active' }}">
+                        <input type="radio" class="d-none" name="type" id="expense" value="{{ config('custom.transaction_types.expense') }}"
+                            {{ $transaction ?? '' ? $transaction->type == config('custom.transaction_types.expense') || old('type') == config('custom.transaction_types.expense') ? 'checked' : '' : 'checked' }}
                             onclick="$('#collapseToAccount').collapse('hide')">
                         Expense
                     </label>
                     <label
-                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == '2' || old('type') == '2' ? 'active' : '') : ''}}">
-                        <input type="radio" class="d-none" name="type" id="income" value="2"
-                            {{ $transaction ?? '' ? $transaction->type == '2' || old('type') == '2' ? 'checked' : '' : ''}}
+                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == config('custom.transaction_types.income') || old('type') == config('custom.transaction_types.income') ? 'active' : '') : '' }}">
+                        <input type="radio" class="d-none" name="type" id="income" value="{{ config('custom.transaction_types.income') }}"
+                            {{ $transaction ?? '' ? $transaction->type == config('custom.transaction_types.income') || old('type') == config('custom.transaction_types.income') ? 'checked' : '' : '' }}
                             onclick="$('#collapseToAccount').collapse('hide')">
                         Income
                     </label>
                     <label
-                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == '3' || old('type') == '3' ? 'active' : '') : ''}}">
-                        <input type="radio" class="d-none" name="type" id="transfer" value="3"
-                            {{ $transaction ?? '' ? $transaction->type == '3' || old('type') == '3' ? 'checked' : '' : ''}}
+                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == config('custom.transaction_types.transfer') || old('type') == config('custom.transaction_types.transfer') ? 'active' : '') : '' }}">
+                        <input type="radio" class="d-none" name="type" id="transfer" value="{{ config('custom.transaction_types.transfer') }}"
+                            {{ $transaction ?? '' ? $transaction->type == config('custom.transaction_types.transfer') || old('type') == config('custom.transaction_types.transfer') ? 'checked' : '' : '' }}
                             onclick="$('#collapseToAccount').collapse('show')">
                         Transfer
                     </label>
                 </div>
             </div>
+            
 
             <!-- ---------- END EXPENSE TYPE ---------- -->
 

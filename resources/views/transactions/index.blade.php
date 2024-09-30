@@ -210,24 +210,22 @@
                                     <div class="d-flex w-100" onclick="openModalForEdit(this)">
                                         <div class="d-flex align-items-center justify-content-center">
                                             <button
-                                                class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == 3 ? 'info' : ($transaction->type == 1 ? 'danger' : 'success') }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
+                                                class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == config('custom.transaction_types.transfer') ? 'info' : ($transaction->type == config('custom.transaction_types.expense') ? 'danger' : 'success') }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
                                                 <i
-                                                    class="fas fa-{{ $transaction->type == 3 ? 'exchange-alt' : ($transaction->type == 1 ? 'arrow-down' : 'arrow-up') }}"></i>
+                                                    class="fas fa-{{ $transaction->type == config('custom.transaction_types.transfer') ? 'exchange-alt' : ($transaction->type == config('custom.transaction_types.expense') ? 'arrow-down' : 'arrow-up') }}"></i>
                                             </button>
                                         </div>
                                         <div class="row w-100 d-flex align-items-center">
                                             <div class="col-6 h-100">
                                                 <div class="d-flex align-items-center">
-
                                                     <div class="d-flex flex-column">
                                                         <h6 class="mb-1 text-dark text-sm">
-                                                            {{ $transaction->type == 3 ? 'Transfer' : ($transaction->category ? $transaction->category->name : 'N/A') }}
+                                                            {{ $transaction->type == config('custom.transaction_types.transfer') ? 'Transfer' : ($transaction->category ? $transaction->category->name : 'N/A') }}
                                                         </h6>
-                                                        <span class="text-xs d-none d-sm-block text-truncate"
-                                                            style="max-width: 250px;">{{ $transaction->details }}</span>
+                                                        <span class="text-xs d-none d-sm-block text-truncate transaction-detail">{{ $transaction->details }}</span>
 
                                                         <span class="text-xs d-block d-sm-none">
-                                                            @if ($transaction->type == 3)
+                                                            @if ($transaction->type == config('custom.transaction_types.transfer'))
                                                                 {{ $transaction->src_account->name }}
                                                                 <i class="fas fa-long-arrow-alt-right mx-2"></i>
                                                                 {{ $transaction->dest_account->name }}
@@ -235,7 +233,6 @@
                                                                 {{ $transaction->src_account->name }}
                                                             @endif
                                                         </span>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -244,7 +241,7 @@
                                                     <div class="d-none d-md-block col-0 col-md-7">
                                                         <div class="d-flex align-items-center justify-content-center">
                                                             <span class="text-sm">
-                                                                @if ($transaction->type == 3)
+                                                                @if ($transaction->type == config('custom.transaction_types.transfer'))
                                                                     {{ $transaction->src_account->name }}
                                                                     <i class="fas fa-long-arrow-alt-right mx-2"></i>
                                                                     {{ $transaction->dest_account->name }}
@@ -256,13 +253,13 @@
                                                     </div>
                                                     <div class="col-12 col-md-5">
                                                         <div
-                                                            class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == 1 ? 'danger' : ($transaction->type == 3 ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
-                                                            {{ $transaction->type == 3 ? '' : ($transaction->type == 1 ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
+                                                            class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == config('custom.transaction_types.expense') ? 'danger' : ($transaction->type == config('custom.transaction_types.transfer') ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
+                                                            {{ $transaction->type == config('custom.transaction_types.transfer') ? '' : ($transaction->type == config('custom.transaction_types.expense') ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
                                                         </div>
                                                         <div class="d-none d-sm-block d-md-none">
                                                             <div class="d-flex align-items-center justify-content-center">
                                                                 <span class="text-xs">
-                                                                    @if ($transaction->type == 3)
+                                                                    @if ($transaction->type == config('custom.transaction_types.transfer'))
                                                                         {{ $transaction->src_account->name }}
                                                                         <i class="fas fa-long-arrow-alt-right mx-2"></i>
                                                                         {{ $transaction->dest_account->name }}
@@ -294,6 +291,7 @@
                             @endforeach
                         </ul>
                     @endforeach
+
                     <div class="d-flex justify-content-center mt-4 flex-grow-1 align-items-end">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination pagination-lg justify-content-center align-items-center">

@@ -120,21 +120,20 @@
                 </div>
                 <div class="card-body pt-4 p-3">
                     @foreach ($groupedTransactions as $date => $transactionsOnDate)
-                        <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">{{ $date }}
-                        </h6>
+                        <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">{{ $date }}</h6>
                         <ul class="list-group">
                             @foreach ($transactionsOnDate as $transaction)
                                 <li
                                     class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                                     <div class="d-flex align-items-center">
                                         <button
-                                            class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == 1 ? 'danger' : 'success' }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
-                                            <i class="fas fa-arrow-{{ $transaction->type == 1 ? 'down' : 'up' }}"></i>
+                                            class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == config('custom.transaction_types.expense') ? 'danger' : 'success' }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
+                                            <i
+                                                class="fas fa-arrow-{{ $transaction->type == config('custom.transaction_types.expense') ? 'down' : 'up' }}"></i>
                                         </button>
                                         <div class="d-flex flex-column">
                                             <h6 class="mb-1 text-dark text-sm">
-                                                {{ $transaction->category ? $transaction->category->name : 'N/A' }}
-                                            </h6>
+                                                {{ $transaction->category ? $transaction->category->name : 'N/A' }}</h6>
                                             <span class="text-xs">{{ $transaction->details }}</span>
                                         </div>
                                     </div>
@@ -142,8 +141,8 @@
                                         {{ $transaction->src_account->name }}
                                     </div>
                                     <div
-                                        class="d-flex align-items-center text-{{ $transaction->type == 1 ? 'danger' : 'success' }} text-gradient text-sm font-weight-bold">
-                                        {{ $transaction->type == 1 ? '- ' : '+ ' }}${{ number_format($transaction->amount, 2) }}
+                                        class="d-flex align-items-center text-{{ $transaction->type == config('custom.transaction_types.expense') ? 'danger' : 'success' }} text-gradient text-sm font-weight-bold">
+                                        {{ $transaction->type == config('custom.transaction_types.expense') ? '- ' : '+ ' }}${{ number_format($transaction->amount, 2) }}
                                     </div>
                                 </li>
                             @endforeach
