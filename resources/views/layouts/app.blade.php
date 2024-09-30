@@ -37,7 +37,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/css/soft-ui-dashboard.css') }}" rel="stylesheet" />
-    <link id="pagestyle" href="{{ asset('assets/css/custom.css?v=1.0.0') }}" rel="stylesheet" />
+    <link id="pagestyle" href="{{ asset('assets/css/custom.css?v=1.0.1') }}" rel="stylesheet" />
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">

@@ -9,6 +9,10 @@
     cursor: pointer;
 }
 
+.transaction-detail{
+    max-width: 250px;
+}
+
 /* Transaction */
 
 
