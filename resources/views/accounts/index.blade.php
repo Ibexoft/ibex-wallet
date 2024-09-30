@@ -250,9 +250,9 @@
                             <!-- Dropdown Trigger -->
                             <div class="w-100 text-end">
                                 <div class="dropdown d-inline ">
-                                    <i class="icon fa fa-ellipsis-h text-sm text-primary"
+                                    <i class="icon fa fa-ellipsis-h text-sm text-primary cursor-pointer"
                                         id="dropdownMenuButton{{ $account->id }}" data-bs-toggle="dropdown"
-                                        aria-expanded="false" style="cursor: pointer;"></i>
+                                        aria-expanded="false"></i>
 
                                     <!-- Dropdown Menu -->
                                     <ul class="dropdown-menu dropdown-menu-end"
