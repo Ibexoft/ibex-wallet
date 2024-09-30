@@ -40,18 +40,18 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name'      => 'required|string|max:35|unique:accounts,name',
-            'type'      => 'required|in:' . implode(',', array_keys(config('custom.account_types'))),
-            'balance'   => 'required|numeric|min:0',
-            'currency'  => 'required|in:' . implode(',', array_keys(config('custom.currencies'))),
+            'name' => 'required|string|max:35|unique:accounts,name',
+            'type' => 'required|in:' . implode(',', array_keys(config('custom.account_types'))),
+            'balance' => 'required|numeric|min:0',
+            'currency' => 'required|in:' . implode(',', array_keys(config('custom.currencies'))),
         ]);
 
         Account::create([
-            'user_id'   => Auth::id(),
-            'name'      => $request->name,
-            'type'      => $request->type,
-            'icon'      => $request->icon,
-            'balance'   => $request->balance,
+            'user_id' => Auth::id(),
+            'name' => $request->name,
+            'type' => $request->type,
+            'icon' => $request->icon,
+            'balance' => $request->balance,
         ]);
 
         return response()->json([
@@ -71,8 +71,12 @@ class AccountController extends Controller
      */
     public function show(Account $account)
     {
-        //
+        return response()->json([
+            'success' => true,
+            'data' => $account
+        ]);
     }
+
 
 
     /**
@@ -86,10 +90,10 @@ class AccountController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'name'      => 'required|string|max:35|unique:accounts,name,' . $id,
-            'type'      => 'required|in:' . implode(',', array_keys(config('custom.account_types'))),
-            'balance'   => 'required|numeric|min:0',
-            'currency'  => 'required|in:' . implode(',', array_keys(config('custom.currencies'))),
+            'name' => 'required|string|max:35|unique:accounts,name,' . $id,
+            'type' => 'required|in:' . implode(',', array_keys(config('custom.account_types'))),
+            'balance' => 'required|numeric|min:0',
+            'currency' => 'required|in:' . implode(',', array_keys(config('custom.currencies'))),
         ]);
 
         // Find the account by ID
@@ -97,10 +101,10 @@ class AccountController extends Controller
 
         // Update the account with the validated data
         $account->update([
-            'name'      => $request->name,
-            'type'      => $request->type,
-            'balance'   => $request->balance,
-            'currency'  => $request->currency,
+            'name' => $request->name,
+            'type' => $request->type,
+            'balance' => $request->balance,
+            'currency' => $request->currency,
         ]);
 
         return response()->json([
@@ -129,7 +133,7 @@ class AccountController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete the account.',
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
