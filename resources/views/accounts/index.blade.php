@@ -265,7 +265,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div onclick='openEditAccountModal({{ json_encode($account) }})'>
+                            <div onclick="fetchAccountData('{{ route('accounts.show', [$account->id]) }}')">
                                 {{-- For Mobile Screen --}}
                                 <div class="row pb-2 d-flex d-md-none align-items-center">
                                     <div class="col-2">
