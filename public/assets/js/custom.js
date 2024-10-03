@@ -86,16 +86,14 @@ function submitTransactionForm(url, formData, method) {
         },
         success: function (response) {
             if (response.success) {
-                $("#transactionModal").modal("hide");
-                swalWithBootstrapButtons
-                    .fire({
-                        title: "Success!",
-                        text: "Transaction has been successfully processed.",
-                        icon: "success",
-                    })
-                    .then(() => {
-                        location.reload();
-                    });
+                // Hide the modal
+                var transactionModal = document.getElementById('transactionModal');
+                var modalInstance = bootstrap.Modal.getInstance(transactionModal);
+                modalInstance.hide();
+
+                setToastMessage("Transaction has been successfully processed.");
+                // Reload the page
+                window.location.reload();
             } else {
                 console.error(response.message);
                 swalWithBootstrapButtons.fire({
@@ -153,15 +151,9 @@ function deleteTransaction(url) {
                     },
                     success: function (response) {
                         if (response.success) {
-                            swalWithBootstrapButtons
-                                .fire({
-                                    title: "Deleted!",
-                                    text: "Your transaction has been deleted.",
-                                    icon: "success",
-                                })
-                                .then(() => {
-                                    location.reload();
-                                });
+                            setToastMessage("Your transaction has been deleted.");
+                            // Reload the page
+                            window.location.reload();
                         } else {
                             console.error(response.message);
                             swalWithBootstrapButtons.fire({
@@ -269,9 +261,9 @@ $("#transactionForm").on("submit", function (e) {
     var isEdit = transactionId !== "";
     var url = isEdit
         ? window.transactionRoutes.update.replace(
-              "__TRANSACTION_ID__",
-              transactionId
-          )
+            "__TRANSACTION_ID__",
+            transactionId
+        )
         : window.transactionRoutes.store;
     var formData = $(this).serialize();
     var method = isEdit ? "PUT" : "POST";
@@ -290,7 +282,7 @@ $("#accountForm").on("submit", function (e) {
 
     addAccount(url, formData);
 });
- 
+
 function addAccount(url, formData) {
     $.ajax({
         url: url,
@@ -304,17 +296,15 @@ function addAccount(url, formData) {
         dataType: 'json',
         success: function (data) {
             if (data.success) {
-                swalWithBootstrapButtons.fire({
-                    title: "Success!",
-                    text: "Your account has been created successfully.",
-                    icon: "success",
-                    confirmButtonText: "OK"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#modal-default').modal('hide');
-                        window.location.reload();
-                    }
-                });
+                // Hide the modal
+                var modalElement = document.getElementById('modal-default');
+                var modalInstance = bootstrap.Modal.getInstance(modalElement);
+                modalInstance.hide()
+
+                setToastMessage("Your account has been added successfully!");
+
+                // Reload the page
+                window.location.reload();
             } else {
                 let errorList = '';
                 for (let field in data.errors) {
@@ -360,7 +350,7 @@ function addAccount(url, formData) {
 
 function openEditAccountModal(account) {
     var updateUrl = window.accountRoutes.update.replace('__ACCOUNT_ID__', account.id);
-    
+
     $('#editAccountForm').attr('action', updateUrl);
 
     // Populate fields with account data
@@ -397,17 +387,14 @@ function updateAccount(url, formData) {
         dataType: 'json',
         success: function (data) {
             if (data.success) {
-                swalWithBootstrapButtons.fire({
-                    title: "Success!",
-                    text: "Your account has been updated successfully.",
-                    icon: "success",
-                    confirmButtonText: "OK"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#modal-edit').modal('hide');
-                        window.location.reload();
-                    }
-                });
+                // Hide the modal
+                var modalElement = document.getElementById('modal-edit');
+                var modalInstance = bootstrap.Modal.getInstance(modalElement);
+                modalInstance.hide();
+
+                setToastMessage("Your account has been updated successfully!");
+                // Reload the page
+                window.location.reload();
             } else {
                 let errorList = '';
                 for (let field in data.errors) {
@@ -473,13 +460,9 @@ function deleteAccount(accountId) {
                 },
                 success: function (response) {
                     if (response.success) {
-                        swalWithBootstrapButtons.fire({
-                            title: "Deleted!",
-                            text: "The account has been deleted.",
-                            icon: "success"
-                        }).then(() => {
-                            window.location.reload();
-                        });
+                        setToastMessage("The account has been deleted.");
+                        // Reload the page
+                        window.location.reload();
                     } else {
                         swalWithBootstrapButtons.fire({
                             title: "Failed",
@@ -517,7 +500,7 @@ function toggleCategory() {
 }
 
 function setCategory(id, isSubcategory = false) { // set id and name of selected category for edit or delete
-    if(id) {
+    if (id) {
         document.getElementById('parentCategoryId').value = id;
         const name = document.querySelector(`#category-${id}-name`).innerText;
         document.getElementById('edit-category-name-input').value = name;
@@ -535,7 +518,7 @@ function addCategory(event) {
     const inputSelector = event.target.querySelector('.category-input');
     const categoryName = inputSelector.value;
     inputSelector.value = "";
-    
+
     if (categoryName.trim() === '') {
         swalWithBootstrapButtons.fire({
             title: "Failed",
@@ -561,15 +544,10 @@ function addCategory(event) {
         },
         success: function (response) {
             if (response.success) {
-                swalWithBootstrapButtons.fire({
-                    title: "Success!",
-                    text: response.message,
-                    icon: "success"
-                }).then(() => {
-                    $(inputSelector).val('');
-                    location.reload();
-                });
-
+                setToastMessage(response.message);
+                $(inputSelector).val('');
+                // Reload the page
+                window.location.reload();
             } else {
                 let errorList = '';
                 for (let field in data.errors) {
@@ -633,32 +611,27 @@ function deleteCategory(id, parentId) {
                 },
                 success: function (response) {
                     if (response.success) {
-                        swalWithBootstrapButtons.fire({
-                            title: "Deleted!",
-                            text: response.message,
-                            icon: "success"
-                        }).then(() => {
-                            const categoryElement = document.querySelector(`#category-${categoryId}`);
-                            const parentCategory = categoryElement.parentElement;
-                            categoryElement.remove();
-                            if (parentCategory.querySelectorAll('.subcategory-card').length === 0) { // if no subcategory
-                                const categoryTitle = parentCategory.querySelector('.category-title');
-                                const icon = categoryTitle.querySelector('.category-toggle-icon');
-                                if (icon) {
-                                    icon.remove();
-                                }
-                                const dropdownToggler = parentCategory.querySelector('.dropdown-toggler');
-                                dropdownToggler.style.cursor = '';
-                                
-                                if (parentId) {
-                                    const dropdownMenu = parentCategory.querySelector('.dropdown-menu');
-                                    const deleteOption = dropdownMenu.querySelector('.delete-option');
-                                    if (deleteOption) {
-                                        deleteOption.classList.remove('d-none');
-                                    }
+                        const categoryElement = document.querySelector(`#category-${categoryId}`);
+                        const parentCategory = categoryElement.parentElement;
+                        categoryElement.remove();
+                        if (parentCategory.querySelectorAll('.subcategory-card').length === 0) { // if no subcategory
+                            const categoryTitle = parentCategory.querySelector('.category-title');
+                            const icon = categoryTitle.querySelector('.category-toggle-icon');
+                            if (icon) {
+                                icon.remove();
+                            }
+                            const dropdownToggler = parentCategory.querySelector('.dropdown-toggler');
+                            dropdownToggler.style.cursor = '';
+
+                            if (parentId) {
+                                const dropdownMenu = parentCategory.querySelector('.dropdown-menu');
+                                const deleteOption = dropdownMenu.querySelector('.delete-option');
+                                if (deleteOption) {
+                                    deleteOption.classList.remove('d-none');
                                 }
                             }
-                        });
+                        }
+                        showToast(response.message);
                     } else {
                         swalWithBootstrapButtons.fire({
                             title: "Failed",
@@ -708,17 +681,13 @@ function updateCategory(event) {
         },
         success: function (response) {
             if (response.success) {
-                swalWithBootstrapButtons.fire({
-                    title: "Updated!",
-                    text: response.message,
-                    icon: "success"
-                }).then(() => {
-                    $(`#category-${id}-name`).text(categoryName);
-                    $(inputSelector).val(categoryName);
-                    const editCategoryModal = document.getElementById('editCategoryModal');
-                    const modal = bootstrap.Modal.getInstance(editCategoryModal);
-                    modal.hide();
-                });
+                $(`#category-${id}-name`).text(categoryName);
+                $(inputSelector).val(categoryName);
+                const editCategoryModal = document.getElementById('editCategoryModal');
+                const modal = bootstrap.Modal.getInstance(editCategoryModal);
+                modal.hide();
+
+                showToast(response.message);
             } else {
                 let errorList = '';
                 for (let field in data.errors) {
@@ -762,3 +731,30 @@ function updateCategory(event) {
 }
 
 /* Categories JavaScript */
+
+window.onload = function () {
+    if (localStorage.getItem('showToast')) {
+        const message = localStorage.getItem('toastMessage');
+        showToast(message);
+
+        // Remove the flag and message after the toast is displayed
+        localStorage.removeItem('showToast');
+        localStorage.removeItem('toastMessage');
+    }
+};
+
+/* Success Toast */
+
+function setToastMessage(message) {
+    // Save the message and a flag in localStorage
+    localStorage.setItem('showToast', true);
+    localStorage.setItem('toastMessage', message);
+}
+
+function showToast(message) {
+    document.getElementById('successToastBody').innerText = message;
+    var toastElement = new bootstrap.Toast(document.getElementById('successToast'));
+    toastElement.show();
+}
+
+/* Success Toast */
