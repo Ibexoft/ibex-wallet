@@ -91,7 +91,7 @@ function submitTransactionForm(url, formData, method) {
                 var modalInstance = bootstrap.Modal.getInstance(transactionModal);
                 modalInstance.hide();
 
-                setToastMessage("Your account has been deleted.");
+                setToastMessage("Transaction has been successfully processed.");
                 // Reload the page
                 window.location.reload();
             } else {
