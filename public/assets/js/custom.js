@@ -359,24 +359,23 @@ function addAccount(url, formData) {
 
 
 function fetchAccountData(url) {
-
-    $.ajax({
-        url: url,
-        method: 'GET',
-        success: function (response) {
-            if (response.success) {
-                // Populate modal with fetched account data
-                var account = response.data;
-                openEditAccountModal(account);
-            } else {
-                alert('Failed to fetch account data.');
-            }
-        },
-        error: function () {
-            alert('Error fetching account data.');
+    fetch(url, {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            var account = data.data;
+            openEditAccountModal(account);
+        } else {
+            alert('Failed to fetch account data.');
         }
+    })
+    .catch(() => {
+        alert('Error fetching account data.');
     });
 }
+
 
 function openEditAccountModal(account) {
     var updateUrl = window.accountRoutes.update.replace('__ACCOUNT_ID__', account.id);

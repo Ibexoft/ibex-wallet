@@ -25,9 +25,4 @@ return [
         'USD' => 'USD',
         // Add more currencies as needed
     ],
-    'transaction_types' => [
-        'income' => 2,
-        'expense' => 1,
-        'transfer' => 3,
-    ],
 ];

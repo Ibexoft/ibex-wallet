@@ -12,23 +12,23 @@
             <div class="form-group row">
                 <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
                     <label
-                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == config('custom.transaction_types.expense') || old('type') == config('custom.transaction_types.expense') ? 'active' : '') : 'active' }}">
-                        <input type="radio" class="d-none" name="type" id="expense" value="{{ config('custom.transaction_types.expense') }}"
-                            {{ $transaction ?? '' ? $transaction->type == config('custom.transaction_types.expense') || old('type') == config('custom.transaction_types.expense') ? 'checked' : '' : 'checked' }}
+                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == \App\Enums\TransactionType::Expense->value || old('type') == \App\Enums\TransactionType::Expense ? 'active' : '') : 'active' }}">
+                        <input type="radio" class="d-none" name="type" id="expense" value="{{ \App\Enums\TransactionType::Expense }}"
+                            {{ $transaction ?? '' ? $transaction->type == \App\Enums\TransactionType::Expense->value || old('type') == \App\Enums\TransactionType::Expense ? 'checked' : '' : 'checked' }}
                             onclick="$('#collapseToAccount').collapse('hide')">
                         Expense
                     </label>
                     <label
-                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == config('custom.transaction_types.income') || old('type') == config('custom.transaction_types.income') ? 'active' : '') : '' }}">
-                        <input type="radio" class="d-none" name="type" id="income" value="{{ config('custom.transaction_types.income') }}"
-                            {{ $transaction ?? '' ? $transaction->type == config('custom.transaction_types.income') || old('type') == config('custom.transaction_types.income') ? 'checked' : '' : '' }}
+                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == \App\Enums\TransactionType::Income->value || old('type') == \App\Enums\TransactionType::Income ? 'active' : '') : '' }}">
+                        <input type="radio" class="d-none" name="type" id="income" value="{{ \App\Enums\TransactionType::Income }}"
+                            {{ $transaction ?? '' ? $transaction->type == \App\Enums\TransactionType::Income->value || old('type') == \App\Enums\TransactionType::Income ? 'checked' : '' : '' }}
                             onclick="$('#collapseToAccount').collapse('hide')">
                         Income
                     </label>
                     <label
-                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == config('custom.transaction_types.transfer') || old('type') == config('custom.transaction_types.transfer') ? 'active' : '') : '' }}">
-                        <input type="radio" class="d-none" name="type" id="transfer" value="{{ config('custom.transaction_types.transfer') }}"
-                            {{ $transaction ?? '' ? $transaction->type == config('custom.transaction_types.transfer') || old('type') == config('custom.transaction_types.transfer') ? 'checked' : '' : '' }}
+                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == \App\Enums\TransactionType::Transfer->value || old('type') == \App\Enums\TransactionType::Transfer ? 'active' : '') : '' }}">
+                        <input type="radio" class="d-none" name="type" id="transfer" value="{{ \App\Enums\TransactionType::Transfer }}"
+                            {{ $transaction ?? '' ? $transaction->type == \App\Enums\TransactionType::Transfer->value || old('type') == \App\Enums\TransactionType::Transfer ? 'checked' : '' : '' }}
                             onclick="$('#collapseToAccount').collapse('show')">
                         Transfer
                     </label>
