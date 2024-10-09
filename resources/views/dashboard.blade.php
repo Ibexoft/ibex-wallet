@@ -127,22 +127,29 @@
                                     class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                                     <div class="d-flex align-items-center">
                                         <button
-                                            class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == config('custom.transaction_types.expense') ? 'danger' : 'success' }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
+                                            class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == \App\Enums\TransactionType::Transfer->value ? 'info' : ($transaction->type == \App\Enums\TransactionType::Expense->value ? 'danger' : 'success') }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
                                             <i
-                                                class="fas fa-arrow-{{ $transaction->type == config('custom.transaction_types.expense') ? 'down' : 'up' }}"></i>
+                                                class="fas fa-{{ $transaction->type == \App\Enums\TransactionType::Transfer->value ? 'exchange-alt' : ($transaction->type == \App\Enums\TransactionType::Expense->value ? 'arrow-down' : 'arrow-up') }}"></i>
                                         </button>
                                         <div class="d-flex flex-column">
                                             <h6 class="mb-1 text-dark text-sm">
-                                                {{ $transaction->category ? $transaction->category->name : 'N/A' }}</h6>
+                                                {{ $transaction->type == \App\Enums\TransactionType::Transfer->value ? 'Transfer' : ($transaction->category ? $transaction->category->name : 'N/A') }}
+                                            </h6>
                                             <span class="text-xs">{{ $transaction->details }}</span>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center ">
-                                        {{ $transaction->src_account->name }}
+                                        @if ($transaction->type == \App\Enums\TransactionType::Transfer->value)
+                                            {{ $transaction->src_account->name }}
+                                            <i class="fas fa-long-arrow-alt-right mx-2"></i>
+                                            {{ $transaction->dest_account->name }}
+                                        @else
+                                            {{ $transaction->src_account->name }}
+                                        @endif
                                     </div>
                                     <div
-                                        class="d-flex align-items-center text-{{ $transaction->type == config('custom.transaction_types.expense') ? 'danger' : 'success' }} text-gradient text-sm font-weight-bold">
-                                        {{ $transaction->type == config('custom.transaction_types.expense') ? '- ' : '+ ' }}${{ number_format($transaction->amount, 2) }}
+                                        class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == \App\Enums\TransactionType::Expense->value ? 'danger' : ($transaction->type == \App\Enums\TransactionType::Transfer->value ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
+                                        {{ $transaction->type == \App\Enums\TransactionType::Transfer->value ? '' : ($transaction->type == \App\Enums\TransactionType::Expense->value ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
                                     </div>
                                 </li>
                             @endforeach

@@ -210,9 +210,9 @@
                                     <div class="d-flex w-100" onclick="openModalForEdit(this)">
                                         <div class="d-flex align-items-center justify-content-center">
                                             <button
-                                                class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == config('custom.transaction_types.transfer') ? 'info' : ($transaction->type == config('custom.transaction_types.expense') ? 'danger' : 'success') }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
+                                                class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == \App\Enums\TransactionType::Transfer->value ? 'info' : ($transaction->type == \App\Enums\TransactionType::Expense->value ? 'danger' : 'success') }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
                                                 <i
-                                                    class="fas fa-{{ $transaction->type == config('custom.transaction_types.transfer') ? 'exchange-alt' : ($transaction->type == config('custom.transaction_types.expense') ? 'arrow-down' : 'arrow-up') }}"></i>
+                                                    class="fas fa-{{ $transaction->type == \App\Enums\TransactionType::Transfer->value ? 'exchange-alt' : ($transaction->type == \App\Enums\TransactionType::Expense->value ? 'arrow-down' : 'arrow-up') }}"></i>
                                             </button>
                                         </div>
                                         <div class="row w-100 d-flex align-items-center">
@@ -220,12 +220,12 @@
                                                 <div class="d-flex align-items-center">
                                                     <div class="d-flex flex-column">
                                                         <h6 class="mb-1 text-dark text-sm">
-                                                            {{ $transaction->type == config('custom.transaction_types.transfer') ? 'Transfer' : ($transaction->category ? $transaction->category->name : 'N/A') }}
+                                                            {{ $transaction->type == \App\Enums\TransactionType::Transfer->value ? 'Transfer' : ($transaction->category ? $transaction->category->name : 'N/A') }}
                                                         </h6>
                                                         <span class="text-xs d-none d-sm-block text-truncate transaction-detail">{{ $transaction->details }}</span>
 
                                                         <span class="text-xs d-block d-sm-none">
-                                                            @if ($transaction->type == config('custom.transaction_types.transfer'))
+                                                            @if ($transaction->type == \App\Enums\TransactionType::Transfer->value)
                                                                 {{ $transaction->src_account->name }}
                                                                 <i class="fas fa-long-arrow-alt-right mx-2"></i>
                                                                 {{ $transaction->dest_account->name }}
@@ -241,7 +241,7 @@
                                                     <div class="d-none d-md-block col-0 col-md-7">
                                                         <div class="d-flex align-items-center justify-content-center">
                                                             <span class="text-sm">
-                                                                @if ($transaction->type == config('custom.transaction_types.transfer'))
+                                                                @if ($transaction->type == \App\Enums\TransactionType::Transfer->value)
                                                                     {{ $transaction->src_account->name }}
                                                                     <i class="fas fa-long-arrow-alt-right mx-2"></i>
                                                                     {{ $transaction->dest_account->name }}
@@ -253,13 +253,13 @@
                                                     </div>
                                                     <div class="col-12 col-md-5">
                                                         <div
-                                                            class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == config('custom.transaction_types.expense') ? 'danger' : ($transaction->type == config('custom.transaction_types.transfer') ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
-                                                            {{ $transaction->type == config('custom.transaction_types.transfer') ? '' : ($transaction->type == config('custom.transaction_types.expense') ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
+                                                            class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == \App\Enums\TransactionType::Expense->value ? 'danger' : ($transaction->type == \App\Enums\TransactionType::Transfer->value ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
+                                                            {{ $transaction->type == \App\Enums\TransactionType::Transfer->value ? '' : ($transaction->type == \App\Enums\TransactionType::Expense->value ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
                                                         </div>
                                                         <div class="d-none d-sm-block d-md-none">
                                                             <div class="d-flex align-items-center justify-content-center">
                                                                 <span class="text-xs">
-                                                                    @if ($transaction->type == config('custom.transaction_types.transfer'))
+                                                                    @if ($transaction->type == \App\Enums\TransactionType::Transfer->value)
                                                                         {{ $transaction->src_account->name }}
                                                                         <i class="fas fa-long-arrow-alt-right mx-2"></i>
                                                                         {{ $transaction->dest_account->name }}
