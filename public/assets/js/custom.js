@@ -220,48 +220,106 @@ function openModalForAdd() {
 }
 
 function openModalForEdit(element) {
-    $("#transactionModalTitle").text("Edit Transaction");
-    $("#transactionModalSubmitBtn").text("Update");
+    // Get the transaction ID from the data-id attribute
+    const transactionId = element.parentElement.dataset.id;
+    var showUrl = window.transactionRoutes.show.replace('__TRANSACTION_ID__', transactionId);
+    console.log(showUrl);
 
-    $("#transaction_id").val($(element).data("id"));
-    $('input[name="type"][value="' + $(element).data("type") + '"]')
-        .prop("checked", true)
-        .trigger("click");
-    $("#src_account_id").val($(element).data("src-account-id"));
-    $("#dest_account_id").val($(element).data("dest-account-id"));
-    $("#amount").val($(element).data("amount"));
-    $("#category_id").val($(element).data("category-id"));
-    $("#wallet_id").val($(element).data("wallet-id"));
-    $("#details").val($(element).data("details"));
-    $("#transaction_date").val($(element).data("transaction-date"));
 
-    $("#transactionModal").modal("show");
+    // Update the modal title and submit button text
+    document.getElementById("transactionModalTitle").textContent = "Edit Transaction";
+    document.getElementById("transactionModalSubmitBtn").textContent = "Update";
+
+    // Fetch transaction data from the server
+    fetch(showUrl, {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const transaction = data.data;
+
+            // Populate the form fields with the fetched data
+            document.getElementById("transaction_id").value = transaction.id;
+
+            // Handle the 'type' field
+            const typeValue = transaction.type; // Ensure this matches your enum values
+            const typeInput = document.querySelector(`input[name="type"][value="${typeValue}"]`);
+            if (typeInput) {
+                typeInput.checked = true;
+                changeTransactionType(typeValue);
+            }
+
+            document.getElementById("src_account_id").value = transaction.src_account_id || '';
+            document.getElementById("dest_account_id").value = transaction.dest_account_id || '';
+            document.getElementById("amount").value = transaction.amount || '';
+            document.getElementById("category_id").value = transaction.category_id || '';
+            document.getElementById("wallet_id").value = transaction.wallet_id || '';
+            document.getElementById("details").value = transaction.details || '';
+            document.getElementById("transaction_date").value = transaction.transaction_date || '';
+
+            // Show the modal (assuming Bootstrap 5 is used)
+            const transactionModalElement = document.getElementById('transactionModal');
+            const transactionModal = new bootstrap.Modal(transactionModalElement);
+            transactionModal.show();
+        } else {
+            alert(`Failed to fetch transaction data: ${data.message}`);
+        }
+    })
+    .catch(() => {
+        alert('Error fetching transaction data.');
+    });
 }
+
+
 
 function changeTransactionType(type) {
-    var isTransfer = type === "transfer";
-    var isExpenseOrIncome = type === "expense" || type === "income";
+    var isTransfer = type === "Transfer";
+    var isExpenseOrIncome = type === "Expense" || type === "Income";
 
-    $("#expense-btn").toggleClass("active", type === "expense");
-    $("#income-btn").toggleClass("active", type === "income");
-    $("#transfer-btn").toggleClass("active", isTransfer);
+    // Toggle 'active' class on buttons
+    document.getElementById("expense-btn").classList.toggle("active", type === "Expense");
+    document.getElementById("income-btn").classList.toggle("active", type === "Income");
+    document.getElementById("transfer-btn").classList.toggle("active", isTransfer);
 
-    $("#collapseToAccount").toggle(isTransfer);
-    $("#account-label").html(
-        isTransfer
+    // Show or hide the 'To Account' collapse section
+    var collapseToAccount = document.getElementById("collapseToAccount");
+    if (collapseToAccount) {
+        collapseToAccount.style.display = isTransfer ? "" : "none";
+    }
+
+    // Update the account label
+    var accountLabel = document.getElementById("account-label");
+    if (accountLabel) {
+        accountLabel.innerHTML = isTransfer
             ? "From Account <span class='text-danger'>*</span>"
-            : "Account <span class='text-danger'>*</span>"
-    );
-    $("#category-field").toggle(isExpenseOrIncome);
-    $("#wallet-field").toggle(isExpenseOrIncome);
+            : "Account <span class='text-danger'>*</span>";
+    }
 
-    var amountField = $("#amount-field");
-    if (isTransfer) {
-        amountField.removeClass("col-md-6").addClass("col-md-12");
-    } else {
-        amountField.removeClass("col-md-12").addClass("col-md-6");
+    // Show or hide category and wallet fields
+    var categoryField = document.getElementById("category-field");
+    if (categoryField) {
+        categoryField.style.display = isExpenseOrIncome ? "" : "none";
+    }
+
+    var walletField = document.getElementById("wallet-field");
+    if (walletField) {
+        walletField.style.display = isExpenseOrIncome ? "" : "none";
+    }
+
+    // Adjust amount field column size
+    var amountField = document.getElementById("amount-field");
+    if (amountField) {
+        if (isTransfer) {
+            amountField.classList.remove("col-md-6");
+            amountField.classList.add("col-md-12");
+        } else {
+            amountField.classList.remove("col-md-12");
+            amountField.classList.add("col-md-6");
+        }
     }
 }
+
 
 $("#transactionForm").on("submit", function (e) {
     e.preventDefault();

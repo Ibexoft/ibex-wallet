@@ -12,23 +12,23 @@
             <div class="form-group row">
                 <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
                     <label
-                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == \App\Enums\TransactionType::Expense->value || old('type') == \App\Enums\TransactionType::Expense ? 'active' : '') : 'active' }}">
-                        <input type="radio" class="d-none" name="type" id="expense" value="{{ \App\Enums\TransactionType::Expense }}"
-                            {{ $transaction ?? '' ? $transaction->type == \App\Enums\TransactionType::Expense->value || old('type') == \App\Enums\TransactionType::Expense ? 'checked' : '' : 'checked' }}
+                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == TransactionType::Expense || old('type') == TransactionType::Expense ? 'active' : '') : 'active' }}">
+                        <input type="radio" class="d-none" name="type" id="expense" value="{{ TransactionType::Expense }}"
+                            {{ $transaction ?? '' ? $transaction->type == TransactionType::Expense || old('type') == TransactionType::Expense ? 'checked' : '' : 'checked' }}
                             onclick="$('#collapseToAccount').collapse('hide')">
                         Expense
                     </label>
                     <label
-                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == \App\Enums\TransactionType::Income->value || old('type') == \App\Enums\TransactionType::Income ? 'active' : '') : '' }}">
-                        <input type="radio" class="d-none" name="type" id="income" value="{{ \App\Enums\TransactionType::Income }}"
-                            {{ $transaction ?? '' ? $transaction->type == \App\Enums\TransactionType::Income->value || old('type') == \App\Enums\TransactionType::Income ? 'checked' : '' : '' }}
+                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == TransactionType::Income || old('type') == TransactionType::Income ? 'active' : '') : '' }}">
+                        <input type="radio" class="d-none" name="type" id="income" value="{{ TransactionType::Income }}"
+                            {{ $transaction ?? '' ? $transaction->type == TransactionType::Income || old('type') == TransactionType::Income ? 'checked' : '' : '' }}
                             onclick="$('#collapseToAccount').collapse('hide')">
                         Income
                     </label>
                     <label
-                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == \App\Enums\TransactionType::Transfer->value || old('type') == \App\Enums\TransactionType::Transfer ? 'active' : '') : '' }}">
-                        <input type="radio" class="d-none" name="type" id="transfer" value="{{ \App\Enums\TransactionType::Transfer }}"
-                            {{ $transaction ?? '' ? $transaction->type == \App\Enums\TransactionType::Transfer->value || old('type') == \App\Enums\TransactionType::Transfer ? 'checked' : '' : '' }}
+                        class="btn btn-secondary btn-lg {{ $transaction ?? '' ? ($transaction->type == TransactionType::Transfer || old('type') == TransactionType::Transfer ? 'active' : '') : '' }}">
+                        <input type="radio" class="d-none" name="type" id="transfer" value="{{ TransactionType::Transfer }}"
+                            {{ $transaction ?? '' ? $transaction->type == TransactionType::Transfer || old('type') == TransactionType::Transfer ? 'checked' : '' : '' }}
                             onclick="$('#collapseToAccount').collapse('show')">
                         Transfer
                     </label>
