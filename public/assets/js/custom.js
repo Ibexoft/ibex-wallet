@@ -263,12 +263,28 @@ function openModalForEdit(element) {
 function changeTransactionType(type) {
     var isTransfer = type === "Transfer";
     var isExpenseOrIncome = type === "Expense" || type === "Income";
+    var isTransfer = type === "Transfer";
+    var isExpenseOrIncome = type === "Expense" || type === "Income";
 
     // Toggle 'active' class on buttons
     document.getElementById("expense-btn").classList.toggle("active", type === "Expense");
     document.getElementById("income-btn").classList.toggle("active", type === "Income");
     document.getElementById("transfer-btn").classList.toggle("active", isTransfer);
+    // Toggle 'active' class on buttons
+    document.getElementById("expense-btn").classList.toggle("active", type === "Expense");
+    document.getElementById("income-btn").classList.toggle("active", type === "Income");
+    document.getElementById("transfer-btn").classList.toggle("active", isTransfer);
 
+    // Show or hide the 'To Account' collapse section
+    var collapseToAccount = document.getElementById("collapseToAccount");
+    if (collapseToAccount) {
+        collapseToAccount.style.display = isTransfer ? "" : "none";
+    }
+
+    // Update the account label
+    var accountLabel = document.getElementById("account-label");
+    if (accountLabel) {
+        accountLabel.innerHTML = isTransfer
     // Show or hide the 'To Account' collapse section
     var collapseToAccount = document.getElementById("collapseToAccount");
     if (collapseToAccount) {
@@ -304,8 +320,33 @@ function changeTransactionType(type) {
             amountField.classList.remove("col-md-12");
             amountField.classList.add("col-md-6");
         }
+            : "Account <span class='text-danger'>*</span>";
+    }
+
+    // Show or hide category and wallet fields
+    var categoryField = document.getElementById("category-field");
+    if (categoryField) {
+        categoryField.style.display = isExpenseOrIncome ? "" : "none";
+    }
+
+    var walletField = document.getElementById("wallet-field");
+    if (walletField) {
+        walletField.style.display = isExpenseOrIncome ? "" : "none";
+    }
+
+    // Adjust amount field column size
+    var amountField = document.getElementById("amount-field");
+    if (amountField) {
+        if (isTransfer) {
+            amountField.classList.remove("col-md-6");
+            amountField.classList.add("col-md-12");
+        } else {
+            amountField.classList.remove("col-md-12");
+            amountField.classList.add("col-md-6");
+        }
     }
 }
+
 
 
 $("#transactionForm").on("submit", function (e) {
@@ -431,6 +472,7 @@ function openEditAccountModal(account) {
     // Show the modal
     $('#modal-edit').modal('show');
 }
+
 
 
 $("#editAccountForm").on("submit", function (e) {
