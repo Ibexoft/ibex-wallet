@@ -254,13 +254,8 @@ function openModalForEdit(element) {
             const transactionModalElement = document.getElementById('transactionModal');
             const transactionModal = new bootstrap.Modal(transactionModalElement);
             transactionModal.show();
-        } else {
-            alert(`Failed to fetch transaction data: ${data.message}`);
         }
     })
-    .catch(() => {
-        alert('Error fetching transaction data.');
-    });
 }
 
 
@@ -415,13 +410,8 @@ function fetchAccountData(url) {
         if (data.success) {
             var account = data.data;
             openEditAccountModal(account);
-        } else {
-            alert('Failed to fetch account data.');
         }
     })
-    .catch(() => {
-        alert('Error fetching account data.');
-    });
 }
 
 
