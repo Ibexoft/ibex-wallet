@@ -227,7 +227,8 @@ class TransactionController extends Controller
             'category_id.required_unless' => 'The category field is required.',
             'src_account_id.required' => 'The source account field is required.',
         ]);
-
+        
+        $validated['user_id'] = auth()->id();
         $transaction->update($validated);
 
         return response()->json(['success' => true, 'message' => 'Transaction updated successfully!']);
