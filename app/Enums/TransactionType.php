@@ -1,11 +1,11 @@
 <?php
 namespace App\Enums;
 
-enum TransactionType: int
+enum TransactionType
 {
-    case Expense = 1;
-    case Income = 2;
-    case Transfer = 3;
+    case Expense;
+    case Income;
+    case Transfer;
 
     public function label(): string
     {

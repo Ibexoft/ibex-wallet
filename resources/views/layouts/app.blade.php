@@ -44,8 +44,8 @@
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         @if (Auth::user())
             <!-- Navbar -->
-        @include('layouts.navigation')
-        <!-- End Navbar -->
+            @include('layouts.navigation')
+            <!-- End Navbar -->
         @endif
         <div class="container">
             <div class="row">

@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Transaction extends Model
 {
     protected $fillable = ['user_id', 'type', 'amount', 'transaction_date', 'category_id', 'src_account_id', 'dest_account_id', 'details', 'spent_on', 'wallet_id'];
+
+    protected $casts = [
+        'type' => TransactionType::class,
+    ];
 
     public function user()
     {
