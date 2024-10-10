@@ -9,6 +9,10 @@
     cursor: pointer;
 }
 
+.transaction-detail{
+    max-width: 250px;
+}
+
 /* Transaction */
 
 
@@ -16,6 +20,10 @@
 
 .account-item{
     cursor: pointer;
+}
+
+.cursor-pointer{
+    cursor: pointer
 }
 
 /* Accounts */

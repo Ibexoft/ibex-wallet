@@ -34,7 +34,7 @@
                                         <small class="text-muted">{{ $transaction->details ? $transaction->details : '' }}</small>
                                     </a>
                                 </td>
-                                <td>{{ $transaction->type == 1 ? 'Expense' : ($transaction->type == 2 ? 'Income' : 'Transfer') }}</td>
+                                <td>{{ $transaction->type ==  TransactionType::Expense ? 'Expense' : ($transaction->type == TransactionType::Income ? 'Income' : 'Transfer') }}</td>
                                 <td>{{ $transaction->src_account->name }}</td>
                                 <td>{{ $transaction->amount }}</td>
                             </tr>

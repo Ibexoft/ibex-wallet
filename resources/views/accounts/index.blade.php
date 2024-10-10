@@ -246,72 +246,73 @@
             <div class="card-body pt-4 p-3">
                 <ul class="list-group">
                     @foreach ($accounts as $account)
-                        <li class="list-group-item border-0 px-4 mb-3 bg-gray-100 border-radius-lg account-item"
-                            onclick='openEditAccountModal({{ json_encode($account) }})'>
+                        <li class="list-group-item border-0 px-4 mb-3 bg-gray-100 border-radius-lg account-item">
                             <!-- Dropdown Trigger -->
                             <div class="w-100 text-end">
                                 <div class="dropdown d-inline ">
-                                    <i class="icon fa fa-ellipsis-h text-sm text-primary"
+                                    <i class="icon fa fa-ellipsis-h text-sm text-primary cursor-pointer"
                                         id="dropdownMenuButton{{ $account->id }}" data-bs-toggle="dropdown"
-                                        aria-expanded="false" style="cursor: pointer;"
-                                        onclick="event.stopPropagation();"></i>
+                                        aria-expanded="false"></i>
 
                                     <!-- Dropdown Menu -->
                                     <ul class="dropdown-menu dropdown-menu-end"
                                         aria-labelledby="dropdownMenuButton{{ $account->id }}">
                                         <li>
                                             <a class="dropdown-item text-danger" href="javascript:;"
-                                                onclick="event.stopPropagation(); deleteAccount({{ $account->id }});">Delete
+                                                onclick="deleteAccount({{ $account->id }});">Delete
                                             </a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
-                            {{-- For Mobile Screen --}}
-                            <div class="row pb-2 d-flex d-md-none align-items-center">
-                                <div class="col-2">
-                                    <div
-                                        class="icon icon-sm icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                                        <i class="{{ config('custom.account_types')[$account->type]['icon'] }} text-lg opacity-10 mt-1"
-                                            aria-hidden="true"></i>
+                            <div onclick="fetchAccountData('{{ route('accounts.show', [$account->id]) }}')">
+                                {{-- For Mobile Screen --}}
+                                <div class="row pb-2 d-flex d-md-none align-items-center">
+                                    <div class="col-2">
+                                        <div
+                                            class="icon icon-sm icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                                            <i class="{{ config('custom.account_types')[$account->type]['icon'] }} text-lg opacity-10 mt-1"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="d-flex flex-column ps-2 ps-md-0">
+                                            <h6 class="m-0 text-sm">{{ $account->name }}</h6>
+                                            <p class="m-0 text-xs">
+                                                {{ config('custom.account_types')[$account->type]['name'] }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <div class="ms-auto text-end ">
+                                            <h6 class="text-dark font-weight-bold m-0">
+                                                {{ $account->currency }} {{ number_format($account->balance, 2) }}
+                                            </h6>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-10">
-                                    <div class="d-flex flex-column ps-2 ps-md-0">
-                                        <h6 class="m-0 text-sm">{{ $account->name }}</h6>
-                                        <p class="m-0 text-xs">
-                                            {{ config('custom.account_types')[$account->type]['name'] }}</p>
-                                    </div>
-                                </div>
-                                <div class="col-12 mt-2">
-                                    <div class="ms-auto text-end ">
-                                        <h6 class="text-dark font-weight-bold m-0">
-                                            {{ $account->currency }} {{ number_format($account->balance, 2) }}
-                                        </h6>
-                                    </div>
-                                </div>
-                            </div>
 
-                            {{-- For Tablets and Desktop --}}
-                            <div class="row pb-2 d-none d-md-flex">
-                                <div class="col-1">
-                                    <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                                        <i class="{{ config('custom.account_types')[$account->type]['icon'] }} text-lg opacity-10 top-0 mt-3"
-                                            aria-hidden="true"></i>
-                                    </div>
+                                {{-- For Tablets and Desktop --}}
+                                <div class="row pb-2 d-none d-md-flex">
+                                    <div class="col-1">
+                                        <div
+                                            class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                                            <i class="{{ config('custom.account_types')[$account->type]['icon'] }} text-lg opacity-10 top-0 mt-3"
+                                                aria-hidden="true"></i>
+                                        </div>
 
-                                </div>
-                                <div class="col-11 d-flex align-items-center">
-                                    <div class="d-flex flex-column">
-                                        <h6 class="m-0">{{ $account->name }}</h6>
-                                        <p class="m-0 text-xs">
-                                            {{ config('custom.account_types')[$account->type]['name'] }}
-                                        </p>
                                     </div>
-                                    <div class="ms-auto text-end ">
-                                        <h5 class="text-dark font-weight-bold m-0">
-                                            {{ $account->currency }} {{ number_format($account->balance, 2) }}
-                                        </h5>
+                                    <div class="col-11 d-flex align-items-center">
+                                        <div class="d-flex flex-column">
+                                            <h6 class="m-0">{{ $account->name }}</h6>
+                                            <p class="m-0 text-xs">
+                                                {{ config('custom.account_types')[$account->type]['name'] }}
+                                            </p>
+                                        </div>
+                                        <div class="ms-auto text-end ">
+                                            <h5 class="text-dark font-weight-bold m-0">
+                                                {{ $account->currency }} {{ number_format($account->balance, 2) }}
+                                            </h5>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

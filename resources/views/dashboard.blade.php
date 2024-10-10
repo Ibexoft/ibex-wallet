@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    @php
+    use App\Enums\TransactionType as TransactionType;
+    @endphp
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-lg-8">
@@ -120,30 +123,36 @@
                 </div>
                 <div class="card-body pt-4 p-3">
                     @foreach ($groupedTransactions as $date => $transactionsOnDate)
-                        <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">{{ $date }}
-                        </h6>
+                        <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">{{ $date }}</h6>
                         <ul class="list-group">
                             @foreach ($transactionsOnDate as $transaction)
                                 <li
                                     class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                                     <div class="d-flex align-items-center">
                                         <button
-                                            class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == 1 ? 'danger' : 'success' }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
-                                            <i class="fas fa-arrow-{{ $transaction->type == 1 ? 'down' : 'up' }}"></i>
+                                            class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == TransactionType::Transfer ? 'info' : ($transaction->type == TransactionType::Expense ? 'danger' : 'success') }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
+                                            <i
+                                                class="fas fa-{{ $transaction->type == TransactionType::Transfer ? 'exchange-alt' : ($transaction->type == TransactionType::Expense ? 'arrow-down' : 'arrow-up') }}"></i>
                                         </button>
                                         <div class="d-flex flex-column">
                                             <h6 class="mb-1 text-dark text-sm">
-                                                {{ $transaction->category ? $transaction->category->name : 'N/A' }}
+                                                {{ $transaction->type == TransactionType::Transfer ? 'Transfer' : ($transaction->category ? $transaction->category->name : 'N/A') }}
                                             </h6>
                                             <span class="text-xs">{{ $transaction->details }}</span>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center ">
-                                        {{ $transaction->src_account->name }}
+                                        @if ($transaction->type == TransactionType::Transfer)
+                                            {{ $transaction->src_account->name }}
+                                            <i class="fas fa-long-arrow-alt-right mx-2"></i>
+                                            {{ $transaction->dest_account->name }}
+                                        @else
+                                            {{ $transaction->src_account->name }}
+                                        @endif
                                     </div>
                                     <div
-                                        class="d-flex align-items-center text-{{ $transaction->type == 1 ? 'danger' : 'success' }} text-gradient text-sm font-weight-bold">
-                                        {{ $transaction->type == 1 ? '- ' : '+ ' }}${{ number_format($transaction->amount, 2) }}
+                                        class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == TransactionType::Expense ? 'danger' : ($transaction->type == TransactionType::Transfer ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
+                                        {{ $transaction->type == TransactionType::Transfer ? '' : ($transaction->type == TransactionType::Expense ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
                                     </div>
                                 </li>
                             @endforeach
