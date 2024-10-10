@@ -36,9 +36,8 @@
                         <div class="col-sm-12 col-lg-6 form-group">
                             <label for="editCurrency">Currency</label>
                             <select name="currency" class="form-select form-control" id="editCurrency" required>
-                                @foreach (config('custom.currencies') as $value => $text)
-                                    <option value="{{ $text }}">{{ $text }}
-                                    </option>
+                                @foreach (config('custom.currencies') as $code => $currency)
+                                    <option value="{{ $code }}">{{ $currency }} - {{ $code }}</option>
                                 @endforeach
                             </select>
                         </div>
