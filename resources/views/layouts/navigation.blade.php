@@ -4,12 +4,12 @@
         <div class="col-12">
             <!-- Navbar -->
             <nav
-                class="navbar navbar-expand-lg blur blur-rounded top-0 z-index-3 shadow my-3 py-2 start-0 end-0 mx-4">
+                class="navbar navbar-expand-lg blur blur-rounded top-0 z-index-3 shadow my-3 py-2 start-0 end-0">
                 <div class="container-fluid pe-0">
-                    <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="../pages/dashboard.html">     
-                    {{{ config('app.name', 'Ibex Wallet') }}}
+                    <a class="navbar-brand" href="../pages/dashboard.html" id="header-logo">
+                        <img src="{{ asset('assets/img/ibex_wallet_logo.png') }}" alt="Ibex Wallet Logo">
                     </a>
-                    <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
+                    <button class="navbar-toggler shadow-none border-0 outline-none ms-2" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
                         aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon mt-2">
