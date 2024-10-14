@@ -116,8 +116,8 @@ class TransactionController extends Controller
         if ($transaction->user_id !== auth()->id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized access.'
-            ], 403);
+                'message' => '404 Not Found.'
+            ], 404);
         }
 
 

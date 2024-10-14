@@ -77,8 +77,8 @@ class AccountController extends Controller
         if ($account->user_id !== auth()->id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized access.'
-            ], 403);
+                'message' => '404 Not Found.'
+            ], 404);
         }
         return response()->json([
             'success' => true,
