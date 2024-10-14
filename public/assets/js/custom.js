@@ -215,7 +215,6 @@ function openModalForEdit(element) {
     // Get the transaction ID from the data-id attribute
     const transactionId = element.parentElement.dataset.id;
     var showUrl = window.transactionRoutes.show.replace('__TRANSACTION_ID__', transactionId);
-    console.log(showUrl);
 
 
     // Update the modal title and submit button text
