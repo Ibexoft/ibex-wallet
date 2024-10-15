@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TransactionType;
 use App\Models\User;
 use App\Models\Account;
 use App\Models\Category;
@@ -10,6 +11,8 @@ use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class TransactionController extends Controller
 {
@@ -109,10 +112,21 @@ class TransactionController extends Controller
 
     public function show(Transaction $transaction)
     {
-        $pageTitle = 'Transaction Details';
+        // Check if the authenticated user owns the transaction
+        if ($transaction->user_id !== auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => '404 Not Found.'
+            ], 404);
+        }
 
-        return view('transactions.show', compact('transaction', 'pageTitle'));
+
+        return response()->json([
+            'success' => true,
+            'data' => $transaction
+        ]);
     }
+
 
     public function edit(Transaction $transaction)
     {
@@ -135,19 +149,67 @@ class TransactionController extends Controller
                 'between:0,9999999.99'
             ],
             'transaction_date' => 'required|date',
-            'type' => 'required',
+            'type' => ['required', Rule::in(array_column(TransactionType::cases(), 'name'))],
             'src_account_id' => [
                 'required',
                 'exists:accounts,id'
             ],
             'dest_account_id' => [
                 'nullable',
-                'required_if:type,3',
+                'required_if:type,Transfer',
                 'exists:accounts,id'
             ],
             'category_id' => [
                 'nullable',
-                'required_unless:type,3',
+                'required_unless:type,Transfer',
+                'exists:categories,id'
+            ],
+            'wallet_id' => [
+                'nullable',
+                'exists:wallets,id'
+            ],
+            'details' => [
+                'nullable',
+                'string',
+                'min:3',
+                'max:200'
+            ],
+        ], [
+            'dest_account_id.required_if' => 'The destination account field is required.',
+            'category_id.required_unless' => 'The category field is required.',
+            'src_account_id.required' => 'The source account field is required.',
+        ]);
+
+
+        $validated['user_id'] = auth()->id();
+        Transaction::create($validated);
+
+        return response()->json(['success' => true, 'message' => 'Transaction added successfully!']);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        $validated = $request->validate([
+            'amount' => [
+                'required',
+                'numeric',
+                'between:0,9999999.99'
+            ],
+            'transaction_date' => 'required|date',
+            'type' => ['required', Rule::in(array_column(TransactionType::cases(), 'name'))],
+            'src_account_id' => [
+                'required',
+                'exists:accounts,id'
+            ],
+            'dest_account_id' => [
+                'nullable',
+                'required_if:type,Transfer',
+                'exists:accounts,id'
+            ],
+            'category_id' => [
+                'nullable',
+                'required_unless:type,Transfer',
                 'exists:categories,id'
             ],
             'wallet_id' => [
@@ -166,54 +228,7 @@ class TransactionController extends Controller
             'src_account_id.required' => 'The source account field is required.',
         ]);
         
-
         $validated['user_id'] = auth()->id();
-        Transaction::create($validated);
-
-        return response()->json(['success' => true, 'message' => 'Transaction added successfully!']);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $transaction = Transaction::findOrFail($id);
-        $validated = $request->validate([
-            'amount' => [
-                'required',
-                'numeric',
-                'between:0,9999999.99'
-            ],
-            'transaction_date' => 'required|date',
-            'type' => 'required',
-            'src_account_id' => [
-                'required',
-                'exists:accounts,id'
-            ],
-            'dest_account_id' => [
-                'nullable',
-                'required_if:type,3',
-                'exists:accounts,id'
-            ],
-            'category_id' => [
-                'nullable',
-                'required_unless:type,3',
-                'exists:categories,id'
-            ],
-            'wallet_id' => [
-                'nullable',
-                'exists:wallets,id'
-            ],
-            'details' => [
-                'nullable',
-                'string',
-                'min:3',
-                'max:200'
-            ],
-        ], [
-            'dest_account_id.required_if' => 'The destination account field is required.',
-            'category_id.required_unless' => 'The category field is required.',
-            'src_account_id.required' => 'The source account field is required.',
-        ]);
-
         $transaction->update($validated);
 
         return response()->json(['success' => true, 'message' => 'Transaction updated successfully!']);

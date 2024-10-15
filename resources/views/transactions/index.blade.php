@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('sidebar')
+    @php
+        use App\Enums\TransactionType as TransactionType;
+    @endphp
     <div class="col-lg-3 mb-4 mb-lg-0">
         <div class="card">
             <form id="transaction-filter-form" action="{{ route('transactions.filter') }}" method="POST">
@@ -199,52 +202,27 @@
                         <ul class="list-group">
                             @foreach ($transactionsOnDate as $transaction)
                                 <li class="list-group-item transaction-item border-0 d-flex px-2 border-radius-lg"
-                                    data-id="{{ $transaction->id }}" data-type="{{ $transaction->type }}"
-                                    data-src-account-id="{{ $transaction->src_account_id }}"
-                                    data-dest-account-id="{{ $transaction->dest_account_id }}"
-                                    data-amount="{{ $transaction->amount }}"
-                                    data-category-id="{{ $transaction->category_id }}"
-                                    data-wallet-id="{{ $transaction->wallet_id }}"
-                                    data-details="{{ $transaction->details }}"
-                                    data-transaction-date="{{ $transaction->transaction_date }}"
-                                    onclick="openModalForEdit(this)">
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <button
-                                            class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == 3 ? 'info' : ($transaction->type == 1 ? 'danger' : 'success') }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
-                                            <i
-                                                class="fas fa-{{ $transaction->type == 3 ? 'exchange-alt' : ($transaction->type == 1 ? 'arrow-down' : 'arrow-up') }}"></i>
-                                        </button>
-                                    </div>
-                                    <div class="row w-100 d-flex align-items-center">
-                                        <div class="col-6 h-100">
-                                            <div class="d-flex align-items-center">
-
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="mb-1 text-dark text-sm">
-                                                        {{ $transaction->type == 3 ? 'Transfer' : ($transaction->category ? $transaction->category->name : 'N/A') }}
-                                                    </h6>
-                                                    <span class="text-xs d-none d-sm-block text-truncate"
-                                                        style="max-width: 250px;">{{ $transaction->details }}</span>
-
-                                                    <span class="text-xs d-block d-sm-none">
-                                                        @if ($transaction->type == 3)
-                                                            {{ $transaction->src_account->name }}
-                                                            <i class="fas fa-long-arrow-alt-right mx-2"></i>
-                                                            {{ $transaction->dest_account->name }}
-                                                        @else
-                                                            {{ $transaction->src_account->name }}
-                                                        @endif
-                                                    </span>
-
-                                                </div>
-                                            </div>
+                                    data-id="{{ $transaction->id }}">
+                                    <div class="d-flex w-100" onclick="openModalForEdit(this)">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <button
+                                                class="btn btn-icon-only btn-rounded btn-outline-{{ $transaction->type == TransactionType::Transfer ? 'info' : ($transaction->type == TransactionType::Expense ? 'danger' : 'success') }} mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
+                                                <i
+                                                    class="fas fa-{{ $transaction->type == TransactionType::Transfer ? 'exchange-alt' : ($transaction->type == TransactionType::Expense ? 'arrow-down' : 'arrow-up') }}"></i>
+                                            </button>
                                         </div>
-                                        <div class="col-6 h-100">
-                                            <div class="row h-100 d-flex align-items-center">
-                                                <div class="d-none d-md-block col-0 col-md-7">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <span class="text-sm">
-                                                            @if ($transaction->type == 3)
+                                        <div class="row w-100 d-flex align-items-center">
+                                            <div class="col-6 h-100">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="d-flex flex-column">
+                                                        <h6 class="mb-1 text-dark text-sm">
+                                                            {{ $transaction->type == TransactionType::Transfer ? 'Transfer' : ($transaction->category ? $transaction->category->name : 'N/A') }}
+                                                        </h6>
+                                                        <span
+                                                            class="text-xs d-none d-sm-block text-truncate transaction-detail">{{ $transaction->details }}</span>
+
+                                                        <span class="text-xs d-block d-sm-none">
+                                                            @if ($transaction->type == TransactionType::Transfer)
                                                                 {{ $transaction->src_account->name }}
                                                                 <i class="fas fa-long-arrow-alt-right mx-2"></i>
                                                                 {{ $transaction->dest_account->name }}
@@ -254,15 +232,13 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-md-5">
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == 1 ? 'danger' : ($transaction->type == 3 ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
-                                                        {{ $transaction->type == 3 ? '' : ($transaction->type == 1 ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
-                                                    </div>
-                                                    <div class="d-none d-sm-block d-md-none">
+                                            </div>
+                                            <div class="col-6 h-100">
+                                                <div class="row h-100 d-flex align-items-center">
+                                                    <div class="d-none d-md-block col-0 col-md-7">
                                                         <div class="d-flex align-items-center justify-content-center">
-                                                            <span class="text-xs">
-                                                                @if ($transaction->type == 3)
+                                                            <span class="text-sm">
+                                                                @if ($transaction->type == TransactionType::Transfer)
                                                                     {{ $transaction->src_account->name }}
                                                                     <i class="fas fa-long-arrow-alt-right mx-2"></i>
                                                                     {{ $transaction->dest_account->name }}
@@ -272,19 +248,37 @@
                                                             </span>
                                                         </div>
                                                     </div>
+                                                    <div class="col-12 col-md-5">
+                                                        <div
+                                                            class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == TransactionType::Expense ? 'danger' : ($transaction->type == TransactionType::Transfer ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
+                                                            {{ $transaction->type == TransactionType::Transfer ? '' : ($transaction->type == TransactionType::Expense ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
+                                                        </div>
+                                                        <div class="d-none d-sm-block d-md-none">
+                                                            <div class="d-flex align-items-center justify-content-center">
+                                                                <span class="text-xs">
+                                                                    @if ($transaction->type == TransactionType::Transfer)
+                                                                        {{ $transaction->src_account->name }}
+                                                                        <i class="fas fa-long-arrow-alt-right mx-2"></i>
+                                                                        {{ $transaction->dest_account->name }}
+                                                                    @else
+                                                                        {{ $transaction->src_account->name }}
+                                                                    @endif
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <a class="icon text-primary pb-4" href="#" data-bs-toggle="dropdown"
-                                            onclick="event.stopPropagation();">
+                                        <a class="icon text-primary pb-4" href="#" data-bs-toggle="dropdown">
                                             <i class="fa fa-ellipsis-h py-1"></i>
                                         </a>
                                         <ul class="dropdown-menu shadow-md">
                                             <li>
-                                                <a class="dropdown-item py-1" href="#" style="font-size: 12px;"
-                                                    onclick="event.stopPropagation(); deleteTransaction(`{{ route('transactions.destroy', ['transaction' => $transaction->id]) }}`);">
+                                                <a class="dropdown-item py-1" href="#"
+                                                    onclick="deleteTransaction(`{{ route('transactions.destroy', ['transaction' => $transaction->id]) }}`);">
                                                     Delete
                                                 </a>
                                             </li>
@@ -294,6 +288,7 @@
                             @endforeach
                         </ul>
                     @endforeach
+
                     <div class="d-flex justify-content-center mt-4 flex-grow-1 align-items-end">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination pagination-lg justify-content-center align-items-center">
@@ -360,18 +355,21 @@
                         <div class="form-group row">
                             <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
                                 <label class="btn btn-outline-primary active" id="expense-btn">
-                                    <input type="radio" class="d-none" name="type" value="1" checked
-                                        onclick="changeTransactionType('expense')">
+                                    <input type="radio" class="d-none" name="type"
+                                        value="{{ TransactionType::Expense->label() }}" checked
+                                        onclick="changeTransactionType('{{ TransactionType::Expense->label() }}')">
                                     Expense
                                 </label>
                                 <label class="btn btn-outline-primary" id="income-btn">
-                                    <input type="radio" class="d-none" name="type" value="2"
-                                        onclick="changeTransactionType('income')">
+                                    <input type="radio" class="d-none" name="type"
+                                        value="{{ TransactionType::Income->label() }}"
+                                        onclick="changeTransactionType('{{ TransactionType::Income->label() }}')">
                                     Income
                                 </label>
                                 <label class="btn btn-outline-primary" id="transfer-btn">
-                                    <input type="radio" class="d-none" name="type" value="3"
-                                        onclick="changeTransactionType('transfer')">
+                                    <input type="radio" class="d-none" name="type"
+                                        value="{{ TransactionType::Transfer->label() }}"
+                                        onclick="changeTransactionType('{{ TransactionType::Transfer->label() }}')">
                                     Transfer
                                 </label>
                             </div>
@@ -456,7 +454,8 @@
             window.transactionRoutes = {
                 store: "{{ route('transactions.store') }}",
                 update: "{{ route('transactions.update', ['transaction' => '__TRANSACTION_ID__']) }}",
-                destroy: "{{ route('transactions.destroy', ['transaction' => '__TRANSACTION_ID__']) }}"
+                destroy: "{{ route('transactions.destroy', ['transaction' => '__TRANSACTION_ID__']) }}",
+                show: "{{ route('transactions.show', ['transaction' => '__TRANSACTION_ID__']) }}"
             };
         });
     </script>
