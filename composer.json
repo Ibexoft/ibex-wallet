@@ -1,8 +1,11 @@
 {
-    "name": "laravel/laravel",
+    "name": "ibexoft/ibex-wallet",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Ibex-wallet - Manage your personal expenses",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
