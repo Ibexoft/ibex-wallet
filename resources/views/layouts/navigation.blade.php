@@ -6,8 +6,8 @@
             <nav
                 class="navbar navbar-expand-lg blur blur-rounded top-0 z-index-3 shadow my-3 py-2 start-0 end-0">
                 <div class="container-fluid pe-0">
-                    <a class="navbar-brand" href="../pages/dashboard.html" id="header-logo">
-                        <img src="{{ asset('assets/img/ibex_wallet_logo.png') }}" alt="Ibex Wallet Logo">
+                    <a class="navbar-brand d-inline w-lg-15 w-sm-30 w-50" href="../pages/dashboard.html" id="header-logo">
+                        <img src="{{ asset('assets/img/ibex_wallet_logo.png') }}" alt="Ibex Wallet Logo" class="w-100">
                     </a>
                     <button class="navbar-toggler shadow-none border-0 outline-none ms-2" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"

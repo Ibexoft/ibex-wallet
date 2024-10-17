@@ -1,12 +1,4 @@
-#header-logo img {
-    height: 1rem;
-}
 
-@media (min-width: 425px) {
-    #header-logo img {
-        height: 1.15rem;
-    }
-}
 
 /* Transaction */
 
