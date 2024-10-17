@@ -1,7 +1,7 @@
 @php
 use App\Enums\TransactionType as TransactionType;
 @endphp
-<form id="transactionForm" enctype="multipart/form-data">
+<form class="transactionForm" enctype="multipart/form-data">
     @csrf
     <input type="hidden" id="transaction_id" name="transaction_id">
     <div class="form-group row">

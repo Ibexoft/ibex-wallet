@@ -77,56 +77,60 @@ function transactionInitialConfiguration() {
 }
 
 function submitTransactionForm(url, formData, method) {
-    $.ajax({
-        url: url,
-        method: method,
-        data: formData,
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.success) {
-                // Hide the modal
-                var transactionModal = document.getElementById('transactionModal');
-                var modalInstance = bootstrap.Modal.getInstance(transactionModal);
-                modalInstance?.hide();
+    // If the method is PUT, add a hidden _method field to FormData
+    if (method === 'PUT') {
+        formData.append('_method', 'PUT');
+    }
 
-                setToastMessage("Transaction has been successfully processed.");
-                // Reload the page
-                window.location.reload();
-            } else {
-                console.error(response.message);
-                swalWithBootstrapButtons.fire({
-                    title: "Error",
-                    text: "An error occurred: " + response.message,
-                    icon: "error",
-                });
-            }
+    fetch(url, {
+        method: 'POST', // Always use POST, even for PUT or DELETE
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
         },
-        error: function (xhr, textStatus, errorThrown) {
-            let errorMessage = "An error occurred. Please try again.";
-            if (xhr.responseJSON && xhr.responseJSON.errors) {
-                let errorList = "";
-                for (let field in xhr.responseJSON.errors) {
-                    if (xhr.responseJSON.errors.hasOwnProperty(field)) {
-                        xhr.responseJSON.errors[field].forEach((error) => {
-                            errorList += `<p class="mb-0">${error}</p>`;
-                        });
-                    }
-                }
-                errorList += "";
-                errorMessage = errorList;
-            } else if (xhr.responseText) {
-                errorMessage = xhr.responseText;
-            }
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(response => {
+        if (response.success) {
+            // Hide the modal
+            var transactionModal = document.getElementById('transactionModal');
+            var modalInstance = bootstrap.Modal.getInstance(transactionModal);
+            modalInstance?.hide();
+
+            setToastMessage("Transaction has been successfully processed.");
+            // Reload the page
+            window.location.reload();
+        } else {
+            console.error(response.message);
             swalWithBootstrapButtons.fire({
                 title: "Error",
-                html: errorMessage,
+                text: "An error occurred: " + response.message,
                 icon: "error",
             });
-        },
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        let errorMessage = "An error occurred. Please try again.";
+        if (error.response && error.response.errors) {
+            let errorList = "";
+            for (let field in error.response.errors) {
+                if (error.response.errors.hasOwnProperty(field)) {
+                    error.response.errors[field].forEach((error) => {
+                        errorList += `<p class="mb-0">${error}</p>`;
+                    });
+                }
+            }
+            errorMessage = errorList;
+        }
+        swalWithBootstrapButtons.fire({
+            title: "Error",
+            html: errorMessage,
+            icon: "error",
+        });
     });
 }
+
 
 function deleteTransaction(url) {
     swalForDeleteConfirmation
@@ -204,11 +208,14 @@ function deleteTransaction(url) {
 }
 
 function openModalForAdd() {
-    $("#transactionForm")[0].reset();
-    $("#transactionModalTitle").text("New Transaction");
-    $("#transactionModalSubmitBtn").text("Add");
-    $("#transaction_id").val("");
-    $("#transactionModal").modal("show");
+    const form = document.querySelector('.transactionForm');
+    form?.reset();
+    
+    document.getElementById("transactionModalTitle").textContent = "New Transaction";
+    document.getElementById("transactionModalSubmitBtn").textContent = "Add";
+    form.querySelector("#transaction_id").value = "";
+
+    new bootstrap.Modal(document.getElementById("transactionModal")).show();
 }
 
 function openModalForEdit(element) {
@@ -216,7 +223,7 @@ function openModalForEdit(element) {
     const transactionId = element.parentElement.dataset.id;
     var showUrl = window.transactionRoutes.show.replace('__TRANSACTION_ID__', transactionId);
     var modalDiv = document.getElementById("modalDiv");
-    var form=modalDiv.querySelector("#transactionForm");
+    var form=modalDiv.querySelector(".transactionForm");
   
     // Update the modal title and submit button text
     modalDiv.querySelector("#transactionModalTitle").textContent = "Edit Transaction";
@@ -306,20 +313,26 @@ function changeTransactionType(type, form) {
 }
 
 
-$("#transactionForm").on("submit", function (e) {
-    e.preventDefault();
-    var transactionId = $("#transaction_id").val();
-    var isEdit = transactionId !== "";
-    var url = isEdit
-        ? window.transactionRoutes.update.replace(
-            "__TRANSACTION_ID__",
-            transactionId
-        )
-        : window.transactionRoutes.store;
-    var formData = $(this).serialize();
-    var method = isEdit ? "PUT" : "POST";
-    submitTransactionForm(url, formData, method);
+document.querySelectorAll('.transactionForm').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        
+        var transactionId = form.querySelector("#transaction_id").value;
+        var isEdit = transactionId !== "";
+        
+        // Determine the URL based on whether it's an edit or a new transaction
+        var url = isEdit
+            ? window.transactionRoutes.update.replace("__TRANSACTION_ID__", transactionId)
+            : window.transactionRoutes.store;
+        
+        var formData = new FormData(form);
+        
+        var method = isEdit ? "PUT" : "POST";
+        
+        submitTransactionForm(url, formData, method);
+    });
 });
+
 
 /* Transaction JavaScript */
 
