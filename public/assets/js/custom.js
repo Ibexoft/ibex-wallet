@@ -89,7 +89,7 @@ function submitTransactionForm(url, formData, method) {
                 // Hide the modal
                 var transactionModal = document.getElementById('transactionModal');
                 var modalInstance = bootstrap.Modal.getInstance(transactionModal);
-                modalInstance.hide();
+                modalInstance?.hide();
 
                 setToastMessage("Transaction has been successfully processed.");
                 // Reload the page
@@ -262,6 +262,11 @@ function openModalForEdit(element) {
 function changeTransactionType(type) {
     var isTransfer = type === "Transfer";
     var isExpenseOrIncome = type === "Expense" || type === "Income";
+    console.log(
+        "Type: " + type,
+        "isTransfer: " + isTransfer,
+        "isExpenseOrIncome: " + isExpenseOrIncome
+    )
 
     // Toggle 'active' class on buttons
     document.getElementById("expense-btn").classList.toggle("active", type === "Expense");
