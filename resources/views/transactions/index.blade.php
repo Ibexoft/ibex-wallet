@@ -181,7 +181,7 @@
 @endsection
 @section('script')
     <script>
-        $(document).ready(function() {
+        document.addEventListener("DOMContentLoaded", function () {
             transactionInitialConfiguration();
             window.transactionRoutes = {
                 store: "{{ route('transactions.store') }}",

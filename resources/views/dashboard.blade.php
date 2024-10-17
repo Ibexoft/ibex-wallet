@@ -26,7 +26,7 @@
 
 @section('script')
     <script>
-        $(document).ready(function() {
+        document.addEventListener("DOMContentLoaded", function () {
             transactionInitialConfiguration();
             window.transactionRoutes = {
                 store: "{{ route('transactions.store') }}",
@@ -35,5 +35,6 @@
                 show: "{{ route('transactions.show', ['transaction' => '__TRANSACTION_ID__']) }}"
             };
         });
+
     </script>
 @endsection

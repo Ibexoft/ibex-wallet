@@ -25,7 +25,7 @@
     <div class="card-body pt-4 px-3 d-flex flex-column">
         @if ($transactions->isEmpty())
             <div class="d-flex flex-column align-items-center justify-content-center text-center py-5">
-                <i class="fas fa-wallet mb-3" style="font-size: 4rem;"></i>
+                <i class="fas fa-wallet mb-3 fs-1"></i>
                 <h6 class="mb-2">No Transactions Found</h6>
                 <p class="text-muted mb-0">You have no transactions to display at the moment. Start adding
                     transactions to see them here.</p>
