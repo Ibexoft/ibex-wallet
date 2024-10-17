@@ -174,7 +174,10 @@
     <div class="col">
         @include('transactions.list', ['transactions' => $transactions])
     </div>
-    @include('transactions.add-edit-modal')
+
+     <div id="modalDiv">
+        @include('transactions.add-edit-modal')
+    </div>
 @endsection
 @section('script')
     <script>

@@ -7,7 +7,7 @@
             <div class="col-md-8">
                 @include('transactions.list', ['transactions' => $transactions])
             </div>
-            {{-- @include('transactions.add-edit-modal') --}}
+            
 
             <div class="col-md-4">
                 <div class="card">
@@ -19,11 +19,14 @@
         </div>
 
     </div>
+    <div id="modalDiv">
+        @include('transactions.add-edit-modal')
+    </div>
 @endsection
 
 @section('script')
     <script>
-       $(document).ready(function() {
+        $(document).ready(function() {
             transactionInitialConfiguration();
             window.transactionRoutes = {
                 store: "{{ route('transactions.store') }}",

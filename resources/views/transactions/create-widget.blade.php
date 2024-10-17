@@ -4,25 +4,24 @@ use App\Enums\TransactionType as TransactionType;
 <form id="transactionForm" enctype="multipart/form-data">
     @csrf
     <input type="hidden" id="transaction_id" name="transaction_id">
-    <!-- Hidden field for transaction ID -->
     <div class="form-group row">
         <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
             <label class="btn btn-outline-primary active" id="expense-btn">
                 <input type="radio" class="d-none" name="type"
                     value="{{ TransactionType::Expense->label() }}" checked
-                    onclick="changeTransactionType('{{ TransactionType::Expense->label() }}')">
+                    onclick="changeTransactionType('{{ TransactionType::Expense->label() }}',this.parentElement.parentElement.parentElement.parentElement)">
                 Expense
             </label>
             <label class="btn btn-outline-primary" id="income-btn">
                 <input type="radio" class="d-none" name="type"
                     value="{{ TransactionType::Income->label() }}"
-                    onclick="changeTransactionType('{{ TransactionType::Income->label() }}')">
+                    onclick="changeTransactionType('{{ TransactionType::Income->label() }}',this.parentElement.parentElement.parentElement.parentElement)">
                 Income
             </label>
             <label class="btn btn-outline-primary" id="transfer-btn">
                 <input type="radio" class="d-none" name="type"
                     value="{{ TransactionType::Transfer->label() }}"
-                    onclick="changeTransactionType('{{ TransactionType::Transfer->label() }}')">
+                    onclick="changeTransactionType('{{ TransactionType::Transfer->label() }}',this.parentElement.parentElement.parentElement.parentElement)">
                 Transfer
             </label>
         </div>
