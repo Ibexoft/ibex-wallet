@@ -22,23 +22,23 @@
                         <ul class="navbar-nav mx-auto ms-xl-auto ">
                             @if (Auth::user())
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center me-2 active" aria-current="page"
+                                <a class="nav-link d-flex align-items-center me-2 {{Route::is('dashboard') ? 'text-primary' : ''}}" aria-current="page"
                                     href="{{route('dashboard')}}">
                                     Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link me-2" href="{{route('transactions.index')}}">
+                                <a class="nav-link me-2 {{Route::is('transactions.index') ? 'text-primary' : ''}}" href="{{route('transactions.index')}}">
                                     Transactions
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link me-2" href="{{route('accounts.index')}}">
+                                <a class="nav-link me-2 {{Route::is('accounts.index') ? 'text-primary' : ''}}" href="{{route('accounts.index')}}">
                                    Accounts
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link me-2" href="{{route('categories.index')}}">
+                                <a class="nav-link me-2 {{Route::is('categories.index') ? 'text-primary' : ''}}" href="{{route('categories.index')}}">
                                     Categories
                                 </a>
                             </li>
