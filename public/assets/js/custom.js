@@ -77,56 +77,60 @@ function transactionInitialConfiguration() {
 }
 
 function submitTransactionForm(url, formData, method) {
-    $.ajax({
-        url: url,
-        method: method,
-        data: formData,
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.success) {
-                // Hide the modal
-                var transactionModal = document.getElementById('transactionModal');
-                var modalInstance = bootstrap.Modal.getInstance(transactionModal);
-                modalInstance.hide();
+    // If the method is PUT, add a hidden _method field to FormData
+    if (method === 'PUT') {
+        formData.append('_method', 'PUT');
+    }
 
-                setToastMessage("Transaction has been successfully processed.");
-                // Reload the page
-                window.location.reload();
-            } else {
-                console.error(response.message);
-                swalWithBootstrapButtons.fire({
-                    title: "Error",
-                    text: "An error occurred: " + response.message,
-                    icon: "error",
-                });
-            }
+    fetch(url, {
+        method: 'POST', // Always use POST, even for PUT or DELETE
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
         },
-        error: function (xhr, textStatus, errorThrown) {
-            let errorMessage = "An error occurred. Please try again.";
-            if (xhr.responseJSON && xhr.responseJSON.errors) {
-                let errorList = "";
-                for (let field in xhr.responseJSON.errors) {
-                    if (xhr.responseJSON.errors.hasOwnProperty(field)) {
-                        xhr.responseJSON.errors[field].forEach((error) => {
-                            errorList += `<p class="mb-0">${error}</p>`;
-                        });
-                    }
-                }
-                errorList += "";
-                errorMessage = errorList;
-            } else if (xhr.responseText) {
-                errorMessage = xhr.responseText;
-            }
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(response => {
+        if (response.success) {
+            // Hide the modal
+            var transactionModal = document.getElementById('transactionModal');
+            var modalInstance = bootstrap.Modal.getInstance(transactionModal);
+            modalInstance?.hide();
+
+            setToastMessage("Transaction has been successfully processed.");
+            // Reload the page
+            window.location.reload();
+        } else {
+            console.error(response.message);
             swalWithBootstrapButtons.fire({
                 title: "Error",
-                html: errorMessage,
+                text: "An error occurred: " + response.message,
                 icon: "error",
             });
-        },
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        let errorMessage = "An error occurred. Please try again.";
+        if (error.response && error.response.errors) {
+            let errorList = "";
+            for (let field in error.response.errors) {
+                if (error.response.errors.hasOwnProperty(field)) {
+                    error.response.errors[field].forEach((error) => {
+                        errorList += `<p class="mb-0">${error}</p>`;
+                    });
+                }
+            }
+            errorMessage = errorList;
+        }
+        swalWithBootstrapButtons.fire({
+            title: "Error",
+            html: errorMessage,
+            icon: "error",
+        });
     });
 }
+
 
 function deleteTransaction(url) {
     swalForDeleteConfirmation
@@ -204,22 +208,26 @@ function deleteTransaction(url) {
 }
 
 function openModalForAdd() {
-    $("#transactionForm")[0].reset();
-    $("#transactionModalTitle").text("New Transaction");
-    $("#transactionModalSubmitBtn").text("Add");
-    $("#transaction_id").val("");
-    $("#transactionModal").modal("show");
+    const form = document.querySelector('.transactionForm');
+    form?.reset();
+    
+    document.getElementById("transactionModalTitle").textContent = "New Transaction";
+    document.getElementById("transactionModalSubmitBtn").textContent = "Add";
+    form.querySelector("#transaction_id").value = "";
+
+    new bootstrap.Modal(document.getElementById("transactionModal")).show();
 }
 
 function openModalForEdit(element) {
     // Get the transaction ID from the data-id attribute
     const transactionId = element.parentElement.dataset.id;
     var showUrl = window.transactionRoutes.show.replace('__TRANSACTION_ID__', transactionId);
-
-
+    var modalDiv = document.getElementById("modalDiv");
+    var form=modalDiv.querySelector(".transactionForm");
+  
     // Update the modal title and submit button text
-    document.getElementById("transactionModalTitle").textContent = "Edit Transaction";
-    document.getElementById("transactionModalSubmitBtn").textContent = "Update";
+    modalDiv.querySelector("#transactionModalTitle").textContent = "Edit Transaction";
+    modalDiv.querySelector("#transactionModalSubmitBtn").textContent = "Update";
 
     // Fetch transaction data from the server
     fetch(showUrl, {
@@ -231,72 +239,68 @@ function openModalForEdit(element) {
             const transaction = data.data;
 
             // Populate the form fields with the fetched data
-            document.getElementById("transaction_id").value = transaction.id;
+            modalDiv.querySelector("#transaction_id").value = transaction.id;
 
             // Handle the 'type' field
             const typeValue = transaction.type; // Ensure this matches your enum values
-            const typeInput = document.querySelector(`input[name="type"][value="${typeValue}"]`);
+            const typeInput = modalDiv.querySelector(`input[name="type"][value="${typeValue}"]`);
             if (typeInput) {
                 typeInput.checked = true;
-                changeTransactionType(typeValue);
+                changeTransactionType(typeValue,form);
             }
 
-            document.getElementById("src_account_id").value = transaction.src_account_id || '';
-            document.getElementById("dest_account_id").value = transaction.dest_account_id || '';
-            document.getElementById("amount").value = transaction.amount || '';
-            document.getElementById("category_id").value = transaction.category_id || '';
-            document.getElementById("wallet_id").value = transaction.wallet_id || '';
-            document.getElementById("details").value = transaction.details || '';
-            document.getElementById("transaction_date").value = transaction.transaction_date || '';
+            modalDiv.querySelector("#src_account_id").value = transaction.src_account_id || '';
+            modalDiv.querySelector("#dest_account_id").value = transaction.dest_account_id || '';
+            modalDiv.querySelector("#amount").value = transaction.amount || '';
+            modalDiv.querySelector("#category_id").value = transaction.category_id || '';
+            modalDiv.querySelector("#wallet_id").value = transaction.wallet_id || '';
+            modalDiv.querySelector("#details").value = transaction.details || '';
+            modalDiv.querySelector("#transaction_date").value = transaction.transaction_date || '';
 
             // Show the modal (assuming Bootstrap 5 is used)
             const transactionModalElement = document.getElementById('transactionModal');
             const transactionModal = new bootstrap.Modal(transactionModalElement);
             transactionModal.show();
         }
-    })
+    });
 }
 
-
-
-function changeTransactionType(type) {
+function changeTransactionType(type, form) {
     var isTransfer = type === "Transfer";
     var isExpenseOrIncome = type === "Expense" || type === "Income";
 
     // Toggle 'active' class on buttons
-    document.getElementById("expense-btn").classList.toggle("active", type === "Expense");
-    document.getElementById("income-btn").classList.toggle("active", type === "Income");
-    document.getElementById("transfer-btn").classList.toggle("active", isTransfer);
+    form.querySelector("#expense-btn").classList.toggle("active", type === "Expense");
+    form.querySelector("#income-btn").classList.toggle("active", type === "Income");
+    form.querySelector("#transfer-btn").classList.toggle("active", isTransfer);
 
     // Show or hide the 'To Account' collapse section
-    var collapseToAccount = document.getElementById("collapseToAccount");
+    var collapseToAccount = form.querySelector("#collapseToAccount");
     if (collapseToAccount) {
         collapseToAccount.style.display = isTransfer ? "" : "none";
     }
 
     // Update the account label
-    var accountLabel = document.getElementById("account-label");
+    var accountLabel = form.querySelector("#account-label");
     if (accountLabel) {
         accountLabel.innerHTML = isTransfer
             ? "From Account <span class='text-danger'>*</span>"
             : "Account <span class='text-danger'>*</span>";
     }
 
-
-
     // Show or hide category and wallet fields
-    var categoryField = document.getElementById("category-field");
+    var categoryField = form.querySelector("#category-field");
     if (categoryField) {
         categoryField.style.display = isExpenseOrIncome ? "" : "none";
     }
 
-    var walletField = document.getElementById("wallet-field");
+    var walletField = form.querySelector("#wallet-field");
     if (walletField) {
         walletField.style.display = isExpenseOrIncome ? "" : "none";
     }
 
     // Adjust amount field column size
-    var amountField = document.getElementById("amount-field");
+    var amountField = form.querySelector("#amount-field");
     if (amountField) {
         if (isTransfer) {
             amountField.classList.remove("col-md-6");
@@ -309,21 +313,26 @@ function changeTransactionType(type) {
 }
 
 
-
-$("#transactionForm").on("submit", function (e) {
-    e.preventDefault();
-    var transactionId = $("#transaction_id").val();
-    var isEdit = transactionId !== "";
-    var url = isEdit
-        ? window.transactionRoutes.update.replace(
-            "__TRANSACTION_ID__",
-            transactionId
-        )
-        : window.transactionRoutes.store;
-    var formData = $(this).serialize();
-    var method = isEdit ? "PUT" : "POST";
-    submitTransactionForm(url, formData, method);
+document.querySelectorAll('.transactionForm').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        
+        var transactionId = form.querySelector("#transaction_id").value;
+        var isEdit = transactionId !== "";
+        
+        // Determine the URL based on whether it's an edit or a new transaction
+        var url = isEdit
+            ? window.transactionRoutes.update.replace("__TRANSACTION_ID__", transactionId)
+            : window.transactionRoutes.store;
+        
+        var formData = new FormData(form);
+        
+        var method = isEdit ? "PUT" : "POST";
+        
+        submitTransactionForm(url, formData, method);
+    });
 });
+
 
 /* Transaction JavaScript */
 
