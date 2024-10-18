@@ -1,5 +1,5 @@
 # Ibex Wallet
-[![Open Source Helpers](https://www.codetriage.com/mjawaids/ibex-wallet/badges/users.svg)](https://www.codetriage.com/mjawaids/ibexpenses)
+[![Open Source Helpers](https://www.codetriage.com/ibexoft/ibex-wallet/badges/users.svg)](https://www.codetriage.com/ibexoft/ibex-wallet)
 
 (UNDER ACTIVE DEVELOPMENT. NOT EVEN IN 'BETA')
 
