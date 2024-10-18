@@ -15,8 +15,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::resource('transactions', TransactionController::class);
+    Route::post('/filter-transactions', [TransactionController::class, 'filter'])->name('transactions.filter');
     Route::resource('accounts', AccountController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('wallets', WalletController::class);

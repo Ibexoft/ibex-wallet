@@ -1,0 +1,29 @@
+/* Transaction */
+
+.transaction-card {
+    min-height: 500px;
+}
+
+.transaction-item:hover {
+    background-color: rgba(0, 0, 0, 0.025);
+    cursor: pointer;
+}
+
+.transaction-detail{
+    max-width: 250px;
+}
+
+/* Transaction */
+
+
+/* Accounts */
+
+.account-item{
+    cursor: pointer;
+}
+
+.cursor-pointer{
+    cursor: pointer
+}
+
+/* Accounts */

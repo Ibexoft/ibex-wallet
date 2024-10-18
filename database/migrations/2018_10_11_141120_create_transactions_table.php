@@ -16,7 +16,7 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->integer('type');
+            $table->string('type');
             $table->float('amount', 8, 2);
             $table->date('transaction_date');
             $table->foreignId('category_id')->nullable();

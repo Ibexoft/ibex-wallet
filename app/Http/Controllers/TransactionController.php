@@ -2,52 +2,104 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TransactionType;
 use App\Models\User;
 use App\Models\Account;
 use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class TransactionController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $pageTitle = 'Dashboard';
-        $transactions = Auth::user()->transactions()->orderByDesc('id')->get();
+
+        $paginatedTransactions = Auth::user()->transactions()->orderByDesc('transaction_date')->paginate(10);
+
+        $transactions = $paginatedTransactions->getCollection()->groupBy(function ($transaction) {
+            return Carbon::parse($transaction->transaction_date)->format('d M Y');
+        });
 
         $user = Auth::user();
-
         $total_balance = Transaction::total_balance($user->id);
         $available_balance = Transaction::available_balance($user->id);
         $income_this_month = Transaction::month_income($user->id);
         $expense_this_month = Transaction::month_expense($user->id);
         $owed = Transaction::owed($user->id);
         $other_owed = Transaction::other_owed($user->id);
+        $categories = Category::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
+        $accounts = Account::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
+        $wallets = Wallet::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
 
         return view(
             'transactions.index',
-            compact('transactions', 'pageTitle', 'total_balance', 'available_balance', 'income_this_month', 'expense_this_month', 'owed', 'other_owed')
+            compact(
+                'transactions',
+                'paginatedTransactions',
+                'pageTitle',
+                'total_balance',
+                'available_balance',
+                'income_this_month',
+                'expense_this_month',
+                'owed',
+                'other_owed',
+                'categories',
+                'accounts',
+                'wallets'
+            )
         );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function filter(Request $request)
+    {
+        $request->validate([
+            'categories' => 'array|nullable',
+            'categories.*' => 'exists:categories,id',
+            'accounts' => 'array|nullable',
+            'accounts.*' => 'exists:accounts,id',
+            'transaction_types' => 'array|nullable',
+            'transaction_types.*' => 'in:1,2,3',
+            'min_amount' => 'numeric|nullable',
+            'max_amount' => 'numeric|nullable',
+            'start_date' => 'date|nullable',
+            'end_date' => 'date|nullable',
+        ]);
+
+        $paginatedTransactions = Auth::user()->transactions()
+            ->orderByDesc('transaction_date')
+            ->withCategories($request->categories ?? [])
+            ->withAccounts($request->accounts ?? [])
+            ->withTransactionTypes($request->transaction_types ?? [])
+            ->withAmountRange($request->min_amount, $request->max_amount)
+            ->withDateRange($request->start_date, $request->end_date)
+            ->paginate(10);
+
+        $transactions = $paginatedTransactions->getCollection()->groupBy(function ($transaction) {
+            return Carbon::parse($transaction->transaction_date)->format('d M Y');
+        });
+
+        $categories = Category::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
+        $accounts = Account::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
+        $wallets = Wallet::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
+
+        return view('transactions.index', [
+            'transactions' => $transactions,
+            'paginatedTransactions' => $paginatedTransactions,
+            'filters' => $request->all(),
+            'categories' => $categories,
+            'accounts' => $accounts,
+            'wallets' => $wallets,
+        ]);
+    }
+
+
     public function create()
     {
         $categories = Category::where('user_id', '=', auth()->id())->where('parent_category_id', null)->get();
@@ -57,61 +109,25 @@ class TransactionController extends Controller
         return view('transactions.create', compact(['categories', 'accounts', 'wallets']));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        // $validatedData = $request->validate([
-        //     'amount' => $request->amount,
-        //     'description' => $request->description,
-        //     'type' => $request->type,
-        //     'from_account_id' => $request->from_account_id,
-        //     'to_account_id' => $request->to_account_id,
-        //     'for_whom' => $request->for_whom
-        // ]);
 
-        Transaction::create([
-            'user_id'           => auth()->id(),
-            'type'              => $request->type,
-            'amount'            => $request->amount,
-            'transaction_date'  => $request->transaction_date,
-            'category_id'       => $request->category_id,
-            'src_account_id'    => $request->src_account_id,
-            'dest_account_id'   => $request->dest_account_id,
-            'details'           => $request->details,
-            'spent_on'          => $request->spent_on,
-            'wallet_id'         => $request->wallet_id,
-        ]);
-
-        return redirect('transactions');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Transaction $transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function show(Transaction $transaction)
     {
-        $pageTitle = 'Transaction Details';
+        // Check if the authenticated user owns the transaction
+        if ($transaction->user_id !== auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => '404 Not Found.'
+            ], 404);
+        }
 
-        return view('transactions.show', compact('transaction', 'pageTitle'));
+
+        return response()->json([
+            'success' => true,
+            'data' => $transaction
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Transaction $transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Transaction $transaction)
     {
         $pageTitle = 'Edit Transaction';
@@ -124,40 +140,106 @@ class TransactionController extends Controller
         return view('transactions.edit', compact(['transaction', 'categories', 'accounts', 'wallets', 'pageTitle']));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Transaction         $transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Transaction $transaction)
+    public function store(Request $request)
     {
-        $transaction->type = $request->type;
-        $transaction->amount = $request->amount;
-        $transaction->transaction_date = $request->transaction_date;
-        $transaction->category_id = $request->category_id;
-        $transaction->src_account_id = $request->src_account_id;
-        $transaction->dest_account_id = $request->dest_account_id;
-        $transaction->details = $request->details;
-        $transaction->spent_on = $request->spent_on;
-        $transaction->wallet_id = $request->wallet_id;
+        $validated = $request->validate([
+            'amount' => [
+                'required',
+                'numeric',
+                'between:0,9999999.99'
+            ],
+            'transaction_date' => 'required|date',
+            'type' => ['required', Rule::in(array_column(TransactionType::cases(), 'name'))],
+            'src_account_id' => [
+                'required',
+                'exists:accounts,id'
+            ],
+            'dest_account_id' => [
+                'nullable',
+                'required_if:type,Transfer',
+                'exists:accounts,id'
+            ],
+            'category_id' => [
+                'nullable',
+                'required_unless:type,Transfer',
+                'exists:categories,id'
+            ],
+            'wallet_id' => [
+                'nullable',
+                'exists:wallets,id'
+            ],
+            'details' => [
+                'nullable',
+                'string',
+                'min:3',
+                'max:200'
+            ],
+        ], [
+            'dest_account_id.required_if' => 'The destination account field is required.',
+            'category_id.required_unless' => 'The category field is required.',
+            'src_account_id.required' => 'The source account field is required.',
+        ]);
 
-        $transaction->save();
 
-        return redirect('transactions');
+        $validated['user_id'] = auth()->id();
+        Transaction::create($validated);
+
+        return response()->json(['success' => true, 'message' => 'Transaction added successfully!']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Transaction $transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Transaction $transaction)
+    public function update(Request $request, $id)
     {
-        //
+        $transaction = Transaction::findOrFail($id);
+        $validated = $request->validate([
+            'amount' => [
+                'required',
+                'numeric',
+                'between:0,9999999.99'
+            ],
+            'transaction_date' => 'required|date',
+            'type' => ['required', Rule::in(array_column(TransactionType::cases(), 'name'))],
+            'src_account_id' => [
+                'required',
+                'exists:accounts,id'
+            ],
+            'dest_account_id' => [
+                'nullable',
+                'required_if:type,Transfer',
+                'exists:accounts,id'
+            ],
+            'category_id' => [
+                'nullable',
+                'required_unless:type,Transfer',
+                'exists:categories,id'
+            ],
+            'wallet_id' => [
+                'nullable',
+                'exists:wallets,id'
+            ],
+            'details' => [
+                'nullable',
+                'string',
+                'min:3',
+                'max:200'
+            ],
+        ], [
+            'dest_account_id.required_if' => 'The destination account field is required.',
+            'category_id.required_unless' => 'The category field is required.',
+            'src_account_id.required' => 'The source account field is required.',
+        ]);
+        
+        $validated['user_id'] = auth()->id();
+        $transaction->update($validated);
+
+        return response()->json(['success' => true, 'message' => 'Transaction updated successfully!']);
+    }
+
+
+    public function destroy($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        $transaction->delete();
+
+        return response()->json(['success' => true, 'message' => 'Transaction deleted successfully!']);
     }
 }

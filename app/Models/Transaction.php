@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Transaction extends Model
 {
     protected $fillable = ['user_id', 'type', 'amount', 'transaction_date', 'category_id', 'src_account_id', 'dest_account_id', 'details', 'spent_on', 'wallet_id'];
+
+    protected $casts = [
+        'type' => TransactionType::class,
+    ];
 
     public function user()
     {
@@ -143,5 +148,50 @@ class Transaction extends Model
             ->get();
 
         return $transactions[0]->expense;
+    }
+
+    public function scopeWithCategories($query, $categories)
+    {
+        if (!empty($categories)) {
+            $query->whereIn('category_id', $categories);
+        }
+    }
+
+    // Scope to filter by accounts
+    public function scopeWithAccounts($query, $accounts)
+    {
+        if (!empty($accounts)) {
+            $query->whereIn('src_account_id', $accounts);
+        }
+    }
+
+    // Scope to filter by transaction types
+    public function scopeWithTransactionTypes($query, $types)
+    {
+        if (!empty($types)) {
+            $query->whereIn('type', $types);
+        }
+    }
+
+    // Scope to filter by amount range
+    public function scopeWithAmountRange($query, $min, $max)
+    {
+        if (!is_null($min)) {
+            $query->where('amount', '>=', $min);
+        }
+        if (!is_null($max)) {
+            $query->where('amount', '<=', $max);
+        }
+    }
+
+    // Scope to filter by date range
+    public function scopeWithDateRange($query, $start, $end)
+    {
+        if (!is_null($start)) {
+            $query->where('transaction_date', '>=', $start);
+        }
+        if (!is_null($end)) {
+            $query->where('transaction_date', '<=', $end);
+        }
     }
 }

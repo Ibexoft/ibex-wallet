@@ -23,21 +23,12 @@ class AccountController extends Controller
     {
         $accounts = Account::where('user_id', '=', auth()->id())->get();
 
-        return view('accounts.index', compact('accounts'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
         $accountTypes = config('custom.account_types');
         $currencies = config('custom.currencies');
 
-        return view('accounts.create', compact(['accountTypes', 'currencies']));
+        return view('accounts.index', get_defined_vars());
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -48,22 +39,30 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'title'    => 'required',
-        //     'type'     => 'required',
-        //     'currency' => 'required',
-        // ]);
-
-        Account::create([
-            'user_id'   => Auth::id(),
-            'name'      => $request->name,
-            'type'      => $request->type,
-            'icon'      => $request->icon,
-            'balance'   => $request->balance,
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:35|unique:accounts,name',
+            'type' => 'required|in:' . implode(',', array_keys(config('custom.account_types'))),
+            'balance' => 'required|numeric|min:0',
+            'currency' => 'required|in:' . implode(',', array_keys(config('custom.currencies'))),
         ]);
 
-        return redirect('accounts');
+        $validatedData['user_id'] = auth()->id();
+
+        Account::create([
+            'user_id' => Auth::id(),
+            'name' => $request->name,
+            'type' => $request->type,
+            'icon' => $request->icon,
+            'balance' => $request->balance,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Account created successfully.'
+        ]);
     }
+
+
 
     /**
      * Display the specified resource.
@@ -74,23 +73,20 @@ class AccountController extends Controller
      */
     public function show(Account $account)
     {
-        //
+        // Check if the authenticated user owns the account
+        if ($account->user_id !== auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => '404 Not Found.'
+            ], 404);
+        }
+        return response()->json([
+            'success' => true,
+            'data' => $account
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Account $account
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Account $account)
-    {
-        $accountTypes = config('custom.account_types');
-        $currencies = config('custom.currencies');
 
-        return view('accounts.create', compact(['account', 'accountTypes', 'currencies']));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -100,24 +96,32 @@ class AccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Account $account)
+    public function update(Request $request, $id)
     {
-        // $validatedData = $request->validate([
-        //     'title'    => 'required',
-        //     'type'     => 'required',
-        //     'currency' => 'required',
-        // ]);
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:35|unique:accounts,name,' . $id,
+            'type' => 'required|in:' . implode(',', array_keys(config('custom.account_types'))),
+            'balance' => 'required|numeric|min:0',
+            'currency' => 'required|in:' . implode(',', array_keys(config('custom.currencies'))),
+        ]);
 
-        Account::where('user_id', Auth::id())
-            ->where('id', $account->id)
-            ->update([
-                'name'      => $request->name,
-                'type'      => $request->type,
-                'icon'      => $request->icon,
-                'balance'   => $request->balance
-            ]);
+        $validatedData['user_id'] = auth()->id();
 
-        return redirect('accounts');
+        // Find the account by ID
+        $account = Account::findOrFail($id);
+
+        // Update the account with the validated data
+        $account->update([
+            'name' => $request->name,
+            'type' => $request->type,
+            'balance' => $request->balance,
+            'currency' => $request->currency,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Account updated successfully.'
+        ]);
     }
 
     /**
@@ -129,6 +133,19 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
-        //
+        try {
+            $account->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Account deleted successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete the account.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
