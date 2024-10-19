@@ -215,7 +215,18 @@ function openModalForAdd() {
     document.getElementById("transactionModalSubmitBtn").textContent = "Add";
     form.querySelector("#transaction_id").value = "";
 
-    new bootstrap.Modal(document.getElementById("transactionModal")).show();
+    const modalElement = document.getElementById("transactionModal");
+    const modal = new bootstrap.Modal(modalElement);
+    
+    // Ensure backdrop is removed and modal disposed on close
+    modalElement.addEventListener('hidden.bs.modal', function () {
+        document.body.classList.remove('modal-open'); // Remove modal-open class from body
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove(); // Remove leftover backdrop
+        modal.dispose(); // Properly dispose of the modal instance
+    });
+
+    modal.show();
 }
 
 function openModalForEdit(element) {
