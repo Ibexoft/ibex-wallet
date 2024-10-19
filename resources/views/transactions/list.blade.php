@@ -85,7 +85,7 @@
                                             <div class="col-12 col-md-5">
                                                 <div
                                                     class="d-flex align-items-center justify-content-center text-start text-{{ $transaction->type == TransactionType::Expense ? 'danger' : ($transaction->type == TransactionType::Transfer ? 'info' : 'success') }} text-gradient text-sm font-weight-bold">
-                                                    {{ $transaction->type == TransactionType::Transfer ? '' : ($transaction->type == TransactionType::Expense ? '-' : '+') }}${{ number_format($transaction->amount, 2) }}
+                                                    {{ number_format($transaction->amount, 2) }}
                                                 </div>
                                                 <div class="d-none d-sm-block d-md-none">
                                                     <div class="d-flex align-items-center justify-content-center">
