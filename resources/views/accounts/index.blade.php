@@ -249,16 +249,16 @@
                         <li class="list-group-item border-0 px-4 mb-3 bg-gray-100 border-radius-lg account-item">
                             <!-- Dropdown Trigger -->
                             <div class="w-100 text-end">
-                                <div class="dropdown d-inline ">
+                                <div class="d-inline ">
                                     <i class="icon fa fa-ellipsis-h text-sm text-primary cursor-pointer"
                                         id="dropdownMenuButton{{ $account->id }}" data-bs-toggle="dropdown"
                                         aria-expanded="false"></i>
 
                                     <!-- Dropdown Menu -->
-                                    <ul class="dropdown-menu dropdown-menu-end"
+                                    <ul class="dropdown-menu shadow-md"
                                         aria-labelledby="dropdownMenuButton{{ $account->id }}">
                                         <li>
-                                            <a class="dropdown-item text-danger" href="javascript:;"
+                                            <a class="dropdown-item py-1" href="javascript:;"
                                                 onclick="deleteAccount({{ $account->id }});">Delete
                                             </a>
                                         </li>
