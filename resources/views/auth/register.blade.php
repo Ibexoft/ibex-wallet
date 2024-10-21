@@ -48,16 +48,15 @@
                     <div
                         class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
                         <div
-                            class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center">
+                            class="position-relative bg-gradient-primary h-100 m-3 px-5 border-radius-lg d-flex flex-column justify-content-center">
                             <img src="{{ asset('assets/img/shapes/pattern-lines.svg') }}" alt="pattern-lines"
                                 class="position-absolute opacity-4 start-0">
                             <div class="position-relative">
-                                <img class="max-width-500 w-100 position-relative z-index-2"
+                                <img class="max-width-500 w-70 position-relative z-index-2"
                                     src="{{ asset('assets/img/illustrations/chat.webp') }}">
                             </div>
-                            <h4 class="mt-5 text-white font-weight-bolder">"Attention is the new currency"</h4>
-                            <p class="text-white">The more effortless the writing looks, the more effort the writer actually
-                                put into the process.</p>
+                            <h4 class="mt-5 text-white font-weight-bolder">"Your Journey to Endless Financial Possibilities Begins Here!"</h4>
+                            <p class="text-white">Stay organized, stay informed, and make decisions that empower you.</p>
                         </div>
                     </div>
                 </div>
