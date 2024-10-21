@@ -135,25 +135,27 @@
                             </li>
                         @endif
 
-                        @foreach ($paginatedTransactions->links()->elements as $element)
-                            @if (is_string($element))
-                                <li class="page-item disabled"><span class="page-link">{{ $element }}</span>
-                                </li>
-                            @endif
+                        @if ($paginatedTransactions->lastPage() > 1)
+                            @foreach ($paginatedTransactions->links()->elements as $element)
+                                @if (is_string($element))
+                                    <li class="page-item disabled"><span class="page-link">{{ $element }}</span>
+                                    </li>
+                                @endif
 
-                            @if (is_array($element))
-                                @foreach ($element as $page => $url)
-                                    @if ($page == $paginatedTransactions->currentPage())
-                                        <li class="page-item active mx-1"><span
-                                                class="page-link bg-gradient-primary text-white border-0">{{ $page }}</span>
-                                        </li>
-                                    @else
-                                        <li class="page-item mx-1"><a class="page-link text-primary border"
-                                                href="{{ $url }}">{{ $page }}</a></li>
-                                    @endif
-                                @endforeach
-                            @endif
-                        @endforeach
+                                @if (is_array($element))
+                                    @foreach ($element as $page => $url)
+                                        @if ($page == $paginatedTransactions->currentPage())
+                                            <li class="page-item active mx-1"><span
+                                                    class="page-link bg-gradient-primary text-white border-0">{{ $page }}</span>
+                                            </li>
+                                        @else
+                                            <li class="page-item mx-1"><a class="page-link text-primary border"
+                                                    href="{{ $url }}">{{ $page }}</a></li>
+                                        @endif
+                                    @endforeach
+                                @endif
+                            @endforeach
+                        @endif
 
                         @if ($paginatedTransactions->hasMorePages())
                             <li class="page-item">

@@ -56,14 +56,6 @@
         @include('partials.success-toast')       
     </main>
 
-    @if(Route::currentRouteName() !== 'dashboard')
-    <div class="fixed-plugin">
-        <a class="fixed-plugin-button position-fixed px-3 py-2 bg-gradient-primary">
-            <i class="fa fa-plus py-1"> </i>
-        </a>
-    </div>
-    @endif
-
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>
