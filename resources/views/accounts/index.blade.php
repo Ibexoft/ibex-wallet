@@ -323,10 +323,11 @@
             </div>
         </div>
     </div>
+    
+    @include('accounts.partials.add-account-modal')
+    @include('accounts.partials.edit-account-modal')
 @endsection
 
-@include('accounts.partials.add-account-modal')
-@include('accounts.partials.edit-account-modal')
 
 @section('script')
     <script>
