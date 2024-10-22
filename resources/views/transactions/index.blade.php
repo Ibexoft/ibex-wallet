@@ -99,7 +99,7 @@
                                 <h6 class="mb-0 text-sm">Transaction Type</h6>
                                 <i class="fas fa-angle-{{ isset($filters['transaction_types']) ? 'down' : 'right' }}" id="transactionTypeIcon"></i>
                             </span>
-                            <div id="transactionTypeCollapse" class="{{ isset($filters['transaction_types']) ? '' : 'collapse' }} pt-2 {{ isset($filters['transaction_types']) ? 'show' : '' }}">
+                            <div id="transactionTypeCollapse" class="{{ isset($filters['transaction_types']) ? '' : 'collapse' }} pt-2">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="transactionType2"
                                         name="transaction_types[]" value="1"
