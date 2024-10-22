@@ -23,15 +23,20 @@
                         <!-- Categories Filter -->
                         <div class="mb-3">
                             <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
-                                data-bs-toggle="collapse" data-bs-target="#categoriesCollapse" aria-expanded="false"
+                                data-bs-toggle="collapse" data-bs-target="#categoriesCollapse" aria-expanded="{{ isset($filters['categories']) ? 'true' : 'false' }}"
                                 aria-controls="categoriesCollapse">
                                 <h6 class="mb-0 text-sm">Categories</h6>
                                 <i class="fas fa-angle-right" id="categoriesIcon"></i>
                             </span>
-                            <div id="categoriesCollapse" class="collapse pt-2">
+                            <div id="categoriesCollapse" class="{{ isset($filters['categories']) ? '' : 'collapse' }} pt-2">
                                 <ul style="list-style: none; padding: 0;">
                                     @foreach ($categories as $category)
                                         @if (!$category->parent_category_id)
+                                            @php
+                                                $isExpanded =
+                                                    isset($filters['categories']) &&
+                                                    $category->hasSelectedDescendant($filters['categories']);
+                                            @endphp
                                             <li>
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input category-checkbox"
@@ -39,17 +44,20 @@
                                                         value="{{ $category->id }}"
                                                         {{ isset($filters['categories']) && in_array($category->id, $filters['categories']) ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="category{{ $category->id }}">
-                                                        <i class="fa fa-angle-right toggle-icon"
-                                                            onclick="toggleSubcategories('subcategory-category{{ $category->id }}', this, event)"></i>
+                                                        @if (count($category->subcategories) > 0)
+                                                            <i class="fa fa-angle-{{ $isExpanded ? 'down' : 'right' }} toggle-icon"
+                                                                onclick="toggleSubcategories('subcategory-category{{ $category->id }}', this, event)"></i>
+                                                        @endif
                                                         {{ $category->name }}
                                                     </label>
                                                 </div>
-                                                <ul id="subcategory-category{{ $category->id }}" class="collapse pt-2"
+                                                <ul id="subcategory-category{{ $category->id }}" class="{{ $isExpanded ? '' : 'collapse' }} pt-2"
                                                     style="list-style: none; padding-left: 20px;">
                                                     @if (count($category->subcategories))
                                                         @include('categories.subCategoryCheckbox', [
                                                             'subcategories' => $category->subcategories,
                                                             'indent' => 1,
+                                                            'filters' => $filters,
                                                         ])
                                                     @endif
                                                 </ul>
@@ -60,15 +68,17 @@
                             </div>
                         </div>
 
+
+
                         <!-- Dynamic Accounts Filter -->
                         <div class="mb-3">
                             <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
-                                data-bs-toggle="collapse" data-bs-target="#accountCollapse" aria-expanded="false"
+                                data-bs-toggle="collapse" data-bs-target="#accountCollapse" aria-expanded="{{ isset($filters['accounts']) ? 'true' : 'false' }}"
                                 aria-controls="accountCollapse">
                                 <h6 class="mb-0 text-sm">Accounts</h6>
-                                <i class="fas fa-angle-right" id="accountIcon"></i>
+                                <i class="fas fa-angle-{{ isset($filters['accounts']) ? 'down' : 'right' }}" id="accountIcon"></i>
                             </span>
-                            <div id="accountCollapse" class="collapse pt-2">
+                            <div id="accountCollapse" class="{{ isset($filters['accounts']) ? '' : 'collapse' }} pt-2">
                                 @foreach ($accounts as $account)
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="account{{ $account->id }}"
@@ -84,12 +94,12 @@
                         <!-- Transaction Type Filter -->
                         <div class="mb-3">
                             <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
-                                data-bs-toggle="collapse" data-bs-target="#transactionTypeCollapse" aria-expanded="false"
+                                data-bs-toggle="collapse" data-bs-target="#transactionTypeCollapse" aria-expanded="{{ isset($filters['transaction_types']) ? 'true' : 'false' }}"
                                 aria-controls="transactionTypeCollapse">
                                 <h6 class="mb-0 text-sm">Transaction Type</h6>
-                                <i class="fas fa-angle-right" id="transactionTypeIcon"></i>
+                                <i class="fas fa-angle-{{ isset($filters['transaction_types']) ? 'down' : 'right' }}" id="transactionTypeIcon"></i>
                             </span>
-                            <div id="transactionTypeCollapse" class="collapse pt-2">
+                            <div id="transactionTypeCollapse" class="{{ isset($filters['transaction_types']) ? '' : 'collapse' }} pt-2">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="transactionType2"
                                         name="transaction_types[]" value="1"
@@ -114,12 +124,12 @@
                         <!-- Amount Range Filter -->
                         <div class="mb-3">
                             <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
-                                data-bs-toggle="collapse" data-bs-target="#amountCollapse" aria-expanded="false"
+                                data-bs-toggle="collapse" data-bs-target="#amountCollapse" aria-expanded="{{ isset($filters['min_amount']) || isset($filters['max_amount']) ? 'true' : 'false' }}"
                                 aria-controls="amountCollapse">
                                 <h6 class="mb-0 text-sm">Amount Range</h6>
-                                <i class="fas fa-angle-right" id="amountIcon"></i>
+                                <i class="fas fa-angle-{{ isset($filters['min_amount']) || isset($filters['max_amount']) ? 'down' : 'right' }}" id="amountIcon"></i>
                             </span>
-                            <div id="amountCollapse" class="collapse pt-2">
+                            <div id="amountCollapse" class="{{ isset($filters['min_amount']) || isset($filters['max_amount']) ? '' : 'collapse' }} pt-2">
                                 <div class="row">
                                     <div class="col">
                                         <label for="min_amount" class="form-label">Min:</label>
@@ -138,12 +148,12 @@
                         <!-- Date Range Filter -->
                         <div class="mb-3">
                             <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
-                                data-bs-toggle="collapse" data-bs-target="#dateCollapse" aria-expanded="false"
+                                data-bs-toggle="collapse" data-bs-target="#dateCollapse" aria-expanded="{{ isset($filters['start_date']) || isset($filters['end_date']) ? 'true' : 'false' }}"
                                 aria-controls="dateCollapse">
                                 <h6 class="mb-0 text-sm">Date Range</h6>
-                                <i class="fas fa-angle-right" id="dateIcon"></i>
+                                <i class="fas fa-angle-{{ isset($filters['start_date']) || isset($filters['end_date']) ? 'down' : 'right' }}" id="dateIcon"></i>
                             </span>
-                            <div id="dateCollapse" class="collapse pt-2">
+                            <div id="dateCollapse" class="{{ isset($filters['start_date']) || isset($filters['end_date']) ? '' : 'collapse' }} pt-2">
                                 <div class="row">
                                     <div class="col">
                                         <label for="start_date" class="form-label">Start Date:</label>

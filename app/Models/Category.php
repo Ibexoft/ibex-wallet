@@ -63,4 +63,19 @@ class Category extends Model
             }
         }
     }
+
+    public function hasSelectedDescendant(array $selectedCategories): bool
+    {
+        if (in_array($this->id, $selectedCategories)) {
+            return true;
+        }
+
+        foreach ($this->subcategories as $subcategory) {
+            if ($subcategory->hasSelectedDescendant($selectedCategories)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
