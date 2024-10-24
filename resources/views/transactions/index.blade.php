@@ -57,7 +57,7 @@
                                                         @include('categories.subCategoryCheckbox', [
                                                             'subcategories' => $category->subcategories,
                                                             'indent' => 1,
-                                                            'filters' => $filters,
+                                                            'filters' => isset($filters) ? $filters : ''
                                                         ])
                                                     @endif
                                                 </ul>

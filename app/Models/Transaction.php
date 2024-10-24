@@ -29,6 +29,95 @@ class Transaction extends Model
         return $this->belongsTo(Wallet::class);
     }
 
+    protected static function booted()
+    {
+        static::created(function ($transaction) {
+            $transaction->adjustAccountBalancesOnCreate();
+        });
+
+        static::updated(function ($transaction) {
+            $transaction->adjustAccountBalancesOnUpdate();
+        });
+
+        static::deleted(function ($transaction) {
+            $transaction->adjustAccountBalancesOnDelete();
+        });
+    }
+
+    protected function adjustAccountBalancesOnCreate()
+    {
+        switch ($this->type) {
+            case TransactionType::Expense:
+                $this->adjustBalance($this->src_account_id, -$this->amount);
+                break;
+
+            case TransactionType::Income:
+                $this->adjustBalance($this->src_account_id, $this->amount);
+                break;
+
+            case TransactionType::Transfer:
+                $this->adjustBalance($this->src_account_id, -$this->amount);
+                $this->adjustBalance($this->dest_account_id, $this->amount);
+                break;
+
+            // Handle other transaction types as needed
+        }
+    }
+
+    protected function adjustAccountBalancesOnUpdate()
+    {
+        $original = $this->getOriginal();
+
+        // Reverse the original transaction
+        switch ($original['type']) {
+            case TransactionType::Expense:
+                $this->adjustBalance($original['src_account_id'], $original['amount']);
+                break;
+
+            case TransactionType::Income:
+                $this->adjustBalance($original['src_account_id'], -$original['amount']);
+                break;
+
+            case TransactionType::Transfer:
+                $this->adjustBalance($original['src_account_id'], $original['amount']);
+                $this->adjustBalance($original['dest_account_id'], -$original['amount']);
+                break;
+
+            // Handle other transaction types as needed
+        }
+
+        // Apply the new transaction
+        $this->adjustAccountBalancesOnCreate();
+    }
+
+    protected function adjustAccountBalancesOnDelete()
+    {
+        // Reverse the transaction
+        switch ($this->type) {
+            case TransactionType::Expense:
+                $this->adjustBalance($this->src_account_id, $this->amount);
+                break;
+
+            case TransactionType::Income:
+                $this->adjustBalance($this->src_account_id, -$this->amount);
+                break;
+
+            case TransactionType::Transfer:
+                $this->adjustBalance($this->src_account_id, $this->amount);
+                $this->adjustBalance($this->dest_account_id, -$this->amount);
+                break;
+
+            // Handle other transaction types as needed
+        }
+    }
+
+    private function adjustBalance($accountId, $amount)
+    {
+        if ($accountId && $amount != 0) {
+            Account::where('id', $accountId)->where('user_id', $this->user_id)->increment('balance', $amount);
+        }
+    }
+
     // public function tags()
     // {
     //     return $this->belongsToMany(Tag::class);
