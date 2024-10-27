@@ -58,7 +58,7 @@ class RegisteredUserController extends Controller
             'user_id'  => $user->id,
             'name'    => "Default",
             'type'     => 1,
-            'currency' => "Rs",
+            'currency' => "PKR",
         ]);
 
         event(new Registered($user));

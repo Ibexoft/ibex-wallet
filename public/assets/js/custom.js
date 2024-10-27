@@ -101,7 +101,6 @@ function submitTransactionForm(url, formData, method) {
             // Reload the page
             window.location.reload();
         } else {
-            console.error(response.message);
             swalWithBootstrapButtons.fire({
                 title: "Error",
                 text: "An error occurred: " + response.message,
@@ -110,7 +109,6 @@ function submitTransactionForm(url, formData, method) {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
         let errorMessage = "An error occurred. Please try again.";
         if (error.response && error.response.errors) {
             let errorList = "";
@@ -159,7 +157,6 @@ function deleteTransaction(url) {
                             // Reload the page
                             window.location.reload();
                         } else {
-                            console.error(response.message);
                             swalWithBootstrapButtons.fire({
                                 title: "Error",
                                 text: "An error occurred: " + response.message,
@@ -210,14 +207,14 @@ function deleteTransaction(url) {
 function openModalForAdd() {
     const form = document.querySelector('.transactionForm');
     form?.reset();
-    
+
     document.getElementById("transactionModalTitle").textContent = "New Transaction";
     document.getElementById("transactionModalSubmitBtn").textContent = "Add";
     form.querySelector("#transaction_id").value = "";
 
     const modalElement = document.getElementById("transactionModal");
     const modal = new bootstrap.Modal(modalElement);
-    
+
     // Ensure backdrop is removed and modal disposed on close
     modalElement.addEventListener('hidden.bs.modal', function () {
         document.body.classList.remove('modal-open'); // Remove modal-open class from body
@@ -235,7 +232,7 @@ function openModalForEdit(element) {
     var showUrl = window.transactionRoutes.show.replace('__TRANSACTION_ID__', transactionId);
     var modalDiv = document.getElementById("modalDiv");
     var form=modalDiv.querySelector(".transactionForm");
-  
+
     // Update the modal title and submit button text
     modalDiv.querySelector("#transactionModalTitle").textContent = "Edit Transaction";
     modalDiv.querySelector("#transactionModalSubmitBtn").textContent = "Update";
@@ -327,19 +324,19 @@ function changeTransactionType(type, form) {
 document.querySelectorAll('.transactionForm').forEach(function (form) {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-        
+
         var transactionId = form.querySelector("#transaction_id").value;
         var isEdit = transactionId !== "";
-        
+
         // Determine the URL based on whether it's an edit or a new transaction
         var url = isEdit
             ? window.transactionRoutes.update.replace("__TRANSACTION_ID__", transactionId)
             : window.transactionRoutes.store;
-        
+
         var formData = new FormData(form);
-        
+
         var method = isEdit ? "PUT" : "POST";
-        
+
         submitTransactionForm(url, formData, method);
     });
 });
@@ -563,7 +560,6 @@ function deleteAccount(accountId) {
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.error('AJAX Error:', textStatus, errorThrown);
                     swalWithBootstrapButtons.fire({
                         title: "Error",
                         text: "An error occurred. Please try again.",

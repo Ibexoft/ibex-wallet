@@ -11,19 +11,19 @@ return [
             'icon' => 'fa-solid fa-credit-card',
         ],
         3 => [
-            'name' => 'Bank Account',
+            'name' => 'Current Account',
             'icon' => 'fa-solid fa-landmark',
         ],
         4 => [
             'name' => 'Savings Account',
-            'icon' => 'fa-solid fa-mobile-screen-button',
+            'icon' => 'fa-solid fa-landmark',
         ],
         5 => [
-            'name' => 'Mobile Account',
+            'name' => 'Mobile Wallet',
             'icon' => 'fa-solid fa-mobile-screen-button',
         ],
         6 => [
-            'name' => 'Online Account', // e.g. PayPal, Payoneer, Skrill, 
+            'name' => 'Online Account', // e.g. PayPal, Payoneer, Skrill,
             'icon' => 'fa-solid fa-mobile-screen-button',
         ],
         // Add more types here as needed
@@ -198,6 +198,6 @@ return [
         "YER" => "Yemeni Rial",
         "ZAR" => "South African Rand",
         "ZMW" => "Zambian Kwacha",
-        "ZWL" => "Zimbabwean Dollar"       
+        "ZWL" => "Zimbabwean Dollar"
     ],
 ];
