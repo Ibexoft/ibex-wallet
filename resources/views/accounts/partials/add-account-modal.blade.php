@@ -30,13 +30,14 @@
                         <div class="col-sm-12 col-lg-6 form-group">
                             <label for="balance">Initial amount</label>
                             <input type="number" class="form-control" placeholder="0" name="balance" id="balance"
-                                step="0.01" required>
+                                step="0.01" value="0.00" required>
                         </div>
                         <div class="col-sm-12 col-lg-6 form-group">
                             <label for="Type">Currency</label>
                             <select name="currency" class="form-select form-control" required>
+                                <option></option>
                                 @foreach ($currencies as $code => $currency)
-                                    <option value="{{ $code }}">{{ $currency }} - {{ $code }}</option>
+                                    <option value="{{ $code }}">{{ $code }} - {{ $currency }}</option>
                                 @endforeach
                             </select>
                         </div>

@@ -33,7 +33,7 @@ class Category extends Model
 
             $found = self::where('user_id', $userId)
                 ->where('name', $category)
-                ->where('parent_category_id', $parentCategory ? $parentCategory->id : null)
+                ->where('parent_category_id', $parentCategory?->id)
                 ->count();
 
             if ($found > 0) {
@@ -43,7 +43,7 @@ class Category extends Model
             $parentCat = self::create([
                 'user_id'               => $userId,
                 'name'                  => $category,
-                'parent_category_id'    => $parentCategory ? $parentCategory->id : null,
+                'parent_category_id'    => $parentCategory?->id,
                 'icon'                  => $icon, // Save the icon
             ]);
         }
