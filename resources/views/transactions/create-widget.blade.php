@@ -46,7 +46,7 @@ use App\Enums\TransactionType as TransactionType;
                     class="text-danger">*</span></label>
             <select name="src_account_id" id="src_account_id" class="form-control" required
                 autocomplete="src_account_id">
-                <option selected disabled value="">Select Account</option>
+                <option selected disabled value="">-- Select Account --</option>
                 @foreach ($accounts as $account)
                     <option value="{{ $account->id }}">{{ $account->name }}</option>
                 @endforeach
@@ -56,7 +56,7 @@ use App\Enums\TransactionType as TransactionType;
             <label for="dest_account_id">To Account <span class="text-danger">*</span></label>
             <select name="dest_account_id" id="dest_account_id" class="form-control"
                 autocomplete="dest_account_id">
-                <option selected disabled>Select Account</option>
+                <option selected disabled>-- Select Account --</option>
                 @foreach ($accounts as $account)
                     <option value="{{ $account->id }}">{{ $account->name }}</option>
                 @endforeach
@@ -67,7 +67,7 @@ use App\Enums\TransactionType as TransactionType;
             <label for="category_id">Category <span class="text-danger">*</span></label>
             <select name="category_id" id="category_id" class="form-control"
                 autocomplete="category_id">
-                <option selected disabled value="">Select Category</option>
+                <option selected disabled value="">-- Select Category --</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                     @if (count($category->subcategories))

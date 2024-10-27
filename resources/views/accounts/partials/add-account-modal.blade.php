@@ -18,7 +18,8 @@
                         </div>
                         <div class="col-sm-12 col-lg-6 form-group">
                             <label for="Type">Account type</label>
-                            <select name="type" class="form-select form-control">
+                            <select name="type" class="form-select form-control" required>
+                                <option selected disbaled>-- Select Account Type --</option>
                                 @foreach (config('custom.account_types') as $value => $text)
                                     <option value="{{ $value }}">{{ $text['name'] }}</option>
                                 @endforeach
@@ -35,7 +36,7 @@
                         <div class="col-sm-12 col-lg-6 form-group">
                             <label for="Type">Currency</label>
                             <select name="currency" class="form-select form-control" required>
-                                <option></option>
+                                <option selected disabled>-- Select Currency --</option>
                                 @foreach ($currencies as $code => $currency)
                                     <option value="{{ $code }}">{{ $code }} - {{ $currency }}</option>
                                 @endforeach
