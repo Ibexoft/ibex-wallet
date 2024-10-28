@@ -19,16 +19,40 @@ class AccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $accounts = Account::where('user_id', '=', auth()->id())->get();
-
+        $query = Account::where('user_id', auth()->id());
+    
+        // Search by account name
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+    
+        // Sorting functionality
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'name_asc':
+                    $query->orderBy('name', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('name', 'desc');
+                    break;
+                case 'balance_asc':
+                    $query->orderBy('balance', 'asc');
+                    break;
+                case 'balance_desc':
+                    $query->orderBy('balance', 'desc');
+                    break;
+            }
+        }
+    
+        $accounts = $query->get();
         $accountTypes = config('custom.account_types');
         $currencies = config('custom.currencies');
-
-        return view('accounts.index', get_defined_vars());
+    
+        return view('accounts.index', compact('accounts', 'accountTypes', 'currencies'));
     }
-
+    
 
     /**
      * Store a newly created resource in storage.
