@@ -31,7 +31,7 @@ class HomeController extends Controller
             return Carbon::parse($transaction->transaction_date)->format('d M Y');
         });
 
-        $categories = Category::where('user_id', '=', auth()->id())->get();
+        $categories = Auth::user()->categories()->where('parent_category_id', null)->get();
         $accounts = Account::where('user_id', '=', auth()->id())->get();
         $wallets = Wallet::where('user_id', '=', auth()->id())->get();
 

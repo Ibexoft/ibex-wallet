@@ -33,7 +33,7 @@ class TransactionController extends Controller
         $expense_this_month = Transaction::month_expense($user->id);
         $owed = Transaction::owed($user->id);
         $other_owed = Transaction::other_owed($user->id);
-        $categories = Category::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
+        $categories = Auth::user()->categories()->where('parent_category_id', null)->get();
         $accounts = Account::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
         $wallets = Wallet::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
 
