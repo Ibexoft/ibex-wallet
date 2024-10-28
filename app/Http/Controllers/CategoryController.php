@@ -19,16 +19,35 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $page_title = 'Categories';
 
-        $categories = Auth::user()->categories()->where('parent_category_id', null)->get();
-        return view(
-            'categories.index',
-            compact('categories', 'page_title')
-        );
+        // Initial query
+        $query = Category::where('user_id', auth()->id())->where('parent_category_id', null);
+
+        // Apply search filter if present
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Apply sort filter if present
+        if ($request->has('sort')) {
+            switch ($request->sort) {
+                case 'name_asc':
+                    $query->orderBy('name', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('name', 'desc');
+                    break;
+            }
+        }
+
+        $categories = $query->get();
+
+        return view('categories.index', compact('categories', 'page_title'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -115,10 +134,10 @@ class CategoryController extends Controller
 
         // Update only the 'name' field of the category
         $category->where('user_id', Auth::id())
-                ->where('id', $category->id)
-                ->update([
-                    'name' => $request->name,
-                ]);
+            ->where('id', $category->id)
+            ->update([
+                'name' => $request->name,
+            ]);
 
         return response()->json(['success' => true, 'message' => 'Category name updated successfully.']);
     }
@@ -141,7 +160,7 @@ class CategoryController extends Controller
                 'message' => 'Cannot delete a parent category'
             ]);
         }
-        if($hasTransactions) {
+        if ($hasTransactions) {
             return response()->json([
                 'success' => false,
                 'message' => 'Cannot delete a category associated with a transaction'
