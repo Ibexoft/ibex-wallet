@@ -311,11 +311,11 @@ function changeTransactionType(type, form) {
     var amountField = form.querySelector("#amount-field");
     if (amountField) {
         if (isTransfer) {
-            amountField.classList.remove("col-md-6");
-            amountField.classList.add("col-md-12");
+            amountField.classList.remove("col-4");
+            amountField.classList.add("col-12");
         } else {
-            amountField.classList.remove("col-md-12");
-            amountField.classList.add("col-md-6");
+            amountField.classList.remove("col-12");
+            amountField.classList.add("col-4");
         }
     }
 }
