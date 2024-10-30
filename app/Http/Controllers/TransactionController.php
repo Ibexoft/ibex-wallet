@@ -157,6 +157,12 @@ class TransactionController extends Controller
             'src_account_id.required' => 'The source account field is required.',
         ]);
 
+        session([
+            'transaction_date' => $request->transaction_date,
+            'src_account_id' => $request->src_account_id,
+            'category_id' => $request->category_id,
+            'transaction_type' => $request->type,
+        ]);
 
         $validated['user_id'] = auth()->id();
         Transaction::create($validated);

@@ -7,22 +7,22 @@ use App\Enums\TransactionType as TransactionType;
 
     <div class="form-group row">
         <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
-            <label class="btn btn-outline-primary active" id="expense-btn">
+            <label class="btn btn-outline-primary {{ session('transaction_type') === TransactionType::Expense->label() || !session('transaction_type') ? 'active' : '' }}" id="expense-btn">
                 <input type="radio" class="d-none" name="type"
-                    value="{{ TransactionType::Expense->label() }}" checked
-                    onclick="changeTransactionType('{{ TransactionType::Expense->label() }}',this.parentElement.parentElement.parentElement.parentElement)">
+                    value="{{ TransactionType::Expense->label() }}" {{ session('transaction_type') === TransactionType::Expense->label() || !session('transaction_type') ? 'checked' : '' }}
+                    onclick="changeTransactionType('{{ TransactionType::Expense->label() }}', this.parentElement.parentElement.parentElement.parentElement)">
                 Expense
             </label>
-            <label class="btn btn-outline-primary" id="income-btn">
+            <label class="btn btn-outline-primary {{ session('transaction_type') === TransactionType::Income->label() ? 'active' : '' }}" id="income-btn">
                 <input type="radio" class="d-none" name="type"
-                    value="{{ TransactionType::Income->label() }}"
-                    onclick="changeTransactionType('{{ TransactionType::Income->label() }}',this.parentElement.parentElement.parentElement.parentElement)">
+                    value="{{ TransactionType::Income->label() }}" {{ session('transaction_type') === TransactionType::Income->label() ? 'checked' : '' }}
+                    onclick="changeTransactionType('{{ TransactionType::Income->label() }}', this.parentElement.parentElement.parentElement.parentElement)">
                 Income
             </label>
-            <label class="btn btn-outline-primary" id="transfer-btn">
+            <label class="btn btn-outline-primary {{ session('transaction_type') === TransactionType::Transfer->label() ? 'active' : '' }}" id="transfer-btn">
                 <input type="radio" class="d-none" name="type"
-                    value="{{ TransactionType::Transfer->label() }}"
-                    onclick="changeTransactionType('{{ TransactionType::Transfer->label() }}',this.parentElement.parentElement.parentElement.parentElement)">
+                    value="{{ TransactionType::Transfer->label() }}" {{ session('transaction_type') === TransactionType::Transfer->label() ? 'checked' : '' }}
+                    onclick="changeTransactionType('{{ TransactionType::Transfer->label() }}', this.parentElement.parentElement.parentElement.parentElement)">
                 Transfer
             </label>
         </div>
@@ -32,7 +32,7 @@ use App\Enums\TransactionType as TransactionType;
         <div class="form-group">
             <label for="transaction_date">Date <span class="text-danger">*</span></label>
             <input id="transaction_date" type="date" class="form-control" name="transaction_date"
-                value="{{ date('Y-m-d') }}" required autocomplete="transaction_date">
+                value="{{ session('transaction_date', date('Y-m-d')) }}" required autocomplete="transaction_date">
         </div>
 
         <div class="col-4 form-group" id="amount-field">
@@ -48,7 +48,7 @@ use App\Enums\TransactionType as TransactionType;
                 autocomplete="src_account_id">
                 <option selected disabled value="">-- Select Account --</option>
                 @foreach ($accounts as $account)
-                    <option value="{{ $account->id }}">{{ $account->name }}</option>
+                    <option value="{{ $account->id }}" {{ session('src_account_id') == $account->id ? 'selected' : '' }}>{{ $account->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -69,7 +69,7 @@ use App\Enums\TransactionType as TransactionType;
                 autocomplete="category_id">
                 <option selected disabled value="">-- Select Category --</option>
                 @foreach ($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    <option value="{{ $category->id }}" {{ session('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                     @if (count($category->subcategories))
                         @include ('categories.subCategoryOption', [
                             'subcategories' => $category->subcategories,
@@ -81,20 +81,9 @@ use App\Enums\TransactionType as TransactionType;
         </div>
 
         <div class="form-group">
-            {{-- <label for="details">Details</label> --}}
             <input id="details" type="text" class="form-control" name="details" maxlength="200"
                 autocomplete="details" placeholder="Details (optional)" title="Details about the transaction">
         </div>
-
-        {{-- <div class="col-6 form-group" id="wallet-field">
-            <label for="wallet_id">Wallet</label>
-            <select name="wallet_id" id="wallet_id" class="form-control" required
-                autocomplete="wallet_id">
-                @foreach ($wallets as $wallet)
-                    <option value="{{ $wallet->id }}">{{ $wallet->name }}</option>
-                @endforeach
-            </select>
-        </div> --}}
     </div>
 
     <div class="text-center">

@@ -1,5 +1,5 @@
 @foreach($subcategories as $subcategory)
-    <option value="{{ $subcategory->id }}" {{ isset($category) && $category->id == $subcategory->id ? "disabled" : '' }}>
+    <option value="{{ $subcategory->id }}" {{ isset($category) && $category->id == $subcategory->id ? "disabled" : '' }} {{ session('category_id') == $subcategory->id ? 'selected' : '' }}>
             @for ($i = 0; $i < $indent; $i++)
                 &nbsp;-
             @endfor
