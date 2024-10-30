@@ -5,21 +5,21 @@ use App\Enums\TransactionType as TransactionType;
     @csrf
     <input type="hidden" id="transaction_id" name="transaction_id">
 
-    <div class="form-group row">
+    <div class="row">
         <div class="btn-group btn-group-toggle mx-auto" data-toggle="buttons">
-            <label class="btn btn-outline-primary active" id="expense-btn">
+            <label class="btn btn-outline-primary active px-1 mx-0" id="expense-btn">
                 <input type="radio" class="d-none" name="type"
                     value="{{ TransactionType::Expense->label() }}" checked
                     onclick="changeTransactionType('{{ TransactionType::Expense->label() }}',this.parentElement.parentElement.parentElement.parentElement)">
                 Expense
             </label>
-            <label class="btn btn-outline-primary" id="income-btn">
+            <label class="btn btn-outline-primary px-1" id="income-btn">
                 <input type="radio" class="d-none" name="type"
                     value="{{ TransactionType::Income->label() }}"
                     onclick="changeTransactionType('{{ TransactionType::Income->label() }}',this.parentElement.parentElement.parentElement.parentElement)">
                 Income
             </label>
-            <label class="btn btn-outline-primary" id="transfer-btn">
+            <label class="btn btn-outline-primary px-1" id="transfer-btn">
                 <input type="radio" class="d-none" name="type"
                     value="{{ TransactionType::Transfer->label() }}"
                     onclick="changeTransactionType('{{ TransactionType::Transfer->label() }}',this.parentElement.parentElement.parentElement.parentElement)">
