@@ -341,7 +341,26 @@ document.querySelectorAll('.transactionForm').forEach(function (form) {
     });
 });
 
-document.getElementById("transaction-filter-form")?.addEventListener("change", function() {
+document.getElementById("transaction-filter-form")?.addEventListener("change", function(event) {
+    // Prevent form submission for processing
+    event.preventDefault();
+
+    // Get all input and select elements in the form
+    const inputs = this.querySelectorAll("input, select");
+
+    // Loop through each input/select element
+    inputs.forEach(input => {
+        // Check if the input is empty
+        if (input.value.trim() === "") {
+            // Disable the input before submission
+            input.setAttribute("disabled", "disabled");
+        } else {
+            // Ensure enabled fields remain enabled
+            input.removeAttribute("disabled");
+        }
+    });
+
+    // Submit the form after disabling empty fields
     this.submit();
 });
 
