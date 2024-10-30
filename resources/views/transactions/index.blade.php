@@ -166,10 +166,6 @@
                             </div>
                         </div>
 
-
-                        <button type="submit" class="btn bg-gradient-primary w-100 my-2">Apply Filters</button>
-                        <a href="{{ route('transactions.index') }}" class="btn bg-gradient-secondary w-100">Clear
-                            All Filters</a>
                     </div>
                 </div>
             </form>
