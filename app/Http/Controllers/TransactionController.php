@@ -16,11 +16,31 @@ use Illuminate\Validation\Rules\Enum;
 
 class TransactionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $pageTitle = 'Dashboard';
 
-        $paginatedTransactions = Auth::user()->transactions()->orderByDesc('transaction_date')->paginate(10);
+        // Initial query
+        $query = Auth::user()->transactions()->orderByDesc('transaction_date');
+
+        // Apply filters if present
+        if ($request->filled('categories')) {
+            $query->withCategories($request->categories);
+        }
+        if ($request->filled('accounts')) {
+            $query->withAccounts($request->accounts);
+        }
+        if ($request->filled('transaction_types')) {
+            $query->withTransactionTypes($request->transaction_types);
+        }
+        if ($request->filled('min_amount') || $request->filled('max_amount')) {
+            $query->withAmountRange($request->min_amount, $request->max_amount);
+        }
+        if ($request->filled('start_date') || $request->filled('end_date')) {
+            $query->withDateRange($request->start_date, $request->end_date);
+        }
+
+        $paginatedTransactions = $query->paginate(10);
 
         $transactions = $paginatedTransactions->getCollection()->groupBy(function ($transaction) {
             return Carbon::parse($transaction->transaction_date)->format('d M Y');
@@ -33,9 +53,9 @@ class TransactionController extends Controller
         $expense_this_month = Transaction::month_expense($user->id);
         $owed = Transaction::owed($user->id);
         $other_owed = Transaction::other_owed($user->id);
-        $categories = Auth::user()->categories()->where('parent_category_id', null)->get();
-        $accounts = Account::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
-        $wallets = Wallet::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
+        $categories = $user->categories()->where('parent_category_id', null)->get();
+        $accounts = Account::where('user_id', '=', $user->id)->orderBy('name', 'asc')->get();
+        $wallets = Wallet::where('user_id', '=', $user->id)->orderBy('name', 'asc')->get();
 
         return view(
             'transactions.index',
@@ -52,51 +72,8 @@ class TransactionController extends Controller
                 'categories',
                 'accounts',
                 'wallets'
-            )
+            ) + ['filters' => $request->all()]
         );
-    }
-
-
-    public function filter(Request $request)
-    {
-        $request->validate([
-            'categories' => 'array|nullable',
-            'categories.*' => 'exists:categories,id',
-            'accounts' => 'array|nullable',
-            'accounts.*' => 'exists:accounts,id',
-            'transaction_types' => 'array|nullable',
-            'transaction_types.*' => 'in:1,2,3',
-            'min_amount' => 'numeric|nullable',
-            'max_amount' => 'numeric|nullable',
-            'start_date' => 'date|nullable',
-            'end_date' => 'date|nullable',
-        ]);
-
-        $paginatedTransactions = Auth::user()->transactions()
-            ->orderByDesc('transaction_date')
-            ->withCategories($request->categories ?? [])
-            ->withAccounts($request->accounts ?? [])
-            ->withTransactionTypes($request->transaction_types ?? [])
-            ->withAmountRange($request->min_amount, $request->max_amount)
-            ->withDateRange($request->start_date, $request->end_date)
-            ->paginate(10);
-
-        $transactions = $paginatedTransactions->getCollection()->groupBy(function ($transaction) {
-            return Carbon::parse($transaction->transaction_date)->format('d M Y');
-        });
-
-        $categories = Category::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
-        $accounts = Account::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
-        $wallets = Wallet::where('user_id', '=', auth()->id())->orderBy('name', 'asc')->get();
-
-        return view('transactions.index', [
-            'transactions' => $transactions,
-            'paginatedTransactions' => $paginatedTransactions,
-            'filters' => $request->all(),
-            'categories' => $categories,
-            'accounts' => $accounts,
-            'wallets' => $wallets,
-        ]);
     }
 
 
@@ -227,7 +204,7 @@ class TransactionController extends Controller
             'category_id.required_unless' => 'The category field is required.',
             'src_account_id.required' => 'The source account field is required.',
         ]);
-        
+
         $validated['user_id'] = auth()->id();
         $transaction->update($validated);
 

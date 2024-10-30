@@ -6,7 +6,7 @@
     @endphp
     <div class="col-lg-3 mb-4 mb-lg-0">
         <div class="card">
-            <form id="transaction-filter-form" action="{{ route('transactions.filter') }}" method="POST">
+            <form id="transaction-filter-form" action="{{ route('transactions.index') }}" method="GET">
                 <div class="card-header pb-0 px-3">
                     <span class="text-dark px-2 d-flex justify-content-between w-100 align-items-center"
                         data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="true"
@@ -17,9 +17,6 @@
                 </div>
                 <div class="card-body pb-0">
                     <div id="filterCollapse" class="pt-0 collapse show" data-bs-parent="#accordionExample">
-
-                        @csrf
-
                         <!-- Categories Filter -->
                         <div class="mb-3">
                             <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
@@ -102,20 +99,20 @@
                             <div id="transactionTypeCollapse" class="{{ isset($filters['transaction_types']) ? '' : 'collapse' }} pt-2">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="transactionType2"
-                                        name="transaction_types[]" value="1"
-                                        {{ isset($filters['transaction_types']) && in_array('1', $filters['transaction_types']) ? 'checked' : '' }}>
+                                        name="transaction_types[]" value="{{ TransactionType::Expense->label()}}"
+                                        {{ isset($filters['transaction_types']) && in_array(TransactionType::Expense->label(), $filters['transaction_types']) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="transactionType2">Expense</label>
                                 </div>
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="transactionType1"
-                                        name="transaction_types[]" value="2"
-                                        {{ isset($filters['transaction_types']) && in_array('2', $filters['transaction_types']) ? 'checked' : '' }}>
+                                        name="transaction_types[]" value="{{ TransactionType::Income->label()}}"
+                                        {{ isset($filters['transaction_types']) && in_array(TransactionType::Income->label(), $filters['transaction_types']) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="transactionType1">Income</label>
                                 </div>
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="transactionType3"
-                                        name="transaction_types[]" value="3"
-                                        {{ isset($filters['transaction_types']) && in_array('3', $filters['transaction_types']) ? 'checked' : '' }}>
+                                        name="transaction_types[]" value="{{ TransactionType::Transfer->label()}}"
+                                        {{ isset($filters['transaction_types']) && in_array(TransactionType::Transfer->label(), $filters['transaction_types']) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="transactionType3">Transfer</label>
                                 </div>
                             </div>

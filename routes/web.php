@@ -16,7 +16,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
     Route::resource('transactions', TransactionController::class);
-    Route::post('/filter-transactions', [TransactionController::class, 'filter'])->name('transactions.filter');
     Route::resource('accounts', AccountController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('wallets', WalletController::class);
