@@ -341,6 +341,9 @@ document.querySelectorAll('.transactionForm').forEach(function (form) {
     });
 });
 
+document.getElementById("transaction-filter-form")?.addEventListener("change", function() {
+    this.submit();
+});
 
 /* Transaction JavaScript */
 
