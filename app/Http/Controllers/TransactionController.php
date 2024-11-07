@@ -160,6 +160,7 @@ class TransactionController extends Controller
         session([
             'transaction_date' => $request->transaction_date,
             'src_account_id' => $request->src_account_id,
+            'dest_account_id' => $request->dest_account_id,
             'category_id' => $request->category_id,
             'transaction_type' => $request->type,
         ]);
