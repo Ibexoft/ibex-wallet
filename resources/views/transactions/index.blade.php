@@ -194,6 +194,8 @@
                 destroy: "{{ route('transactions.destroy', ['transaction' => '__TRANSACTION_ID__']) }}",
                 show: "{{ route('transactions.show', ['transaction' => '__TRANSACTION_ID__']) }}"
             };
+            let addform= document.getElementsByClassName("transactionForm")[0];
+            changeTransactionType("{{session('transaction_type')}}", addform);
         });
     </script>
 @endsection

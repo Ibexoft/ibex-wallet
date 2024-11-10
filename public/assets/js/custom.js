@@ -261,7 +261,6 @@ function openModalForEdit(element) {
             modalDiv.querySelector("#dest_account_id").value = transaction.dest_account_id || '';
             modalDiv.querySelector("#amount").value = transaction.amount || '';
             modalDiv.querySelector("#category_id").value = transaction.category_id || '';
-            modalDiv.querySelector("#wallet_id").value = transaction.wallet_id || '';
             modalDiv.querySelector("#details").value = transaction.details || '';
             modalDiv.querySelector("#transaction_date").value = transaction.transaction_date || '';
 
@@ -274,6 +273,9 @@ function openModalForEdit(element) {
 }
 
 function changeTransactionType(type, form) {
+    if (!type){
+        return;
+    }
     var isTransfer = type === "Transfer";
     var isExpenseOrIncome = type === "Expense" || type === "Income";
 
@@ -307,15 +309,20 @@ function changeTransactionType(type, form) {
         walletField.style.display = isExpenseOrIncome ? "" : "none";
     }
 
-    // Adjust amount field column size
+    // Adjust amount field and accounts field column size
     var amountField = form.querySelector("#amount-field");
+    var accountField = form.querySelector("#account-label").parentNode;
     if (amountField) {
         if (isTransfer) {
             amountField.classList.remove("col-4");
             amountField.classList.add("col-12");
+            accountField.classList.remove("col-8");
+            accountField.classList.add("col-6");
         } else {
             amountField.classList.remove("col-12");
             amountField.classList.add("col-4");
+            accountField.classList.remove("col-6");
+            accountField.classList.add("col-8");
         }
     }
 }
