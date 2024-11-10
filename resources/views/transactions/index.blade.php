@@ -165,6 +165,8 @@
                                 </div>
                             </div>
                         </div>
+                        <a href="{{ route('transactions.index') }}" class="btn bg-gradient-secondary w-100 mt-3">Clear
+                            All Filters</a>
 
                     </div>
                 </div>
