@@ -24,11 +24,13 @@ class CategoryController extends Controller
         $page_title = 'Categories';
 
         // Initial query
-        $query = Category::where('user_id', auth()->id())->where('parent_category_id', null);
+        $query = Category::where('user_id', auth()->id());
 
-        // Apply search filter if present
         if ($request->has('search') && $request->search != '') {
+            // Apply search filter if present
             $query->where('name', 'like', '%' . $request->search . '%');
+        }else {
+            $query->where('parent_category_id', null);
         }
 
         // Apply sort filter if present
