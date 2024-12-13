@@ -58,7 +58,7 @@ use App\Enums\TransactionType as TransactionType;
                 autocomplete="dest_account_id">
                 <option selected disabled>-- Select Account --</option>
                 @foreach ($accounts as $account)
-                    <option value="{{ $account->id }}">{{ $account->name }}</option>
+                    <option value="{{ $account->id }}" {{ session('dest_account_id') == $account->id ? 'selected' : '' }}>{{ $account->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -91,3 +91,10 @@ use App\Enums\TransactionType as TransactionType;
             class="btn bg-gradient-primary w-100">Add</button>
     </div>
 </form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let selectedTransactionType = "{{ session('transaction_type') }}";
+        changeTransactionType(selectedTransactionType, document.querySelector('.transactionForm'));
+    });
+</script>
