@@ -23,17 +23,17 @@ class CategoryController extends Controller
     {
         $page_title = 'Categories';
 
-        // Initial query
-        $query = Category::where('user_id', auth()->id());
+        $query = Category::where('user_id', auth()->id())->whereNull('parent_category_id');
 
+        $expendAll = false;
         if ($request->has('search') && $request->search != '') {
-            // Apply search filter if present
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }else {
-            $query->where('parent_category_id', null);
+            $expendAll = true;
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhereHas('subcategories', function ($subQuery) use ($request) {
+                    $subQuery->where('name', 'like', '%' . $request->search . '%');
+                });
         }
 
-        // Apply sort filter if present
         if ($request->has('sort')) {
             switch ($request->sort) {
                 case 'name_asc':
@@ -45,9 +45,13 @@ class CategoryController extends Controller
             }
         }
 
-        $categories = $query->get();
+        $categories = $query->with(['subcategories' => function ($subQuery) use ($request) {
+            if ($request->has('search') && $request->search != '') {
+                $subQuery->where('name', 'like', '%' . $request->search . '%');
+            }
+        }])->get();
 
-        return view('categories.index', compact('categories', 'page_title'));
+        return view('categories.index', compact('categories', 'page_title', 'expendAll'));
     }
 
 

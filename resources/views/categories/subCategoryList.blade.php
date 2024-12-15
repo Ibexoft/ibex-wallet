@@ -1,6 +1,6 @@
 @foreach ($subcategories as $subcategory)
     <div class="subcategory-card row mx-auto ps-md-3 ps-2 position-relative align-items-center justify-content-between rounded px-0 my-3 mb-0 py-1"
-        style="display:none;" id="category-{{ $subcategory->id }}">
+        style="display:{{$expendAll ? '' : 'none'}};" id="category-{{ $subcategory->id }}">
         <!-- Column 1: Category Info -->
         <div onclick="toggleCategory.call(this)" class="dropdown-toggler col-lg-5 col-md-5 col-10 opacity-50 d-flex align-items-center"
             style="{{ count($subcategory->subcategories) ? 'cursor: pointer;' : '' }}">

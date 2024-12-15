@@ -64,7 +64,7 @@
                 @endif
                 @foreach ($categories as $category)
                     {{-- Parent Category --}}
-                    <div class="category-card  m-auto position-relative row align-items-center justify-content-between py-3 px-0 rounded my-3 bg-gray-100"
+                    <div class="category-card  m-auto position-relative row align-items-center justify-content-between py-2 px-0 rounded my-3 bg-gray-100"
                         id="category-{{ $category->id }}">
                         <!-- Column 1: Category Info -->
                         <div onclick="toggleCategory.call(this)"
@@ -107,6 +107,7 @@
                             @include('categories.subCategoryList', [
                                 'subcategories' => $category->subcategories,
                                 'isParentable' => true,
+                                'expendAll' => $expendAll
                             ])
                         @endif
                     </div>
