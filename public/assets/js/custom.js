@@ -874,3 +874,16 @@ function showToast(message) {
 }
 
 /* Success Toast */
+
+/* Transaction To and From Dropdown */
+function filterOptions(sourceDropdown, targetDropdown) {
+    const selectedValue = sourceDropdown.value;
+    Array.from(targetDropdown.options).forEach(option => {
+        if (option.value === selectedValue) {
+            option.classList.add('d-none');
+        } else {
+            option.classList.remove('d-none');
+        }
+    });
+}
+/* Transaction To and From Dropdown */

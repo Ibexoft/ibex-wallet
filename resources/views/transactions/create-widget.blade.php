@@ -96,5 +96,20 @@ use App\Enums\TransactionType as TransactionType;
     document.addEventListener("DOMContentLoaded", function () {
         let selectedTransactionType = "{{ session('transaction_type') }}";
         changeTransactionType(selectedTransactionType, document.querySelector('.transactionForm'));
+
+        // To account and dest account cannot be same
+        const srcAccountDropdown = document.getElementById('src_account_id');
+        const destAccountDropdown = document.getElementById('dest_account_id');
+
+        srcAccountDropdown.addEventListener('change', () => {
+            filterOptions(srcAccountDropdown, destAccountDropdown);
+        });
+
+            destAccountDropdown.addEventListener('change', () => {
+            filterOptions(destAccountDropdown, srcAccountDropdown);
+        });
+        // Initial filter on page load
+        filterOptions(srcAccountDropdown, destAccountDropdown);
+        filterOptions(destAccountDropdown, srcAccountDropdown);
     });
 </script>
