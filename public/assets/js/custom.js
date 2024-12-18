@@ -876,11 +876,14 @@ function showToast(message) {
 /* Success Toast */
 
 /* Transaction To and From Dropdown */
-function filterOptions(sourceDropdown, targetDropdown) {
+function filterDestinationOptions(sourceDropdown, destDropdown) {
     const selectedValue = sourceDropdown.value;
-    Array.from(targetDropdown.options).forEach(option => {
+    Array.from(destDropdown.options).forEach(option => {
         if (option.value === selectedValue) {
             option.classList.add('d-none');
+            if (option.selected) {
+                option.selected = false;
+            }
         } else {
             option.classList.remove('d-none');
         }

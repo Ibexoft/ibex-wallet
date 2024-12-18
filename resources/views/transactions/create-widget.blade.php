@@ -66,7 +66,7 @@ use App\Enums\TransactionType as TransactionType;
         <div class="col-12 form-group" id="category-field">
             <label for="category_id">Category <span class="text-danger">*</span></label>
             <select name="category_id" id="category_id" class="form-control"
-                autocomplete="category_id">
+                autocomplete="category_id" required>
                 <option selected disabled value="">-- Select Category --</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}" {{ session('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
@@ -97,19 +97,14 @@ use App\Enums\TransactionType as TransactionType;
         let selectedTransactionType = "{{ session('transaction_type') }}";
         changeTransactionType(selectedTransactionType, document.querySelector('.transactionForm'));
 
-        // To account and dest account cannot be same
+        // To account and From account cannot be the same
         const srcAccountDropdown = document.getElementById('src_account_id');
         const destAccountDropdown = document.getElementById('dest_account_id');
 
         srcAccountDropdown.addEventListener('change', () => {
-            filterOptions(srcAccountDropdown, destAccountDropdown);
+            filterDestinationOptions(srcAccountDropdown, destAccountDropdown);
         });
 
-            destAccountDropdown.addEventListener('change', () => {
-            filterOptions(destAccountDropdown, srcAccountDropdown);
-        });
-        // Initial filter on page load
-        filterOptions(srcAccountDropdown, destAccountDropdown);
-        filterOptions(destAccountDropdown, srcAccountDropdown);
+        filterDestinationOptions(srcAccountDropdown, destAccountDropdown);
     });
 </script>
