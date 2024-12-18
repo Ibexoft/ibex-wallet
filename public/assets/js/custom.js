@@ -882,11 +882,14 @@ function filterDestinationOptions(sourceDropdown, destDropdown) {
         if (option.value === selectedValue) {
             option.classList.add('d-none');
             if (option.selected) {
-                option.selected = false;
+                destDropdown.selectedIndex = 0;
             }
         } else {
             option.classList.remove('d-none');
         }
     });
+    if (destDropdown.value === selectedValue) {
+        destDropdown.selectedIndex = 0;
+    }
 }
 /* Transaction To and From Dropdown */

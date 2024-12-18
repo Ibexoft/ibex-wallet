@@ -54,9 +54,9 @@ use App\Enums\TransactionType as TransactionType;
         </div>
         <div class="col-6 form-group" id="collapseToAccount" style="display: none;">
             <label for="dest_account_id">To Account <span class="text-danger">*</span></label>
-            <select name="dest_account_id" id="dest_account_id" class="form-control"
+            <select name="dest_account_id" id="dest_account_id" class="form-control" required
                 autocomplete="dest_account_id">
-                <option selected disabled>-- Select Account --</option>
+                <option selected disabled value="">-- Select Account --</option>
                 @foreach ($accounts as $account)
                     <option value="{{ $account->id }}" {{ session('dest_account_id') == $account->id ? 'selected' : '' }}>{{ $account->name }}</option>
                 @endforeach
