@@ -874,3 +874,22 @@ function showToast(message) {
 }
 
 /* Success Toast */
+
+/* Transaction To and From Dropdown */
+function filterDestinationOptions(sourceDropdown, destDropdown) {
+    const selectedValue = sourceDropdown.value;
+    Array.from(destDropdown.options).forEach(option => {
+        if (option.value === selectedValue) {
+            option.classList.add('d-none');
+            if (option.selected) {
+                destDropdown.selectedIndex = 0;
+            }
+        } else {
+            option.classList.remove('d-none');
+        }
+    });
+    if (destDropdown.value === selectedValue) {
+        destDropdown.selectedIndex = 0;
+    }
+}
+/* Transaction To and From Dropdown */

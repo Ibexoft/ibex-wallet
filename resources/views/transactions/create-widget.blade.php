@@ -54,9 +54,9 @@ use App\Enums\TransactionType as TransactionType;
         </div>
         <div class="col-6 form-group" id="collapseToAccount" style="display: none;">
             <label for="dest_account_id">To Account <span class="text-danger">*</span></label>
-            <select name="dest_account_id" id="dest_account_id" class="form-control"
+            <select name="dest_account_id" id="dest_account_id" class="form-control" required
                 autocomplete="dest_account_id">
-                <option selected disabled>-- Select Account --</option>
+                <option selected disabled value="">-- Select Account --</option>
                 @foreach ($accounts as $account)
                     <option value="{{ $account->id }}" {{ session('dest_account_id') == $account->id ? 'selected' : '' }}>{{ $account->name }}</option>
                 @endforeach
@@ -66,7 +66,7 @@ use App\Enums\TransactionType as TransactionType;
         <div class="col-12 form-group" id="category-field">
             <label for="category_id">Category <span class="text-danger">*</span></label>
             <select name="category_id" id="category_id" class="form-control"
-                autocomplete="category_id">
+                autocomplete="category_id" required>
                 <option selected disabled value="">-- Select Category --</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}" {{ session('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
@@ -96,5 +96,15 @@ use App\Enums\TransactionType as TransactionType;
     document.addEventListener("DOMContentLoaded", function () {
         let selectedTransactionType = "{{ session('transaction_type') }}";
         changeTransactionType(selectedTransactionType, document.querySelector('.transactionForm'));
+
+        // To account and From account cannot be the same
+        const srcAccountDropdown = document.getElementById('src_account_id');
+        const destAccountDropdown = document.getElementById('dest_account_id');
+
+        srcAccountDropdown.addEventListener('change', () => {
+            filterDestinationOptions(srcAccountDropdown, destAccountDropdown);
+        });
+
+        filterDestinationOptions(srcAccountDropdown, destAccountDropdown);
     });
 </script>
