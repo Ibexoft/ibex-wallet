@@ -146,7 +146,7 @@
 
 @section('script')
     <script>
-        $(document).ready(function() {
+        document.addEventListener("DOMContentLoaded", function () {
             window.accountRoutes = {
                 store: "{{ route('accounts.store') }}",
                 update: "{{ route('accounts.update', ['account' => '__ACCOUNT_ID__']) }}",
