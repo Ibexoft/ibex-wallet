@@ -158,12 +158,24 @@ class AccountController extends Controller
     public function destroy(Account $account)
     {
         try {
+            $hasTransactions = \DB::table('transactions')
+                ->where('src_account_id', $account->id)
+                ->orWhere('dest_account_id', $account->id)
+                ->exists();  
+                
+            if ($hasTransactions) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot delete an account associated with a transaction'
+                ]);
+            }
+            
             $account->delete();
-
             return response()->json([
                 'success' => true,
                 'message' => 'Account deleted successfully.'
             ]);
+            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

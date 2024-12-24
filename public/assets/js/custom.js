@@ -583,7 +583,7 @@ function deleteAccount(accountId) {
                     } else {
                         swalWithBootstrapButtons.fire({
                             title: "Failed",
-                            text: "Failed to delete the account. Please try again.",
+                            text: response.message,
                             icon: "error"
                         });
                     }
