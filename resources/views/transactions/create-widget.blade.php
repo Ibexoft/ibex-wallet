@@ -19,7 +19,7 @@ use App\Enums\TransactionType as TransactionType;
                     onclick="changeTransactionType('{{ TransactionType::Income->label() }}', this.parentElement.parentElement.parentElement.parentElement)">
                 Income
             </label>
-            <label class="btn btn-outline-primary px-1 {{ session('transaction_type') === TransactionType::Transfer->label() ? 'active' : '' }}" id="transfer-btn">
+            <label class="btn btn-outline-primary px-1 {{ $accounts->count() < 2 ? 'disabled opacity-5' : '' }} {{ session('transaction_type') === TransactionType::Transfer->label() ? 'active' : '' }}" id="transfer-btn">
                 <input type="radio" class="d-none" name="type"
                     value="{{ TransactionType::Transfer->label() }}" {{ session('transaction_type') === TransactionType::Transfer->label() ? 'checked' : '' }}
                     onclick="changeTransactionType('{{ TransactionType::Transfer->label() }}', this.parentElement.parentElement.parentElement.parentElement)">
