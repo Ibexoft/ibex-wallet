@@ -143,15 +143,16 @@ function deleteTransaction(url) {
         })
         .then((result) => {
             if (result.isConfirmed) {
-                $.ajax({
-                    url: url,
+                fetch(url, {
                     method: "DELETE",
                     headers: {
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                            "content"
-                        ),
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
                     },
-                    success: function (response) {
+                })
+                    .then((response) => response.json())
+                    .then((response) => {
                         if (response.success) {
                             setToastMessage("Your transaction has been deleted.");
                             // Reload the page
@@ -163,43 +164,26 @@ function deleteTransaction(url) {
                                 icon: "error",
                             });
                         }
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        let errorMessage =
-                            "An error occurred. Please try again.";
-                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    })
+                    .catch((error) => {
+                        let errorMessage = "An error occurred. Please try again.";
+                        if (error.response && error.response.errors) {
                             let errorList = "";
-                            for (let field in xhr.responseJSON.errors) {
-                                if (
-                                    xhr.responseJSON.errors.hasOwnProperty(
-                                        field
-                                    )
-                                ) {
-                                    xhr.responseJSON.errors[field].forEach(
-                                        (error) => {
-                                            errorList += `<p class="mb-0">${error}</p>`;
-                                        }
-                                    );
+                            for (let field in error.response.errors) {
+                                if (error.response.errors.hasOwnProperty(field)) {
+                                    error.response.errors[field].forEach((err) => {
+                                        errorList += `<p class="mb-0">${err}</p>`;
+                                    });
                                 }
                             }
-                            errorList += "";
                             errorMessage = errorList;
-                        } else if (xhr.responseText) {
-                            errorMessage = xhr.responseText;
                         }
                         swalWithBootstrapButtons.fire({
                             title: "Error",
                             html: errorMessage,
                             icon: "error",
                         });
-                    },
-                });
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                swalWithBootstrapButtons.fire({
-                    title: "Cancelled",
-                    text: "Your transaction is safe :)",
-                    icon: "error",
-                });
+                    });
             }
         });
 }
@@ -375,7 +359,7 @@ document.getElementById("transaction-filter-form")?.addEventListener("change", f
 
 /* Accounts JavaScript */
 
-$("#accountForm").on("submit", function (e) {
+document.getElementById("accountForm")?.addEventListener("submit", function (e) {
     e.preventDefault();
 
     var formData = new FormData(this);
@@ -385,68 +369,78 @@ $("#accountForm").on("submit", function (e) {
 });
 
 function addAccount(url, formData) {
-    $.ajax({
-        url: url,
-        method: 'POST',
-        data: formData,
-        processData: false,  // Prevent jQuery from automatically transforming the data into a query string
-        contentType: false,  // Prevent jQuery from setting the Content-Type header
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        dataType: 'json',
-        success: function (data) {
-            if (data.success) {
-                // Hide the modal
-                var modalElement = document.getElementById('modal-default');
-                var modalInstance = bootstrap.Modal.getInstance(modalElement);
-                modalInstance.hide()
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    
+    // Set the CSRF token in the headers
+    xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+    
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) { // Request is completed
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                
+                if (data.success) {
+                    // Hide the modal
+                    var modalElement = document.getElementById('modal-default');
+                    var modalInstance = bootstrap.Modal.getInstance(modalElement);
+                    modalInstance.hide();
 
-                setToastMessage("Your account has been added successfully!");
+                    setToastMessage("Your account has been added successfully!");
 
-                // Reload the page
-                window.location.reload();
-            } else {
-                let errorList = '';
-                for (let field in data.errors) {
-                    if (data.errors.hasOwnProperty(field)) {
-                        data.errors[field].forEach(error => {
-                            errorList += `<p class="mb-0">${error}</p>`;
-                        });
+                    // Reload the page
+                    window.location.reload();
+                } else {
+                    let errorList = '';
+                    for (let field in data.errors) {
+                        if (data.errors.hasOwnProperty(field)) {
+                            data.errors[field].forEach(error => {
+                                errorList += `<p class="mb-0">${error}</p>`;
+                            });
+                        }
                     }
+                    swalWithBootstrapButtons.fire({
+                        title: "Validation Errors",
+                        html: errorList,
+                        icon: "error",
+                    });
                 }
-                errorList += '';
+            } else {
+                let errorMessage = "An error occurred. Please try again.";
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    let errorList = '';
+                    for (let field in xhr.responseJSON.errors) {
+                        if (xhr.responseJSON.errors.hasOwnProperty(field)) {
+                            xhr.responseJSON.errors[field].forEach(error => {
+                                errorList += `<p class="mb-0">${error}</p>`;
+                            });
+                        }
+                    }
+                    errorMessage = errorList;
+                } else if (xhr.responseText) {
+                    errorMessage = xhr.responseText;
+                }
                 swalWithBootstrapButtons.fire({
-                    title: "Validation Errors",
-                    html: errorList,
+                    title: "Error",
+                    html: errorMessage,
                     icon: "error",
                 });
             }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            let errorMessage = "An error occurred. Please try again.";
-            if (xhr.responseJSON && xhr.responseJSON.errors) {
-                let errorList = '';
-                for (let field in xhr.responseJSON.errors) {
-                    if (xhr.responseJSON.errors.hasOwnProperty(field)) {
-                        xhr.responseJSON.errors[field].forEach(error => {
-                            errorList += `<p class="mb-0">${error}</p>`;
-                        });
-                    }
-                }
-                errorList += '';
-                errorMessage = errorList;
-            } else if (xhr.responseText) {
-                errorMessage = xhr.responseText;
-            }
-            swalWithBootstrapButtons.fire({
-                title: "Error",
-                html: errorMessage,
-                icon: "error",
-            });
         }
-    });
+    };
+
+    xhr.onerror = function () {
+        swalWithBootstrapButtons.fire({
+            title: "Error",
+            text: "An error occurred while processing the request.",
+            icon: "error",
+        });
+    };
+
+    // Send the request with FormData
+    xhr.send(formData);
 }
+
 
 
 function fetchAccountData(url) {
@@ -466,23 +460,23 @@ function fetchAccountData(url) {
 function openEditAccountModal(account) {
     var updateUrl = window.accountRoutes.update.replace('__ACCOUNT_ID__', account.id);
 
-    $('#editAccountForm').attr('action', updateUrl);
+    document.getElementById('editAccountForm').action = updateUrl;
 
-    // Populate fields with account data
-    $('#editAccountId').val(account.id);
-    $('#editName').val(account.name);
-    $('#editColor').val(account.color);
-    $('#editBalance').val(account.balance);
-    $('#editType').val(account.type);
-    $('#editCurrency').val(account.currency);
+    document.getElementById('editAccountId').value = account.id;
+    document.getElementById('editName').value = account.name;
+    document.getElementById('editColor').value = account.color;
+    document.getElementById('editBalance').value = account.balance;
+    document.getElementById('editType').value = account.type;
+    document.getElementById('editCurrency').value = account.currency;
 
     // Show the modal
-    $('#modal-edit').modal('show');
+    var modal = new bootstrap.Modal(document.getElementById('modal-edit'));
+    modal.show();
 }
 
 
 
-$("#editAccountForm").on("submit", function (e) {
+document.getElementById("editAccountForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
     var formData = new FormData(this);
@@ -492,24 +486,28 @@ $("#editAccountForm").on("submit", function (e) {
 });
 
 function updateAccount(url, formData) {
-    $.ajax({
-        url: url,
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    const options = {
         method: 'POST',
-        data: formData,
-        processData: false,  // Prevent jQuery from automatically transforming the data into a query string
-        contentType: false,  // Prevent jQuery from setting the Content-Type header
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': csrfToken,
         },
-        dataType: 'json',
-        success: function (data) {
+        body: formData,
+    };
+
+    // Send the request using fetch
+    fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
             if (data.success) {
                 // Hide the modal
-                var modalElement = document.getElementById('modal-edit');
-                var modalInstance = bootstrap.Modal.getInstance(modalElement);
+                const modalElement = document.getElementById('modal-edit');
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
                 modalInstance.hide();
 
                 setToastMessage("Your account has been updated successfully!");
+
                 // Reload the page
                 window.location.reload();
             } else {
@@ -528,22 +526,21 @@ function updateAccount(url, formData) {
                     icon: "error",
                 });
             }
-        },
-        error: function (xhr, textStatus, errorThrown) {
+        })
+        .catch(error => {
             let errorMessage = "An error occurred. Please try again.";
-            if (xhr.responseJSON && xhr.responseJSON.errors) {
+            if (error.response && error.response.errors) {
                 let errorList = '';
-                for (let field in xhr.responseJSON.errors) {
-                    if (xhr.responseJSON.errors.hasOwnProperty(field)) {
-                        xhr.responseJSON.errors[field].forEach(error => {
-                            errorList += `<p class="mb-0">${error}</p>`;
+                for (let field in error.response.errors) {
+                    if (error.response.errors.hasOwnProperty(field)) {
+                        error.response.errors[field].forEach(err => {
+                            errorList += `<p class="mb-0">${err}</p>`;
                         });
                     }
                 }
-
                 errorMessage = errorList;
-            } else if (xhr.responseText) {
-                errorMessage = xhr.responseText;
+            } else if (error.responseText) {
+                errorMessage = error.responseText;
             }
 
             swalWithBootstrapButtons.fire({
@@ -551,9 +548,9 @@ function updateAccount(url, formData) {
                 html: errorMessage,
                 icon: "error",
             });
-        }
-    });
+        });
 }
+
 
 
 function deleteAccount(accountId) {
@@ -569,13 +566,20 @@ function deleteAccount(accountId) {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            $.ajax({
-                url: deleteUrl,
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            // Create the request options
+            const options = {
                 method: 'DELETE',
                 headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'X-CSRF-TOKEN': csrfToken,
                 },
-                success: function (response) {
+            };
+
+            // Send the request using fetch
+            fetch(deleteUrl, options)
+                .then(response => response.json())
+                .then(response => {
                     if (response.success) {
                         setToastMessage("The account has been deleted.");
                         // Reload the page
@@ -587,15 +591,14 @@ function deleteAccount(accountId) {
                             icon: "error"
                         });
                     }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
+                })
+                .catch(error => {
                     swalWithBootstrapButtons.fire({
                         title: "Error",
                         text: "An error occurred. Please try again.",
                         icon: "error"
                     });
-                }
-            });
+                });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             swalWithBootstrapButtons.fire({
                 title: "Cancelled",
@@ -606,14 +609,36 @@ function deleteAccount(accountId) {
     });
 }
 
+
 /* Accounts JavaScript */
 
 /* Categories JavaScript */
 
 function toggleCategory() {
-    $(this).siblings('.subcategory-card').toggle();
-    $(this).find('.category-toggle-icon').toggleClass('fa-chevron-down fa-chevron-up');
+    // Get all sibling elements with the class 'subcategory-card'
+    const siblingCards = Array.from(this.parentElement.children).filter(
+        element => element !== this && element.classList.contains('subcategory-card')
+    );
+
+    // Toggle visibility for each sibling subcategory card
+    siblingCards.forEach(card => {
+        card.style.display = card.style.display === 'none' || card.style.display === '' ? 'flex' : 'none';
+    });
+
+    const icon = this.querySelector('.category-toggle-icon');
+    if (icon) {
+        if (icon.classList.contains('fa-chevron-down')) {
+            icon.classList.remove('fa-chevron-down');
+            icon.classList.add('fa-chevron-up');
+        } else {
+            icon.classList.remove('fa-chevron-up');
+            icon.classList.add('fa-chevron-down');
+        }
+    }
 }
+
+
+
 
 function setCategory(id, isSubcategory = false) { // set id and name of selected category for edit or delete
     if (id) {
@@ -643,25 +668,30 @@ function addCategory(event) {
         });
         return;
     }
+
     const parentCategoryId = document.getElementById('parentCategoryId').value;
     const addCategoryModal = document.getElementById('addCategoryModal');
     const modal = bootstrap.Modal.getInstance(addCategoryModal);
     modal.hide();
 
-    // Send AJAX request to the server to save the category
-    $.ajax({
-        url: '/categories',
+    // Send fetch request to the server to save the category
+    fetch('/categories', {
         method: 'POST',
-        data: {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
             parent_category_id: parentCategoryId,
             name: categoryName,
-            icon: "fa fa-check",
-            _token: $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (response) {
-            if (response.success) {
-                setToastMessage(response.message);
-                $(inputSelector).val('');
+            icon: "fa fa-check"
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                setToastMessage(data.message);
+                inputSelector.value = '';
                 // Reload the page
                 window.location.reload();
             } else {
@@ -673,37 +703,21 @@ function addCategory(event) {
                         });
                     }
                 }
-                errorList += '';
                 swalWithBootstrapButtons.fire({
                     title: "Validation Errors",
                     html: errorList,
                     icon: "error",
                 });
             }
-        },
-        error: function (xhr) {
-            let errorMessage = "An error occurred. Please try again.";
-            if (xhr.responseJSON && xhr.responseJSON.errors) {
-                let errorList = '';
-                for (let field in xhr.responseJSON.errors) {
-                    if (xhr.responseJSON.errors.hasOwnProperty(field)) {
-                        xhr.responseJSON.errors[field].forEach(error => {
-                            errorList += `<p class="mb-0">${error}</p>`;
-                        });
-                    }
-                }
-                errorList += '';
-                errorMessage = errorList;
-            } else if (xhr.responseText) {
-                errorMessage = xhr.responseText;
-            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
             swalWithBootstrapButtons.fire({
                 title: "Error",
-                html: errorMessage,
+                text: "An error occurred. Please try again.",
                 icon: "error",
             });
-        }
-    });
+        });
 }
 
 function deleteCategory(id, parentId) {
@@ -711,7 +725,7 @@ function deleteCategory(id, parentId) {
 
     swalWithBootstrapButtons.fire({
         title: "Are you sure?",
-        text: "You want want to delete this category?",
+        text: "You want to delete this category?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -719,17 +733,20 @@ function deleteCategory(id, parentId) {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            $.ajax({
-                url: '/categories/' + categoryId,
+            fetch('/categories/' + categoryId, {
                 method: 'DELETE',
                 headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (response) {
-                    if (response.success) {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
                         const categoryElement = document.querySelector(`#category-${categoryId}`);
                         const parentCategory = categoryElement.parentElement;
                         categoryElement.remove();
+                        
                         if (parentCategory.querySelectorAll('.subcategory-card').length === 0) { // if no subcategory
                             const categoryTitle = parentCategory.querySelector('.category-title');
                             const icon = categoryTitle.querySelector('.category-toggle-icon');
@@ -747,23 +764,23 @@ function deleteCategory(id, parentId) {
                                 }
                             }
                         }
-                        showToast(response.message);
+                        showToast(data.message);
                     } else {
                         swalWithBootstrapButtons.fire({
                             title: "Failed",
-                            text: response.message,
+                            text: data.message,
                             icon: "error"
                         });
                     }
-                },
-                error: function (xhr) {
+                })
+                .catch(error => {
+                    console.error("Error:", error);
                     swalWithBootstrapButtons.fire({
                         title: "Error",
                         text: "An error occurred. Please try again.",
                         icon: "error"
                     });
-                }
-            });
+                });
         }
     });
 }
@@ -772,12 +789,12 @@ function deleteCategory(id, parentId) {
 function updateCategory(event) {
     event.preventDefault();
 
-    // input field for the category name and the new name value
+    // Input field for the category name and the new name value
     const inputSelector = event.target.querySelector('.edit-category-input');
-    const categoryName = $(inputSelector).val();
+    const categoryName = inputSelector.value;
 
     if (categoryName.trim() === '') {
-        swalWithBootstrapButtons.fire({
+        Swal.fire({
             title: "Failed",
             text: "Category name cannot be empty",
             icon: "error"
@@ -786,64 +803,53 @@ function updateCategory(event) {
     }
 
     const id = document.getElementById('parentCategoryId').value;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    // Send AJAX request to the server to update the category
-    $.ajax({
-        url: '/categories/' + id,
+    // Send fetch request to the server to update the category
+    fetch(`/categories/${id}`, {
         method: 'PUT',
-        data: {
-            name: categoryName,
-            _token: $('meta[name="csrf-token"]').attr('content')
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
         },
-        success: function (response) {
-            if (response.success) {
-                $(`#category-${id}-name`).text(categoryName);
-                $(inputSelector).val(categoryName);
+        body: JSON.stringify({ name: categoryName })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.querySelector(`#category-${id}-name`).textContent = categoryName;
+                inputSelector.value = categoryName;
+
                 const editCategoryModal = document.getElementById('editCategoryModal');
                 const modal = bootstrap.Modal.getInstance(editCategoryModal);
                 modal.hide();
 
-                showToast(response.message);
+                showToast(data.message);
             } else {
                 let errorList = '';
-                for (let field in data.errors) {
-                    if (data.errors.hasOwnProperty(field)) {
-                        data.errors[field].forEach(error => {
-                            errorList += `<p class="mb-0">${error}</p>`;
-                        });
+                if (data.errors) {
+                    for (let field in data.errors) {
+                        if (data.errors.hasOwnProperty(field)) {
+                            data.errors[field].forEach(error => {
+                                errorList += `<p class="mb-0">${error}</p>`;
+                            });
+                        }
                     }
                 }
-                errorList += '';
-                swalWithBootstrapButtons.fire({
+                Swal.fire({
                     title: "Validation Errors",
                     html: errorList,
                     icon: "error",
                 });
             }
-        },
-        error: function (xhr) {
-            let errorMessage = "An error occurred. Please try again.";
-            if (xhr.responseJSON && xhr.responseJSON.errors) {
-                let errorList = '';
-                for (let field in xhr.responseJSON.errors) {
-                    if (xhr.responseJSON.errors.hasOwnProperty(field)) {
-                        xhr.responseJSON.errors[field].forEach(error => {
-                            errorList += `<p class="mb-0">${error}</p>`;
-                        });
-                    }
-                }
-                errorList += '';
-                errorMessage = errorList;
-            } else if (xhr.responseText) {
-                errorMessage = xhr.responseText;
-            }
-            swalWithBootstrapButtons.fire({
+        })
+        .catch(error => {
+            Swal.fire({
                 title: "Error",
-                html: errorMessage,
-                icon: "error",
+                text: "An error occurred. Please try again.",
+                icon: "error"
             });
-        }
-    });
+        });
 }
 
 /* Categories JavaScript */
