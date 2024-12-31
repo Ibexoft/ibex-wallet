@@ -152,6 +152,15 @@
                 update: "{{ route('accounts.update', ['account' => '__ACCOUNT_ID__']) }}",
                 destroy: "{{ route('accounts.destroy', ['account' => '__ACCOUNT_ID__']) }}"
             };
+
+            document.getElementById("editAccountForm").addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+                var url = this.action;
+
+                updateAccount(url, formData);
+            });
         });
     </script>
 @endsection
