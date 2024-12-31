@@ -4,12 +4,11 @@
     <div class="container">
 
         <div class="mt-4 row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-8 order-2 order-md-1 mt-md-auto mt-4">
                 @include('transactions.list', ['transactions' => $transactions])
             </div>
-            
 
-            <div class="col-md-4">
+            <div class="col-md-4 order-1 order-md-2">
                 <div class="card">
                     <div class="card-body">
                         @include('transactions.create-widget')
