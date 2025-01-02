@@ -21328,7 +21328,7 @@ fieldset:disabled .btn {
   }
 
   .navbar.blur .dropdown .dropdown-menu.show {
-    transform: perspective(999px) rotateX(0deg) translateZ(0) translate3d(0, 0px, 5px) !important;
+    /* transform: perspective(999px) rotateX(0deg) translateZ(0) translate3d(0, 0px, 5px) !important; */
     box-shadow: none;
     margin-bottom: 1rem;
   }
