@@ -1,5 +1,5 @@
 <div class="container  z-index-sticky top-0 position-sticky">
-    
+
     <div class="row">
         <div class="col-12">
             <!-- Navbar -->
@@ -15,7 +15,7 @@
                             <span class="navbar-toggler-bar bar3"></span>
                         </span>
                     </button>
-                    <a class="navbar-brand d-inline w-lg-15 w-sm-30 w-40 mx-lg-2 mx-0-auto" href="{{ route('dashboard') }}"
+                    <a class="navbar-brand d-inline w-lg-15 w-sm-30 w-40 mx-lg-2 mx-auto" href="{{ route('dashboard') }}"
                         id="header-logo">
                         <img src="{{ asset('assets/img/ibex_wallet_logo.png') }}" alt="Ibex Wallet Logo" class="w-100">
                     </a>
