@@ -48,11 +48,15 @@
                             @if (Auth::check())
                             <div class="dropdown">
                                 <a class="nav-link dropdown-toggle show border rounded-pill px-4" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{-- I want to show user icon here in i tag --}}
                                     <i class="fas fa-user pe-1"></i>
                                     {{ Auth::user()->name }}
                                 </a>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu pb-0">
+                                    <li>
+                                        <a href="{{route('profile.show', ['profile' => Auth::user()->id])}}" class="nav-link dropdown-item">
+                                            Profile
+                                        </a>
+                                    </li>
                                     <li>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf

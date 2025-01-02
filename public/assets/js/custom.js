@@ -883,3 +883,16 @@ function filterDestinationOptions(sourceDropdown, destDropdown) {
     }
 }
 /* Transaction To and From Dropdown */
+
+/* Profile */
+function toggleEditMode() {
+    document.getElementById('profile-edit-btn').classList.toggle('d-none');
+    document.getElementById('profile-cancel-btn').classList.toggle('d-none');
+    document.getElementById('profile-save-btn').classList.toggle('d-none');
+
+    ['name', 'email'].forEach((field) => {
+        document.getElementById(`${field}-view`).classList.toggle('d-none');
+        document.getElementById(`${field}-input`).classList.toggle('d-none');
+    });
+}
+
