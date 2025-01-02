@@ -271,6 +271,10 @@ function changeTransactionType(type, form) {
     // Show or hide the 'To Account' collapse section
     var collapseToAccount = form.querySelector("#collapseToAccount");
     if (collapseToAccount) {
+        var selectElement = collapseToAccount.querySelector("select");
+        if (selectElement) {
+            isTransfer ? selectElement.setAttribute("required", "") : selectElement.removeAttribute("required");
+        }
         collapseToAccount.style.display = isTransfer ? "" : "none";
     }
 
