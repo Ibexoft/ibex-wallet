@@ -458,9 +458,7 @@ function openEditAccountModal(account) {
 
     document.getElementById('editAccountForm').action = updateUrl;
 
-    document.getElementById('editAccountId').value = account.id;
     document.getElementById('editName').value = account.name;
-    document.getElementById('editColor').value = account.color;
     document.getElementById('editBalance').value = account.balance;
     document.getElementById('editType').value = account.type;
     document.getElementById('editCurrency').value = account.currency;
@@ -470,16 +468,6 @@ function openEditAccountModal(account) {
     modal.show();
 }
 
-
-
-document.getElementById("editAccountForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    var formData = new FormData(this);
-    var url = this.action;
-
-    updateAccount(url, formData);
-});
 
 function updateAccount(url, formData) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
