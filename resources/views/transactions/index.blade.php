@@ -16,7 +16,7 @@
                     </span>
                 </div>
                 <div class="card-body pb-0">
-                    <div id="filterCollapse" class="pt-0 collapse show" data-bs-parent="#accordionExample">
+                    <div id="filterCollapse" class="pt-0 collapse d-md-block" data-bs-parent="#accordionExample">
                         <!-- Categories Filter -->
                         <div class="mb-3">
                             <span class="p-0 text-xs d-flex justify-content-between w-100 align-items-center"
