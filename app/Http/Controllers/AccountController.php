@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class AccountController extends Controller
 {
@@ -64,7 +65,14 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:35|unique:accounts,name',
+            'name' => [
+            'required',
+            'string',
+            'max:35',
+                Rule::unique('accounts', 'name')->where(function ($query) {
+                    return $query->where('user_id', auth()->id());
+                }),
+            ],
             'type' => 'required|in:' . implode(',', array_keys(config('custom.account_types'))),
             'balance' => 'required|numeric|min:0',
             'currency' => 'required|in:' . implode(',', array_keys(config('custom.currencies'))),
@@ -123,9 +131,18 @@ class AccountController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:35|unique:accounts,name,' . $id,
+            'name' => [
+                'required',
+                'string',
+                'max:35',
+                Rule::unique('accounts', 'name')
+                    ->where(function ($query) {
+                        return $query->where('user_id', auth()->id());
+                    })
+                    ->ignore($id), // Ignore the current account's ID
+            ],
             'type' => 'required|in:' . implode(',', array_keys(config('custom.account_types'))),
-            'balance' => 'required|numeric|min:0',
+            'balance' => 'required|numeric',
             'currency' => 'required|in:' . implode(',', array_keys(config('custom.currencies'))),
         ]);
 

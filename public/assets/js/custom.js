@@ -365,77 +365,60 @@ document.getElementById("accountForm")?.addEventListener("submit", function (e) 
 });
 
 function addAccount(url, formData) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    
-    // Set the CSRF token in the headers
-    xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-    
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) { // Request is completed
-            if (xhr.status === 200) {
-                var data = JSON.parse(xhr.responseText);
-                
-                if (data.success) {
-                    // Hide the modal
-                    var modalElement = document.getElementById('modal-default');
-                    var modalInstance = bootstrap.Modal.getInstance(modalElement);
-                    modalInstance.hide();
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+            "Accept": "application/json",
+        },
+        body: formData,
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errData => {
+                    throw errData;
+                });
+            }
+            return response.json(); // Return JSON data for successful responses
+        })
+        .then(response => {
+            if (response.success) {
+                // Hide the modal
+                const addAccountModal = document.getElementById('AddAccountModal');
+                const modalInstance = bootstrap.Modal.getInstance(addAccountModal);
+                modalInstance?.hide();
 
-                    setToastMessage("Your account has been added successfully!");
-
-                    // Reload the page
-                    window.location.reload();
-                } else {
-                    let errorList = '';
-                    for (let field in data.errors) {
-                        if (data.errors.hasOwnProperty(field)) {
-                            data.errors[field].forEach(error => {
-                                errorList += `<p class="mb-0">${error}</p>`;
-                            });
-                        }
-                    }
-                    swalWithBootstrapButtons.fire({
-                        title: "Validation Errors",
-                        html: errorList,
-                        icon: "error",
-                    });
-                }
+                setToastMessage("Account successfully created.");
+                window.location.reload();
             } else {
-                let errorMessage = "An error occurred. Please try again.";
-                if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    let errorList = '';
-                    for (let field in xhr.responseJSON.errors) {
-                        if (xhr.responseJSON.errors.hasOwnProperty(field)) {
-                            xhr.responseJSON.errors[field].forEach(error => {
-                                errorList += `<p class="mb-0">${error}</p>`;
-                            });
-                        }
-                    }
-                    errorMessage = errorList;
-                } else if (xhr.responseText) {
-                    errorMessage = xhr.responseText;
-                }
                 swalWithBootstrapButtons.fire({
                     title: "Error",
-                    html: errorMessage,
+                    text: "An error occurred: " + response.message,
                     icon: "error",
                 });
             }
-        }
-    };
-
-    xhr.onerror = function () {
-        swalWithBootstrapButtons.fire({
-            title: "Error",
-            text: "An error occurred while processing the request.",
-            icon: "error",
+        })
+        .catch(error => {
+            let errorMessage = "An error occurred. Please try again.";
+            if (error.errors) {
+                let errorList = "";
+                for (let field in error.errors) {
+                    if (error.errors.hasOwnProperty(field)) {
+                        error.errors[field].forEach((err) => {
+                            errorList += `<p class="mb-0">${err}</p>`;
+                        });
+                    }
+                }
+                errorMessage = errorList;
+            }
+            swalWithBootstrapButtons.fire({
+                title: "Error",
+                html: errorMessage,
+                icon: "error",
+            });
         });
-    };
-
-    // Send the request with FormData
-    xhr.send(formData);
 }
+
 
 
 
@@ -464,18 +447,17 @@ function openEditAccountModal(account) {
     document.getElementById('editCurrency').value = account.currency;
 
     // Show the modal
-    var modal = new bootstrap.Modal(document.getElementById('modal-edit'));
+    var modal = new bootstrap.Modal(document.getElementById('EditAccountModal'));
     modal.show();
 }
 
 
 function updateAccount(url, formData) {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
     const options = {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': csrfToken,
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+            "Accept": "application/json",
         },
         body: formData,
     };
@@ -486,7 +468,7 @@ function updateAccount(url, formData) {
         .then(data => {
             if (data.success) {
                 // Hide the modal
-                const modalElement = document.getElementById('modal-edit');
+                const modalElement = document.getElementById('EditAccountModal');
                 const modalInstance = bootstrap.Modal.getInstance(modalElement);
                 modalInstance.hide();
 
@@ -536,7 +518,6 @@ function updateAccount(url, formData) {
 }
 
 
-
 function deleteAccount(accountId) {
     var deleteUrl = window.accountRoutes.destroy.replace('__ACCOUNT_ID__', accountId);
 
@@ -581,13 +562,7 @@ function deleteAccount(accountId) {
                         title: "Error",
                         text: "An error occurred. Please try again.",
                         icon: "error"
-                    });
                 });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            swalWithBootstrapButtons.fire({
-                title: "Cancelled",
-                text: "Your account is safe :)",
-                icon: "error"
             });
         }
     });
