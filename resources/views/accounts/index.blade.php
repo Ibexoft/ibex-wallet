@@ -13,7 +13,7 @@
                     </span>
                 </div>
                 <div class="card-body pb-0">
-                    <div id="filterCollapse" class="pt-0 collapse show" data-bs-parent="#accordionExample">
+                    <div id="filterCollapse" class="pt-0 collapse d-md-block" data-bs-parent="#accordionExample">
                         <div class="mb-3">
                             <label for="accountSearch" class="form-label">Search Accounts</label>
                             <input type="text" class="form-control" id="accountSearch" name="search"
