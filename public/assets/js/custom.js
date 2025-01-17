@@ -195,11 +195,6 @@ function openModalForAdd() {
     document.getElementById("transactionModalTitle").textContent = "New Transaction";
     document.getElementById("transactionModalSubmitBtn").textContent = "Add";
     form.querySelector("#transaction_id").value = "";
-
-    const modalElement = document.getElementById("transactionModal");
-    const modal = new bootstrap.Modal(modalElement);
-
-    modal.show();
 }
 
 function openModalForEdit(element) {
