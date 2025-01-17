@@ -49,7 +49,7 @@
             <div class="card-header pb-0 d-block d-sm-flex justify-content-between mt-0">
                 <h6 class="mb-sm-2 mb-md-0 text-center text-sm-start">Accounts Information</h6>
                 <button type="button" class="btn btn-block bg-gradient-primary mb-3 w-100 w-sm-auto" data-bs-toggle="modal"
-                    data-bs-target="#modal-default">+ Add Account</button>
+                    data-bs-target="#AddAccountModal">+ Add Account</button>
             </div>
             <div class="card-body pt-4 p-3">
                 <ul class="list-group">

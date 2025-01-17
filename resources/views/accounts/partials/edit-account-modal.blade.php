@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="modal-edit">
+<div class="modal fade" id="EditAccountModal" tabindex="-1" role="dialog" aria-labelledby="EditAccountModal">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header px-5">
