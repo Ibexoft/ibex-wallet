@@ -576,7 +576,7 @@ function toggleCategory() {
 
     // Toggle visibility for each sibling subcategory card
     siblingCards.forEach(card => {
-        card.style.display = card.style.display === 'none' || card.style.display === '' ? 'flex' : 'none';
+        card.style.display = card.style.display === 'none' ? 'flex' : 'none';
     });
 
     const icon = this.querySelector('.category-toggle-icon');
