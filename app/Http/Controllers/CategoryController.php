@@ -28,10 +28,13 @@ class CategoryController extends Controller
         $expendAll = false;
         if ($request->has('search') && $request->search != '') {
             $expendAll = true;
-            $query->where('name', 'like', '%' . $request->search . '%')
-                ->orWhereHas('subcategories', function ($subQuery) use ($request) {
-                    $subQuery->where('name', 'like', '%' . $request->search . '%');
-                });
+            $searchTerm = '%' . $request->search . '%';
+            $query->where(function ($mainQuery) use ($searchTerm) {
+                $mainQuery->where('name', 'like', $searchTerm)
+                    ->orWhereHas('subcategories', function ($subQuery) use ($searchTerm) {
+                        $subQuery->where('name', 'like', $searchTerm);
+                    });
+            });
         }
 
         if ($request->has('sort')) {
