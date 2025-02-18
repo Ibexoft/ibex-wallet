@@ -1,4 +1,4 @@
-<div class="container  z-index-sticky top-0 position-sticky">
+<div class="container-fluid z-index-sticky top-0 position-sticky">
 
     <div class="row">
         <div class="col-12">
