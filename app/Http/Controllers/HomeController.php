@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Enums\TransactionType;
 use App\Models\Account;
-use App\Models\Category;
-use App\Models\Wallet;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -25,88 +22,55 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Existing data
-        $paginatedTransactions = Auth::user()->transactions()->orderByDesc('transaction_date')->paginate(10);
+        $user = Auth::user();
+        $no_of_months = 6;
 
-        $transactions = $paginatedTransactions->getCollection()->groupBy(function ($transaction) {
-            return Carbon::parse($transaction->transaction_date)->format('d M Y');
-        });
+        // Fetch categories, accounts
+        $categories = $user->categories()->whereNull('parent_category_id')->get();
+        $accounts = Account::where('user_id', $user->id)->get();
 
-        $categories = Auth::user()->categories()->where('parent_category_id', null)->get();
-        $accounts = Account::where('user_id', '=', auth()->id())->get();
-        $wallets = Wallet::where('user_id', '=', auth()->id())->get();
-
-        // Cards Data
-        $totalIncome = Auth::user()->transactions()->where('type', 'income')->sum('amount');
-        $totalExpense = Auth::user()->transactions()->where('type', 'expense')->sum('amount');
-
-        // recent 5 (income/expenses) transactions
-        $recentTransactions = Auth::user()->transactions()
+        // Fetch total income and expense for the tenure given
+        $totalIncome = $user->getTotalIncome($no_of_months);
+        $totalExpense = $user->getTotalExpense($no_of_months);
+        
+        // Fetch recent transactions (last 5 income/expenses)
+        $recentTransactions = $user->transactions()
             ->whereIn('type', [TransactionType::Income, TransactionType::Expense])
-            ->orderByDesc('transaction_date')
+            ->latest('transaction_date')
             ->take(5)
             ->get();
 
-        // Calculate income and expense for the last 6 months
-        $monthlyData = collect([]);
-        $currentDate = Carbon::now();
-
-        $no_of_months = 6;
-        for ($i = 0; $i < $no_of_months; $i++) {
-            $startOfMonth = $currentDate->copy()->startOfMonth();
-            $endOfMonth = $currentDate->copy()->endOfMonth();
-
-            $income = Auth::user()->transactions()
-                ->where('type', 'income')
-                ->whereBetween('transaction_date', [$startOfMonth, $endOfMonth])
-                ->sum('amount');
-
-            $expense = Auth::user()->transactions()
-                ->where('type', 'expense')
-                ->whereBetween('transaction_date', [$startOfMonth, $endOfMonth])
-                ->sum('amount');
-
-            $monthlyData->push([
-                'month' => $currentDate->format('M Y'),
-                'income' => $income,
-                'expense' => $expense,
-            ]);
-
-            $currentDate->subMonth(); // Move to the previous month
-        }
+        // Fetch income and expense data for the last 6 months
+        $monthlyData = $user->getMonthlyIncomeExpense($no_of_months);
         
-        // Charts Data
+        // Prepare chart data
         $chartData = [
-            'labels' => $monthlyData->pluck('month')->reverse()->values(), // Months
-            'income' => $monthlyData->pluck('income')->reverse()->values(), // Income
-            'expense' => $monthlyData->pluck('expense')->reverse()->values(), // Expense
+            'labels' => $monthlyData->pluck('month')->reverse()->values(),
+            'income' => $monthlyData->pluck('income')->reverse()->values(),
+            'expense' => $monthlyData->pluck('expense')->reverse()->values(),
         ];
 
-
-        // Categories Data
-        // Fetch expense data for each category
+        // Fetch top 5 expense categories
         $categoriesData = DB::table('transactions')
-        ->select('categories.name', DB::raw('SUM(transactions.amount) as total'))
-        ->join('categories', 'transactions.category_id', '=', 'categories.id')
-        ->where('transactions.type', 'expense')
-        ->groupBy('categories.name')
-        ->orderBy('total', 'desc')
-        ->limit(5)
-        ->get();
+            ->select('categories.name', DB::raw('SUM(transactions.amount) as total'))
+            ->join('categories', 'transactions.category_id', '=', 'categories.id')
+            ->where('transactions.type', 'expense')
+            ->where('transactions.user_id', $user->id)
+            ->groupBy('categories.name')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get();
 
-        // category progress bars data
-        $totalExpenses = $categoriesData->sum('total');
-        $categoriesProgress = $categoriesData->map(function ($category) use ($totalExpenses) {
-            return [
-                'name' => $category->name,
-                'percentage' => round(($category->total / $totalExpenses) * 100, 2),
-            ];
-        });
+        // Calculate category progress bars
+        $totalExpenses = $categoriesData->sum('total') ?: 1; // Avoid division by zero
+        $categoriesProgress = $categoriesData->map(fn($category) => [
+            'name' => $category->name,
+            'percentage' => round(($category->total / $totalExpenses) * 100, 2),
+        ]);
 
-        return view('dashboard', compact([
-            'totalIncome', 'totalExpense', 'recentTransactions', 'chartData', 'categoriesProgress',
-            'paginatedTransactions', 'transactions', 'categories', 
-            'accounts', 'wallets', 'monthlyData'
-        ]));
+        return view('dashboard', compact(
+            'totalIncome', 'totalExpense', 'recentTransactions', 'chartData', 'categoriesProgress', 'categories', 'accounts', 'monthlyData'
+        ));
     }
+
 }
