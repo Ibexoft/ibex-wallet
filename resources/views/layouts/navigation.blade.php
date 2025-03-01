@@ -123,7 +123,7 @@
                         <i class="far fa-credit-card fa-lg"></i>
                     </a>
 
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#transactionModal" onclick="openModalForAdd()""
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#transactionModal" onclick="openModalForAdd()"
                         class="bg-primary shadow text-white rounded-circle d-flex align-items-center justify-content-center transaction-add-button"
                         style="width: 40px; height: 40px;">
                         <span class="btn-inner--icon">
