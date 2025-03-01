@@ -4,7 +4,7 @@
         <div class="col-12">
             <!-- Navbar -->
             <nav
-                class="navbar navbar-expand-lg blur blur-rounded top-0 z-index-3 shadow my-3 py-2 start-0 end-0">
+                class="d-lg-block d-none navbar navbar-expand-lg blur blur-rounded top-0 z-index-3 shadow my-3 py-2 start-0 end-0">
                 <div class="container-fluid px-0">
                     <button class="navbar-toggler shadow-none border-0 outline-none px-0" type="button"
                         data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation"
@@ -21,31 +21,31 @@
                     </a>
                     <div class="d-lg-none d-block">
                         @if (Auth::check())
-                        <div class="dropdown">
-                            <a class="avatar avatar-sm shadow-md cursor-pointer rounded-circle overflow-hidden mt-2"
-                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('assets/img/user-placeholder.png') }}"
-                                    alt="team4">
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a href="{{ route('profile.show', ['profile' => Auth::user()->id]) }}"
-                                        class="nav-link dropdown-item">
-                                        Profile
-                                    </a>
-                                </li>
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <a class="nav-link dropdown-item"
-                                            onclick="event.preventDefault(); this.closest('form').submit();">
-                                            Logout
+                            <div class="dropdown">
+                                <a class="avatar avatar-sm shadow-md cursor-pointer rounded-circle overflow-hidden mt-2"
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('assets/img/user-placeholder.png') }}"
+                                        alt="team4">
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a href="{{ route('profile.show', ['profile' => Auth::user()->id]) }}"
+                                            class="nav-link dropdown-item">
+                                            Profile
                                         </a>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    @endif
+                                    </li>
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <a class="nav-link dropdown-item"
+                                                onclick="event.preventDefault(); this.closest('form').submit();">
+                                                Logout
+                                            </a>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                     <div class="collapse navbar-collapse" id="navigation">
                         <ul class="navbar-nav mx-auto ms-xl-auto ">
@@ -104,12 +104,44 @@
                                 </div>
                             @endif
                         </ul>
-                        
+
 
                     </div>
                 </div>
             </nav>
             <!-- End Navbar -->
+
+            {{-- Mobile Bottom Navigation --}}
+            <nav class="d-lg-none fixed-bottom bottom-2 mx-3 px-5 py-2 shadow start-0 end-0 bg-white blur blur-rounded">
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{{ route('dashboard') }}" class="text-dark text-decoration-none">
+                        <i class="fas fa-chart-line fa-lg"></i>
+                    </a>
+
+                    <a href="{{ route('transactions.index') }}" class="text-dark text-decoration-none">                        
+                        <i class="far fa-credit-card fa-lg"></i>
+                    </a>
+
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#transactionModal" onclick="openModalForAdd()"
+                        class="bg-primary shadow text-white rounded-circle d-flex align-items-center justify-content-center transaction-add-button"
+                        style="width: 40px; height: 40px;">
+                        <span class="btn-inner--icon">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                    </a>
+
+
+                    <a href="{{ route('accounts.index') }}" class="text-dark text-decoration-none">
+                        <i class="far fa-building fa-lg"></i>
+                    </a>
+
+                    <a href="{{ route('profile.show', ['profile' => Auth::user()->id]) }}"
+                        class="text-dark text-decoration-none">
+                        <i class="far fa-user fa-lg"></i>
+                    </a>
+                </div>
+            </nav>
         </div>
     </div>
 </div>

@@ -23,7 +23,7 @@
 }
 
 .cursor-pointer{
-    cursor: pointer
+    cursor: pointer;
 }
 
 /* Accounts */
@@ -32,4 +32,14 @@
 #profileImage:hover {
     transition: 0.3s ease-in-out;
     opacity: 0.5;
+}
+
+/* Transaction Add Button */
+.transaction-add-button{
+    transform: scale(1);
+    transition: 0.3s ease-in-out;
+}
+
+.transaction-add-button:hover {
+    transform: scale(1.1);
 }
