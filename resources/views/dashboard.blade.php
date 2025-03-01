@@ -228,6 +228,10 @@
             </div>
         </div>
     </div>
+
+    <div id="modalDiv">
+        @include('transactions.add-edit-modal')
+    </div>
 @endsection
 
 @section('script')
